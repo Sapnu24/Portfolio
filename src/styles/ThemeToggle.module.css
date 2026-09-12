@@ -1,0 +1,72 @@
+/* ==========================================================
+   THEME TOGGLE BUTTON - High-End Glassmorphic Interactive Switch
+   Instant Click Switch: Light <-> Dark (OS-Synced by Default)
+========================================================== */
+
+.toggleContainer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.toggleBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: var(--toggle-bg, rgba(79, 70, 229, 0.08));
+  border: 1px solid var(--toggle-border, rgba(79, 70, 229, 0.16));
+  color: var(--toggle-icon-color, #4f46e5);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--toggle-shadow, 0 2px 8px rgba(79, 70, 229, 0.08));
+  outline: none;
+}
+
+.toggleBtn:hover {
+  background: var(--toggle-bg-hover, rgba(79, 70, 229, 0.15));
+  border-color: var(--accent-color, #06b6d4);
+  color: var(--accent-color, #06b6d4);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.22);
+}
+
+.toggleBtn:focus-visible {
+  outline: 2px solid var(--primary-color, #4f46e5);
+  outline-offset: 2px;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  position: relative;
+}
+
+.sunIcon {
+  color: #f59e0b;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.5));
+}
+
+.moonIcon {
+  color: #06b6d4;
+  filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.6));
+}
+
+/* Compact Variant for Mobile Island */
+.compact {
+  width: 38px;
+  height: 38px;
+}
+
+@media (max-width: 480px) {
+  .toggleBtn {
+    width: 36px;
+    height: 36px;
+  }
+}

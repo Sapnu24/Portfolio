@@ -1,0 +1,408 @@
+/* ==========================================================================
+   Tech Icon Picker (Searchable Dropdown & Responsive Picker)
+   ========================================================================== */
+
+.comboboxWrapper {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Combobox Trigger Button */
+.comboboxTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 42px;
+  padding: 0.5rem 0.85rem;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  font-size: 0.875rem;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.comboboxTrigger:hover {
+  background: #ffffff;
+  border-color: var(--primary-color, #4f46e5);
+}
+
+.comboboxTriggerActive {
+  background: #ffffff !important;
+  border-color: var(--primary-color, #4f46e5) !important;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
+  outline: none;
+}
+
+.triggerContent {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.triggerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.triggerLabel {
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+}
+
+.triggerCategory {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.triggerChevron {
+  color: #64748b;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.triggerChevronOpen {
+  transform: rotate(180deg);
+}
+
+/* Floating Popover */
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  box-sizing: border-box;
+  animation: fadeIn 0.15s ease-out;
+  min-width: 280px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Search Header inside Popover */
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.7rem;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  height: 36px;
+  padding: 0.4rem 2rem 0.4rem 2.1rem !important;
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.82rem !important;
+  color: #0f172a !important;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  background: #ffffff !important;
+  border-color: var(--primary-color, #4f46e5) !important;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15) !important;
+  outline: none !important;
+}
+
+.clearSearchBtn {
+  position: absolute;
+  right: 0.45rem;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 0.15s ease;
+}
+
+.clearSearchBtn:hover {
+  color: #ef4444;
+}
+
+/* Category Filter Bar with Visible Horizontal Scrollbar */
+.categoryBar {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.15rem 0.1rem 0.45rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color, #4f46e5) rgba(79, 70, 229, 0.08);
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.categoryBar::-webkit-scrollbar {
+  height: 5px;
+  display: block;
+}
+
+.categoryBar::-webkit-scrollbar-track {
+  background: rgba(79, 70, 229, 0.08);
+  border-radius: 9999px;
+}
+
+.categoryBar::-webkit-scrollbar-thumb {
+  background: var(--primary-color, #4f46e5);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.categoryBar::-webkit-scrollbar-thumb:hover {
+  background: #4338ca;
+}
+
+.categoryPill {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 0.18rem 0.5rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.categoryPill:hover {
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+.categoryPillActive {
+  background: var(--primary-color, #4f46e5) !important;
+  color: #ffffff !important;
+  border-color: var(--primary-color, #4f46e5) !important;
+  font-weight: 600;
+}
+
+/* Meta Row */
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  color: #64748b;
+  padding: 0 0.1rem;
+}
+
+.suggestBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.68rem;
+}
+
+/* Scrollable Icon Grid */
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 0.35rem;
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 0.25rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.55rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(79, 70, 229, 0.3) transparent;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.iconGrid::-webkit-scrollbar {
+  width: 5px;
+}
+
+.iconGrid::-webkit-scrollbar-thumb {
+  background: rgba(79, 70, 229, 0.3);
+  border-radius: 4px;
+}
+
+/* Individual Icon Card */
+.iconCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.45rem 0.2rem 0.3rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  color: #334155;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.iconCard:hover {
+  border-color: var(--primary-color, #4f46e5);
+  background: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.1);
+  color: #0f172a;
+}
+
+.iconCardActive {
+  background: #eef2ff !important;
+  border-color: var(--primary-color, #4f46e5) !important;
+  box-shadow: 0 0 0 1.5px rgba(79, 70, 229, 0.25) !important;
+  color: var(--primary-color, #4f46e5) !important;
+}
+
+.checkIndicator {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.15rem;
+  color: var(--primary-color, #4f46e5);
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconSvgWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.iconName {
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.15;
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.iconCategoryTag {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.iconCardActive .iconCategoryTag {
+  color: #059669;
+}
+
+/* Empty State */
+.emptyState {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 0.5rem;
+  color: #64748b;
+  text-align: center;
+  gap: 0.35rem;
+}
+
+.emptyStateText {
+  font-size: 0.78rem;
+}
+
+.resetBtn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+  .popover {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    z-index: 2100;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  .iconGrid {
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    max-height: 170px;
+    gap: 0.3rem;
+  }
+}

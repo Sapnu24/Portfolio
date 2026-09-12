@@ -1,0 +1,223 @@
+.loginPage {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: radial-gradient(circle at 20% 20%, #0d5c54 0%, #04342c 55%, #02201b 100%);
+    overflow: hidden;
+}
+
+.bgGlow {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 80% 15%, rgba(31, 216, 177, 0.18), transparent 45%),
+        radial-gradient(circle at 10% 85%, rgba(31, 216, 177, 0.12), transparent 40%);
+    pointer-events: none;
+}
+
+.loginCard {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: 2.25rem 2rem;
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+}
+
+.loginBrand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1.75rem;
+}
+
+.loginIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 0.85rem;
+    background: rgba(13, 92, 84, 0.1);
+    color: var(--primary-color, #0d5c54);
+}
+
+.eyebrow {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--mix-color, #1fd8b1);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.loginBrand h1 {
+    margin: 0;
+    color: var(--primary-color, #0d5c54);
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.loginForm {
+    display: grid;
+    gap: 1.1rem;
+}
+
+.loginForm label {
+    display: grid;
+    gap: 0.4rem;
+    color: var(--primary-color, #0d5c54);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.inputWithIcon {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0 0.85rem;
+    border: 1px solid #d7e1e2;
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #6b7a7a;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inputWithIcon:focus-within {
+    border-color: #1fd8b1;
+    box-shadow: 0 0 0 3px rgba(31, 216, 177, 0.18);
+}
+
+.inputWithIcon input {
+    flex: 1;
+    width: 100%;
+    border: 0 !important;
+    outline: 0 !important;
+    padding: 0.75rem 0 !important;
+    background: transparent !important;
+    color: #1a1a1a;
+    font: inherit;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.inputWithIcon input:focus {
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+
+.togglePassword {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: #8a9a99;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.togglePassword:hover {
+    color: var(--primary-color, #0d5c54);
+}
+
+.errorText {
+    margin: 0;
+    padding: 0.6rem 0.85rem;
+    border-radius: 0.6rem;
+    background: rgba(192, 57, 43, 0.08);
+    color: #c0392b;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.primaryButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+    padding: 0.85rem 1rem;
+    border: 0;
+    border-radius: 0.75rem;
+    background: var(--primary-color, #0d5c54);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.primaryButton:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: #0a4a43;
+}
+
+.primaryButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.loginHint {
+    margin: 1.25rem 0 0;
+    padding: 0.75rem 0.85rem;
+    border-radius: 0.65rem;
+    background: rgba(13, 92, 84, 0.05);
+    color: #6b7a7a;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.backLink {
+    display: block;
+    margin-top: 1.25rem;
+    color: var(--primary-color, #0d5c54);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+}
+
+.backLink:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .loginPage {
+        padding: max(1rem, env(safe-area-inset-top)) max(0.85rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(0.85rem, env(safe-area-inset-left));
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+
+    .loginCard {
+        padding: 1.75rem 1.15rem;
+        border-radius: 1rem;
+    }
+
+    .loginBrand {
+        gap: 0.75rem;
+        margin-bottom: 1.35rem;
+    }
+
+    .loginBrand h1 {
+        font-size: 1.15rem;
+    }
+
+    .primaryButton {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+}

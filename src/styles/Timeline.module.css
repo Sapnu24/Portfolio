@@ -1,0 +1,424 @@
+/* ==========================================================
+   CAREER ROADMAP (TIMELINE) - High-End UI/UX Design System
+   Theme 1: #4f46e5 (Electric Indigo) & #06b6d4 (Neon Cyan)
+   Supports Light & Dark Theme Switching
+========================================================== */
+
+.roadmapSection {
+  position: relative;
+  padding: 6rem 2rem 5.5rem;
+  background: transparent;
+  color: var(--text-primary, #1e293b);
+  transition: color 0.3s ease;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ==========================================================
+   1. SECTION HEADER
+========================================================== */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.eyebrowBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.38rem 1rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  color: var(--primary-color, #4f46e5);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.82rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.08);
+}
+
+.eyebrowBadge svg {
+  color: var(--accent-color, #06b6d4);
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 850;
+  line-height: 1.2;
+  color: var(--headline-color, #1e293b);
+  margin-bottom: 1.1rem;
+  letter-spacing: -0.02em;
+}
+
+.titleGradient {
+  background: var(--title-gradient, linear-gradient(135deg, #4f46e5 0%, #0ea5e9 55%, #06b6d4 100%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline;
+}
+
+.subtitle {
+  font-size: clamp(0.98rem, 1.8vw, 1.1rem);
+  color: var(--subtitle-color, #475569);
+  max-width: 680px;
+  line-height: 1.8;
+  margin: 0 auto;
+}
+
+/* ==========================================================
+   2. TIMELINE SPINE & NODES
+========================================================== */
+.timeline {
+  position: relative;
+  width: 100%;
+  max-width: 820px;
+  padding-left: 2.75rem;
+}
+
+/* Glowing Gradient Vertical Spine */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 1rem;
+  bottom: 1rem;
+  left: 22px;
+  width: 3px;
+  background: var(--spine-gradient, linear-gradient(180deg, #4f46e5 0%, #0ea5e9 50%, #06b6d4 100%));
+  border-radius: 9999px;
+  opacity: 0.85;
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: 3.25rem;
+}
+
+.timelineItem:last-child {
+  margin-bottom: 0;
+}
+
+/* Timeline Node Icon */
+.timelineIconWrapper {
+  position: absolute;
+  left: -2.75rem;
+  top: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.timelineIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card-bg, #ffffff);
+  color: var(--primary-color, #4f46e5);
+  border: 2px solid rgba(79, 70, 229, 0.25);
+  box-shadow:
+    0 4px 14px var(--shadow-glow, rgba(79, 70, 229, 0.12)),
+    0 0 0 4px var(--bg-secondary, #f8fafc);
+  font-size: 1rem;
+}
+
+/* ==========================================================
+   3. MILESTONE CARDS
+========================================================== */
+.timelineCard {
+  position: relative;
+  background: var(--card-bg, #ffffff);
+  border-radius: 1.35rem;
+  padding: 1.85rem 1.75rem;
+  border: 1px solid var(--border-card, rgba(79, 70, 229, 0.1));
+  box-shadow: var(--shadow-card, 0 10px 30px rgba(79, 70, 229, 0.05));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.timelineCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4f46e5 0%, #0ea5e9 50%, #06b6d4 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.timelineItem:hover .timelineCard::before {
+  opacity: 1;
+}
+
+.timelineItem:hover .timelineCard {
+  border-color: var(--border-card-hover, rgba(6, 182, 212, 0.3));
+  box-shadow:
+    0 14px 36px var(--shadow-glow, rgba(79, 70, 229, 0.1)),
+    0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.roleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.roleTitle {
+  font-size: clamp(1.15rem, 2vw, 1.3rem);
+  font-weight: 800;
+  color: var(--primary-color, #4f46e5);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.companyWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--subtitle-color, #64748b);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.companyIcon {
+  color: var(--accent-color, #06b6d4);
+}
+
+.companyName {
+  color: var(--text-secondary, #475569);
+}
+
+/* Period Badge */
+.periodBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.06) 0%, rgba(6, 182, 212, 0.08) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  color: var(--primary-color, #4f46e5);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.calendarIcon {
+  color: var(--accent-color, #06b6d4);
+}
+
+.description {
+  font-size: 0.94rem;
+  line-height: 1.7;
+  color: var(--subtitle-color, #475569);
+  margin: 0 0 1.25rem;
+}
+
+/* ==========================================================
+   4. TAG PILLS
+========================================================== */
+.tagsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tagPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.32rem 0.72rem;
+  border-radius: 9999px;
+  background: var(--tag-bg, rgba(79, 70, 229, 0.06));
+  border: 1px solid var(--border-subtle, rgba(79, 70, 229, 0.14));
+  color: var(--text-primary, #334155);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.76rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+
+.tagPill:hover {
+  background: var(--card-bg-elevated, #ffffff);
+  border-color: var(--primary-color, #4f46e5);
+  color: var(--primary-color, #4f46e5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15);
+}
+
+/* ==========================================================
+   RESPONSIVE DESIGN (Tablets & Mobile)
+========================================================== */
+@media (max-width: 768px) {
+  .roadmapSection {
+    padding: 4.5rem 1.25rem 4rem;
+  }
+
+  .timeline {
+    padding-left: 2.25rem;
+  }
+
+  .timeline::before {
+    left: 17px;
+  }
+
+  .timelineIconWrapper {
+    left: -2.25rem;
+  }
+
+  .timelineIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .timelineCard {
+    padding: 1.4rem 1.2rem;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .roadmapSection {
+    padding: 3.5rem 0.85rem 3rem;
+  }
+
+  .timeline {
+    padding-left: 1.85rem;
+  }
+
+  .timeline::before {
+    left: 14px;
+  }
+
+  .timelineIconWrapper {
+    left: -1.85rem;
+  }
+
+  .timelineIcon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.78rem;
+  }
+
+  .timelineCard {
+    padding: 1.25rem 1rem;
+    border-radius: 1.15rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .roleTitle {
+    font-size: 1.1rem;
+  }
+
+  .description {
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .roadmapSection {
+    padding: 3rem 0.6rem 2.5rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    font-size: 1.55rem;
+  }
+
+  .eyebrowBadge {
+    font-size: 0.72rem;
+    padding: 0.28rem 0.75rem;
+  }
+
+  .subtitle {
+    font-size: 0.84rem;
+  }
+
+  .timeline {
+    padding-left: 1.55rem;
+  }
+
+  .timeline::before {
+    left: 11px;
+  }
+
+  .timelineIconWrapper {
+    left: -1.55rem;
+    top: 1rem;
+  }
+
+  .timelineIcon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.7rem;
+  }
+
+  .timelineCard {
+    padding: 1.1rem 0.85rem;
+    border-radius: 1rem;
+  }
+
+  .roleTitle {
+    font-size: 1rem;
+  }
+
+  .companyWrapper {
+    font-size: 0.82rem;
+  }
+
+  .periodBadge {
+    font-size: 0.72rem;
+    padding: 0.22rem 0.55rem;
+  }
+
+  .description {
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+
+  .tagPill {
+    font-size: 0.7rem;
+    padding: 0.22rem 0.52rem;
+  }
+}

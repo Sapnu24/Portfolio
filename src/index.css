@@ -1,0 +1,284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================
+   GLOBAL DESIGN TOKENS - Light & Dark Mode System
+   Theme: Electric Indigo (#4f46e5 / #6366f1) & Neon Cyan (#06b6d4)
+========================================================== */
+
+:root {
+  --font-primary: "Plus Jakarta Sans", "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Space Grotesk", "Plus Jakarta Sans", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  --font-tech: "Rajdhani", "JetBrains Mono", sans-serif;
+
+  /* --- LIGHT MODE TOKENS (Default) --- */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --secondary-bg-color: #f8fafc;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-color: #0f172a;
+  --subtitle-color: #64748b;
+  --headline-color: #0f172a;
+  --text-muted: #64748b;
+
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary-color: #ffffff;
+  --mix-color: #06b6d4;
+  --accent-color: #06b6d4;
+  --accent-hover: #0891b2;
+  --accent-glow: rgba(6, 182, 212, 0.22);
+  --primary-glow: rgba(79, 70, 229, 0.18);
+
+  --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+  --gradient-accent: linear-gradient(90deg, #4f46e5 0%, #06b6d4 50%, #6366f1 100%);
+  --title-gradient: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 55%, #06b6d4 100%);
+
+  --card-color: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-bg-elevated: #ffffff;
+  --glass-color: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.85);
+
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+  --navbar-scrolled-bg: rgba(255, 255, 255, 0.94);
+  --navbar-border: rgba(255, 255, 255, 0.85);
+  --nav-pill-bg: rgba(79, 70, 229, 0.04);
+  --nav-pill-border: rgba(79, 70, 229, 0.1);
+  --nav-link-color: #475569;
+  --nav-link-active-bg: #ffffff;
+  --mobile-dock-bg: rgba(255, 255, 255, 0.94);
+  --mobile-dock-border: rgba(255, 255, 255, 0.9);
+
+  --border-subtle: rgba(79, 70, 229, 0.12);
+  --border-card: rgba(79, 70, 229, 0.12);
+  --border-card-hover: rgba(6, 182, 212, 0.4);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.05);
+  --shadow-glow: rgba(79, 70, 229, 0.12);
+
+  --toggle-bg: rgba(79, 70, 229, 0.08);
+  --toggle-border: rgba(79, 70, 229, 0.16);
+  --toggle-icon-color: #4f46e5;
+  --toggle-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-text: #0f172a;
+  --spine-gradient: linear-gradient(180deg, #4f46e5 0%, #06b6d4 50%, #6366f1 100%);
+  --ambient-orb-1: rgba(6, 182, 212, 0.09);
+  --ambient-orb-2: rgba(79, 70, 229, 0.08);
+
+  /* Subtle Section Background Patterns & Ambient Detail (Light Mode) */
+  --bg-pattern-dot: radial-gradient(rgba(79, 70, 229, 0.07) 1px, transparent 1px);
+  --bg-pattern-size: 28px 28px;
+  --bg-ambient-orb-cyan: radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.045) 0%, transparent 55%);
+  --bg-ambient-orb-indigo: radial-gradient(circle at 90% 80%, rgba(79, 70, 229, 0.04) 0%, transparent 55%);
+
+  /* Skeleton Loader Tokens (Light Mode) */
+  --skeleton-bg: #ffffff;
+  --skeleton-bar: #e2e8f0;
+  --skeleton-shimmer: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 35%, #ffffff 50%, #e2e8f0 65%, #f1f5f9 100%);
+  --skeleton-card-bg: #ffffff;
+  --skeleton-border: rgba(79, 70, 229, 0.1);
+  --skeleton-nav-bg: rgba(255, 255, 255, 0.88);
+
+  font-family: var(--font-primary);
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- DARK MODE TOKENS (Activated via data-theme="dark" or .dark-theme) --- */
+[data-theme="dark"],
+html.dark-theme,
+body.dark-theme {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #0f172a;
+  --bg-tertiary: #1e293b;
+  --secondary-bg-color: #0f172a;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-color: #f8fafc;
+  --subtitle-color: #94a3b8;
+  --headline-color: #ffffff;
+  --text-muted: #94a3b8;
+
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --secondary-color: #0b0f19;
+  --mix-color: #22d3ee;
+  --accent-color: #06b6d4;
+  --accent-hover: #22d3ee;
+  --accent-glow: rgba(6, 182, 212, 0.35);
+  --primary-glow: rgba(99, 102, 241, 0.28);
+
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+  --gradient-accent: linear-gradient(90deg, #6366f1 0%, #06b6d4 50%, #818cf8 100%);
+  --title-gradient: linear-gradient(135deg, #818cf8 0%, #38bdf8 55%, #22d3ee 100%);
+
+  --card-color: #1e293b;
+  --card-bg: rgba(15, 23, 42, 0.88);
+  --card-bg-elevated: #1e293b;
+  --glass-color: rgba(11, 15, 25, 0.88);
+  --glass-border: rgba(99, 102, 241, 0.22);
+
+  --navbar-bg: rgba(11, 15, 25, 0.85);
+  --navbar-scrolled-bg: rgba(11, 15, 25, 0.94);
+  --navbar-border: rgba(99, 102, 241, 0.22);
+  --nav-pill-bg: rgba(15, 23, 42, 0.7);
+  --nav-pill-border: rgba(99, 102, 241, 0.22);
+  --nav-link-color: #cbd5e1;
+  --nav-link-active-bg: rgba(30, 41, 59, 0.95);
+  --mobile-dock-bg: rgba(11, 15, 25, 0.94);
+  --mobile-dock-border: rgba(99, 102, 241, 0.3);
+
+  --border-subtle: rgba(99, 102, 241, 0.22);
+  --border-card: rgba(99, 102, 241, 0.22);
+  --border-card-hover: rgba(6, 182, 212, 0.55);
+  --shadow-card: 0 14px 36px rgba(0, 0, 0, 0.55);
+  --shadow-glow: rgba(6, 182, 212, 0.22);
+
+  --toggle-bg: rgba(15, 23, 42, 0.85);
+  --toggle-border: rgba(99, 102, 241, 0.35);
+  --toggle-icon-color: #06b6d4;
+  --toggle-shadow: 0 2px 10px rgba(6, 182, 212, 0.2);
+
+  --input-bg: rgba(15, 23, 42, 0.95);
+  --input-border: rgba(99, 102, 241, 0.3);
+  --input-text: #f8fafc;
+  --spine-gradient: linear-gradient(180deg, #6366f1 0%, #06b6d4 50%, #818cf8 100%);
+  --ambient-orb-1: rgba(6, 182, 212, 0.16);
+  --ambient-orb-2: rgba(99, 102, 241, 0.15);
+
+  /* Subtle Section Background Patterns & Ambient Detail (Dark Mode) */
+  --bg-pattern-dot: radial-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+  --bg-pattern-size: 28px 28px;
+  --bg-ambient-orb-cyan: radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 55%);
+  --bg-ambient-orb-indigo: radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.075) 0%, transparent 55%);
+
+  /* Skeleton Loader Tokens (Dark Mode) */
+  --skeleton-bg: #0b0f19;
+  --skeleton-bar: #1e293b;
+  --skeleton-shimmer: linear-gradient(90deg, #111827 0%, #1e293b 35%, #334155 50%, #1e293b 65%, #111827 100%);
+  --skeleton-card-bg: rgba(17, 24, 39, 0.92);
+  --skeleton-border: rgba(99, 102, 241, 0.2);
+  --skeleton-nav-bg: rgba(11, 15, 25, 0.88);
+
+  color-scheme: dark;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+/* Smooth background & color transitions across all elements */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+html, body, p, a, button, input, textarea, select {
+  font-family: var(--font-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+  letter-spacing: -0.025em;
+  font-weight: 800;
+  color: var(--headline-color);
+}
+
+/* ==========================================================
+   TECHNICAL MONOSPACE FONT: STRICTLY FOR ALL PILLS & BADGES
+========================================================== */
+[class*="eyebrow"],
+[class*="sectionTag"],
+[class*="statusBadge"],
+[class*="statusPill"],
+[class*="badge"],
+[class*="techTag"],
+[class*="tagPill"],
+[class*="techPill"],
+[class*="pill"],
+[class*="skillBadge"],
+[class*="timelinePeriod"],
+[class*="liveTag"],
+[class*="quick-prompt-btn"],
+[class*="scrollText"],
+[class*="codeSnippet"],
+[class*="deckTab"] {
+  font-family: var(--font-mono, monospace) !important;
+}
+
+/* Specific Eyebrow Pill Badges */
+[class*="eyebrowBadge"],
+[class*="greetingPrefix"] {
+  font-family: var(--font-mono, monospace) !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  font-weight: 750 !important;
+}
+
+/* Custom Scrollbars Everywhere */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.4) rgba(99, 102, 241, 0.05);
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.35);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.65);
+  background-clip: content-box;
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--accent-color);
+}

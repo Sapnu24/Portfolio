@@ -1,0 +1,359 @@
+/* ==========================================================
+   NAVBAR - High-End Brand Design System
+   Cinematic Frosted Glassmorphism & Floating Capsule Docks
+   Theme 1: #4f46e5 (Electric Indigo) & #06b6d4 (Neon Cyan)
+   Supports Light & Dark Theme Switching
+========================================================== */
+
+/* Outer Header Container */
+.navbarWrapper {
+  position: fixed;
+  top: 14px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0 1.25rem;
+  pointer-events: none; /* allows clicking through margins */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================
+   1. DESKTOP FLOATING ISLAND NAVBAR
+========================================================== */
+.navbar {
+  pointer-events: auto;
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  border-radius: 9999px;
+  background: var(--navbar-bg, rgba(255, 255, 255, 0.85));
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid var(--navbar-border, rgba(255, 255, 255, 0.85));
+  box-shadow:
+    0 12px 36px var(--shadow-glow, rgba(79, 70, 229, 0.12)),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.scrollProgressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: var(--gradient-accent, linear-gradient(90deg, #4f46e5 0%, #06b6d4 50%, #6366f1 100%));
+  border-radius: 9999px;
+  transform-origin: 0%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Compact Scrolled State */
+.navbarWrapper.scrolled .navbar {
+  height: 58px;
+  background: var(--navbar-scrolled-bg, rgba(255, 255, 255, 0.94));
+  box-shadow:
+    0 16px 42px var(--shadow-glow, rgba(79, 70, 229, 0.15)),
+    0 4px 12px rgba(6, 182, 212, 0.1);
+  border-color: var(--navbar-border, rgba(255, 255, 255, 0.95));
+}
+
+/* ==========================================================
+   2. BRAND LOGO
+========================================================= */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.logo:hover {
+  transform: scale(1.03);
+}
+
+.logoText {
+  font-family: var(--font-primary, inherit);
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: var(--primary-color, #4f46e5);
+}
+
+.logoDot {
+  color: var(--accent-color, #06b6d4);
+  font-size: 1.6rem;
+  line-height: 0;
+  display: inline-block;
+  margin-left: 1px;
+}
+
+/* ==========================================================
+   3. DESKTOP NAV LINKS
+========================================================== */
+.desktopMenu {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--nav-pill-bg, rgba(79, 70, 229, 0.04));
+  padding: 0.3rem 0.45rem;
+  border-radius: 9999px;
+  border: 1px solid var(--nav-pill-border, rgba(79, 70, 229, 0.1));
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.menuLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  color: var(--nav-link-color, #475569);
+  text-decoration: none;
+  font-family: var(--font-primary, inherit);
+  font-size: 0.86rem;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navIcon {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.menuLink:hover {
+  color: var(--primary-color, #4f46e5);
+  background: rgba(79, 70, 229, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Active Link State */
+.activeLink {
+  background: var(--nav-link-active-bg, #ffffff) !important;
+  color: var(--primary-color, #4f46e5) !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px var(--shadow-glow, rgba(79, 70, 229, 0.15));
+}
+
+.activeLink .navIcon {
+  color: var(--primary-color, #4f46e5);
+  opacity: 1;
+}
+
+/* ==========================================================
+   4. DESKTOP QUICK CTA BUTTON & THEME TOGGLE
+========================================================== */
+.navAction {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navCtaBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.52rem 1.25rem;
+  border-radius: 9999px;
+  background: var(--gradient-primary, linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%));
+  color: #ffffff !important;
+  font-family: var(--font-primary, inherit);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow:
+    0 6px 18px rgba(79, 70, 229, 0.35),
+    0 2px 6px rgba(6, 182, 212, 0.2);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  border: none;
+}
+
+.navCtaBtn::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 70%
+  );
+  transform: rotate(30deg) translateY(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.navCtaBtn:hover::after {
+  transform: rotate(30deg) translateY(100%);
+}
+
+.navCtaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 24px rgba(79, 70, 229, 0.4),
+    0 4px 10px rgba(6, 182, 212, 0.3);
+  color: #ffffff !important;
+}
+
+.navCtaIcon {
+  transition: transform 0.2s ease;
+}
+
+.navCtaBtn:hover .navCtaIcon {
+  transform: translateX(3px);
+}
+
+/* ==========================================================
+   5. MOBILE FLOATING BOTTOM DOCK ISLAND
+========================================================== */
+.mobileNavDock {
+  display: none;
+}
+
+.mobileDockDivider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-subtle, rgba(79, 70, 229, 0.2));
+  margin: 0 0.15rem;
+}
+
+@media (max-width: 860px) {
+  .navbarWrapper {
+    top: 0;
+    padding: 0;
+  }
+
+  /* Hide Desktop Top Navbar on Tablet/Mobile */
+  .navbar {
+    display: none;
+  }
+
+  /* Mobile Floating Bottom Dock Island */
+  .mobileNavDock {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.65rem;
+    border-radius: 9999px;
+    background: var(--mobile-dock-bg, rgba(255, 255, 255, 0.94));
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    border: 1.5px solid var(--mobile-dock-border, rgba(255, 255, 255, 0.9));
+    box-shadow:
+      0 16px 42px var(--shadow-glow, rgba(79, 70, 229, 0.22)),
+      0 4px 12px rgba(6, 182, 212, 0.12),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    z-index: 1000;
+    pointer-events: auto;
+    width: auto;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .mobileDockItem {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--primary-color, #4f46e5);
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+  }
+
+  .mobileDockIcon {
+    font-size: 1.28rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobileDockItem:hover {
+    background: rgba(79, 70, 229, 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Active Mobile Dock Pill */
+  .activeMobileItem {
+    background: var(--gradient-primary, linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%)) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) scale(1.06);
+    box-shadow:
+      0 8px 22px rgba(79, 70, 229, 0.38),
+      0 2px 8px rgba(6, 182, 212, 0.25);
+  }
+
+  .activeMobileItem .mobileDockIcon {
+    color: #ffffff !important;
+  }
+
+  .mobileActiveDot {
+    position: absolute;
+    bottom: -2px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ffffff;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobileNavDock {
+    bottom: 14px;
+    gap: 0.22rem;
+    padding: 0.35rem 0.5rem;
+  }
+
+  .mobileDockItem {
+    width: 39px;
+    height: 39px;
+  }
+
+  .mobileDockIcon {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobileNavDock {
+    bottom: 10px;
+    gap: 0.16rem;
+    padding: 0.28rem 0.38rem;
+  }
+
+  .mobileDockItem {
+    width: 34px;
+    height: 34px;
+  }
+
+  .mobileDockIcon {
+    font-size: 1.02rem;
+  }
+}

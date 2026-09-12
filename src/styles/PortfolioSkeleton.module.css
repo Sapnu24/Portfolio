@@ -1,0 +1,524 @@
+/* ==========================================================
+   PORTFOLIO SKELETON LOADER - High-End UI Shimmer System
+   Responsive for Desktop, Tablet, and Mobile
+   Theme 1: #4f46e5 (Electric Indigo) & #06b6d4 (Neon Cyan)
+========================================================== */
+
+.skeletonOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-primary, #0b0f19);
+  z-index: 99999;
+  overflow-y: auto;
+  overflow-x: hidden;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease;
+  pointer-events: all;
+}
+
+.skeletonOverlay.fadeOut {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.skeletonContentWrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 5rem;
+}
+
+/* Base Neutral Shimmer Animation (Dark-native with Light/Dark Theme Variable) */
+.shimmer {
+  position: relative;
+  background: var(--skeleton-bar, #1e293b);
+  background-image: var(--skeleton-shimmer, linear-gradient(
+    90deg,
+    #111827 0%,
+    #1e293b 35%,
+    #334155 50%,
+    #1e293b 65%,
+    #111827 100%
+  ));
+  background-size: 200% 100%;
+  animation: skeletonWave 1.6s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+@keyframes skeletonWave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ==========================================================
+   1. NAVBAR SKELETON
+========================================================== */
+.navWrapper {
+  position: fixed;
+  top: 14px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0 1.25rem;
+  pointer-events: none;
+}
+
+.navDock {
+  width: 100%;
+  max-width: 1100px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  border-radius: 9999px;
+  background: var(--skeleton-nav-bg, rgba(255, 255, 255, 0.88));
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--skeleton-border, rgba(79, 70, 229, 0.15));
+  box-shadow: var(--shadow-card, 0 10px 30px rgba(0, 0, 0, 0.06));
+}
+
+.navLogo {
+  width: 120px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--toggle-bg, rgba(79, 70, 229, 0.05));
+  padding: 0.35rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.navLinkPill {
+  width: 65px;
+  height: 24px;
+  border-radius: 9999px;
+}
+
+.navCta {
+  width: 110px;
+  height: 36px;
+  border-radius: 9999px;
+}
+
+.mobileMenuToggle {
+  display: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 0.6rem;
+}
+
+/* ==========================================================
+   2. HERO SKELETON
+========================================================== */
+.heroSection {
+  position: relative;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 8rem 2rem 5rem;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.heroLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.statusPill {
+  width: 320px;
+  max-width: 90%;
+  height: 34px;
+  border-radius: 9999px;
+}
+
+.greetingPill {
+  width: 150px;
+  height: 28px;
+  border-radius: 9999px;
+}
+
+.titleLine1 {
+  width: 85%;
+  height: 52px;
+  border-radius: 0.65rem;
+}
+
+.titleLine2 {
+  width: 65%;
+  height: 52px;
+  border-radius: 0.65rem;
+}
+
+.rolePill {
+  width: 240px;
+  height: 32px;
+  border-radius: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.bioParagraph {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 580px;
+  margin-top: 0.5rem;
+}
+
+.bioLine {
+  height: 16px;
+  border-radius: 4px;
+}
+
+.techPillsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.techPill {
+  height: 30px;
+  border-radius: 9999px;
+}
+
+.actionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.btnPrimary {
+  width: 165px;
+  height: 48px;
+  border-radius: 9999px;
+}
+
+.btnSecondary {
+  width: 145px;
+  height: 48px;
+  border-radius: 9999px;
+}
+
+.btnResume {
+  width: 130px;
+  height: 48px;
+  border-radius: 9999px;
+}
+
+.socialRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.socialDot {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+}
+
+/* Hero Right Deck Skeleton */
+.heroRight {
+  position: relative;
+  width: 100%;
+}
+
+.codeDeck {
+  background: var(--skeleton-card-bg, #ffffff);
+  border: 1px solid var(--skeleton-border, rgba(79, 70, 229, 0.12));
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-card, 0 20px 45px rgba(0, 0, 0, 0.08));
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.deckHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--skeleton-border, rgba(79, 70, 229, 0.1));
+}
+
+.windowDots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.windowDot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.deckTabs {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.deckTab {
+  width: 90px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.codeBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.5rem 0;
+}
+
+.codeLine {
+  height: 14px;
+  border-radius: 4px;
+}
+
+.floatingHudRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.hudCard {
+  flex: 1;
+  height: 42px;
+  border-radius: 0.75rem;
+}
+
+/* ==========================================================
+   3. SKILLS BANNER SKELETON
+========================================================== */
+.skillsBannerSection {
+  width: 100%;
+  padding: 3rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.marqueeRow {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  overflow: hidden;
+}
+
+.marqueeCard {
+  width: 140px;
+  height: 42px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================
+   4. PROJECTS SECTION SKELETON
+========================================================== */
+.projectsSection {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sectionHeaderCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  width: 100%;
+  max-width: 650px;
+}
+
+.sectionEyebrow {
+  width: 160px;
+  height: 30px;
+  border-radius: 9999px;
+}
+
+.sectionTitle {
+  width: 280px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.sectionSubtitle {
+  width: 80%;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  width: 100%;
+}
+
+.projectCard {
+  background: var(--skeleton-card-bg, #ffffff);
+  border: 1px solid var(--skeleton-border, rgba(79, 70, 229, 0.12));
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.projectImagePlaceholder {
+  width: 100%;
+  height: 200px;
+  border-radius: 1rem;
+}
+
+.projectCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.projectCardTitle {
+  width: 180px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.projectCardStatus {
+  width: 90px;
+  height: 22px;
+  border-radius: 9999px;
+}
+
+.projectTagsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.projectTag {
+  width: 60px;
+  height: 22px;
+  border-radius: 9999px;
+}
+
+.projectBtnRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.projectBtn {
+  flex: 1;
+  height: 40px;
+  border-radius: 0.75rem;
+}
+
+/* ==========================================================
+   RESPONSIVE DESIGN (Tablets & Mobile View)
+========================================================== */
+@media (max-width: 1024px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+
+  .navCta {
+    display: none;
+  }
+
+  .mobileMenuToggle {
+    display: block;
+  }
+
+  .heroSection {
+    padding: 6.5rem 1.25rem 3.5rem;
+  }
+
+  .titleLine1,
+  .titleLine2 {
+    height: 38px;
+  }
+
+  .actionButtons {
+    width: 100%;
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .btnResume {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .projectImagePlaceholder {
+    height: 170px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding: 5.8rem 1rem 2.5rem;
+  }
+
+  .statusPill {
+    width: 100%;
+    height: 32px;
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .btnResume {
+    width: 100%;
+    flex: none;
+  }
+
+  .floatingHudRow {
+    flex-direction: column;
+  }
+}
