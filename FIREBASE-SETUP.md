@@ -156,7 +156,7 @@ Click **"Publish"** to apply the rules.
 - `bio` (string): e.g. `"Full-stack developer focused on responsive design..."`
 - `githubUrl` (string): e.g. `"https://github.com/Neil1227"`
 - `facebookUrl` (string): e.g. `"https://facebook.com/DncngBlde"`
-- `indeedUrl` (string): e.g. `"https://www.indeed.com/profile/yourprofile"`
+- `upworkUrl` (string): e.g. `"https://www.upwork.com/freelancers/yourprofile"`
 - `yearsExperience` (string): e.g. `"1+"` (programming years)
 - `resumeUrl` (string): Firebase Storage download URL or `/Acierto_Neil_Patrick_CV.pdf`
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaFacebook } from "react-icons/fa";
-import { SiIndeed } from "react-icons/si";
+import { SiUpwork } from "react-icons/si";
 import {
   ArrowRight,
   Mail,
@@ -222,6 +222,18 @@ export default function Hero() {
                   className={styles.socialIcon}
                 >
                   <FaGithub size={19} />
+                </a>
+              )}
+              {profile.upworkUrl && (
+                <a
+                  href={profile.upworkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Upwork Profile"
+                  title="Upwork"
+                  className={styles.socialIcon}
+                >
+                  <SiUpwork size={18} />
                 </a>
               )}
               {profile.email && (

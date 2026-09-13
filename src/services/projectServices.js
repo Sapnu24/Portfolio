@@ -23,6 +23,7 @@ export const DEFAULT_PROJECTS = [
     status: "Production Ready",
     duration: "6 months",
     team: "Lead Developer: Sean Marion Velasco (with my team)",
+    category: "Websites",
     featured: true,
     isMasterFeatured: true,
     image: "/img/projects/KMUwebsite.png",
@@ -41,6 +42,7 @@ export const DEFAULT_PROJECTS = [
     status: "Completed",
     duration: "1 month",
     team: "Lead Developer: Sean Marion Velasco",
+    category: "Websites",
     featured: true,
     isMasterFeatured: false,
     image: "/img/projects/portfoliov1.png",
@@ -59,6 +61,7 @@ export const DEFAULT_PROJECTS = [
     status: "Completed",
     duration: "1 year",
     team: "Lead Developer: Sean Marion Velasco (with my team)",
+    category: "Systems",
     featured: true,
     isMasterFeatured: false,
     image: "/img/projects/acv.png",
@@ -102,6 +105,29 @@ export function sortProjects(list) {
   });
 }
 
+export function inferProjectCategory(project) {
+  if (project?.category && typeof project.category === "string" && project.category.trim()) {
+    const trimmed = project.category.trim();
+    if (trimmed.toLowerCase() === "website" || trimmed.toLowerCase() === "websites") return "Websites";
+    if (trimmed.toLowerCase() === "system" || trimmed.toLowerCase() === "systems") return "Systems";
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+  }
+  const id = (project?.id || "").toLowerCase();
+  const text = `${project?.title || ""} ${project?.description || ""}`.toLowerCase();
+  if (
+    id === "acv-adoption" ||
+    id.includes("system") ||
+    id.includes("dms") ||
+    id.includes("intern") ||
+    text.includes("system") ||
+    text.includes("management") ||
+    text.includes("vet")
+  ) {
+    return "Systems";
+  }
+  return "Websites";
+}
+
 export function getCachedProjects() {
   try {
     const cached = localStorage.getItem(PROJECTS_STORAGE_KEY);
@@ -110,6 +136,7 @@ export function getCachedProjects() {
       if (Array.isArray(parsed) && parsed.length > 0) {
         const enriched = parsed.map((p) => ({
           ...p,
+          category: inferProjectCategory(p),
           mobileImage: p.mobileImage || DEFAULT_MOBILE_MAP[p.id] || p.image,
         }));
         return sortProjects(enriched);
@@ -163,6 +190,7 @@ export async function getProjects() {
       return {
         id: docSnap.id,
         ...data,
+        category: inferProjectCategory({ id: docSnap.id, ...data }),
         isMasterFeatured: isMaster,
         featured: isFeatured,
         technologies: Array.isArray(data.technologies)

@@ -95,7 +95,7 @@ const About = () => {
             Engineered for Performance, <span className={styles.titleGradient}>Scalability & Precision</span>
           </h2>
           <p className={styles.subtitle}>
-            I am Sean Marion Velasco, a Full-Stack Developer and Software Engineer. I architect and build robust web applications, high-performance APIs, and scalable digital systems for clients on Upwork and worldwide (assisted by my team for larger project scopes).
+            I am Sean Marion Velasco, a Full-Stack Developer and Software Engineer. I architect and build robust web applications, high-performance APIs, and scalable digital systems for clients on Upwork and worldwide.
           </p>
         </motion.div>
 
@@ -163,8 +163,8 @@ const About = () => {
             const skillsArray = Array.isArray(category.skills)
               ? category.skills
               : typeof category.skills === "string"
-              ? category.skills.split(",").map((s) => s.trim()).filter(Boolean)
-              : [];
+                ? category.skills.split(",").map((s) => s.trim()).filter(Boolean)
+                : [];
 
             return (
               <motion.div

@@ -9,7 +9,6 @@ export const DEFAULT_PROFILE = {
   bio: "Full-stack software engineer specializing in high-performance React web applications, scalable Laravel PHP backends, REST APIs, and bespoke digital solutions for global clients.",
   githubUrl: "https://github.com",
   facebookUrl: "",
-  indeedUrl: "",
   upworkUrl: "https://www.upwork.com",
   email: "contact@seanvelasco.dev",
   phone: "+1 (555) 019-2834",
@@ -29,7 +28,11 @@ export function getCachedHeroProfile() {
     if (cached) {
       const parsed = JSON.parse(cached);
       if (parsed && typeof parsed === "object") {
-        return { ...DEFAULT_PROFILE, ...parsed };
+        return {
+          ...DEFAULT_PROFILE,
+          ...parsed,
+          upworkUrl: parsed.upworkUrl || parsed.indeedUrl || DEFAULT_PROFILE.upworkUrl,
+        };
       }
     }
   } catch {

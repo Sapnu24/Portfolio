@@ -77,6 +77,273 @@
 }
 
 /* ==========================================================
+   1.5. CATEGORY FILTER TABS (Light & Dark Mode Support)
+========================================================== */
+.filterWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2.25rem;
+  margin-bottom: 2.75rem;
+  width: 100%;
+}
+
+.filterTrack {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  background: var(--card-bg, rgba(255, 255, 255, 0.92));
+  border: 1px solid var(--border-card, rgba(79, 70, 229, 0.14));
+  border-radius: 9999px;
+  box-shadow: var(--shadow-card, 0 4px 20px rgba(79, 70, 229, 0.06));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filterTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.filterBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.52rem 1.15rem;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: var(--subtitle-color, #64748b);
+  font-family: var(--font-sans, inherit);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.25s ease, background-color 0.25s ease, transform 0.2s ease;
+  z-index: 1;
+}
+
+.filterBtn:hover {
+  color: var(--headline-color, #0f172a);
+}
+
+.filterBtnActive {
+  color: #ffffff !important;
+}
+
+.activeBackground {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--gradient-primary, linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%));
+  box-shadow: 0 4px 18px rgba(79, 70, 229, 0.38);
+  z-index: -1;
+}
+
+.filterIcon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.filterBtn:hover .filterIcon {
+  transform: scale(1.1);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.12rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary-color, #4f46e5);
+  border: 1px solid rgba(79, 70, 229, 0.12);
+  transition: all 0.25s ease;
+  min-width: 1.35rem;
+  line-height: 1;
+}
+
+.filterBtnActive .filterCount {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================================
+   DARK MODE OVERRIDES FOR FILTER BUTTONS & BADGES
+========================================================== */
+:global([data-theme="dark"]) .filterTrack,
+:global(html.dark-theme) .filterTrack,
+:global(body.dark-theme) .filterTrack {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(99, 102, 241, 0.28);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+:global([data-theme="dark"]) .filterBtn,
+:global(html.dark-theme) .filterBtn,
+:global(body.dark-theme) .filterBtn {
+  color: #94a3b8;
+}
+
+:global([data-theme="dark"]) .filterBtn:hover,
+:global(html.dark-theme) .filterBtn:hover,
+:global(body.dark-theme) .filterBtn:hover {
+  color: #ffffff;
+  background: rgba(99, 102, 241, 0.12);
+}
+
+:global([data-theme="dark"]) .filterBtnActive,
+:global(html.dark-theme) .filterBtnActive,
+:global(body.dark-theme) .filterBtnActive {
+  color: #ffffff !important;
+}
+
+:global([data-theme="dark"]) .activeBackground,
+:global(html.dark-theme) .activeBackground,
+:global(body.dark-theme) .activeBackground {
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.45), 0 0 14px rgba(99, 102, 241, 0.35);
+}
+
+:global([data-theme="dark"]) .filterCount,
+:global(html.dark-theme) .filterCount,
+:global(body.dark-theme) .filterCount {
+  background: rgba(99, 102, 241, 0.2);
+  color: #22d3ee;
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+:global([data-theme="dark"]) .filterBtnActive .filterCount,
+:global(html.dark-theme) .filterBtnActive .filterCount,
+:global(body.dark-theme) .filterBtnActive .filterCount {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+:global([data-theme="dark"]) .categoryBadge,
+:global(html.dark-theme) .categoryBadge,
+:global(body.dark-theme) .categoryBadge {
+  background: rgba(6, 182, 212, 0.14);
+  color: #22d3ee;
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.12);
+}
+
+:global([data-theme="dark"]) .emptyState,
+:global(html.dark-theme) .emptyState,
+:global(body.dark-theme) .emptyState {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+:global([data-theme="dark"]) .emptyIconWrapper,
+:global(html.dark-theme) .emptyIconWrapper,
+:global(body.dark-theme) .emptyIconWrapper {
+  background: rgba(99, 102, 241, 0.2);
+  color: #22d3ee;
+}
+
+/* Category Pill on Card */
+.headerBadges {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.68rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: rgba(6, 182, 212, 0.08);
+  color: #0891b2;
+  border: 1px solid rgba(6, 182, 212, 0.22);
+}
+
+/* Empty State */
+.emptyState {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--card-bg, #ffffff);
+  border: 1.5px dashed var(--border-card, rgba(79, 70, 229, 0.2));
+  border-radius: 1.5rem;
+  gap: 1rem;
+}
+
+.emptyIconWrapper {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary-color, #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--headline-color, #1e293b);
+  margin: 0;
+}
+
+.emptyDesc {
+  font-size: 0.92rem;
+  color: var(--subtitle-color, #64748b);
+  max-width: 440px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.resetBtn {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
+}
+
+/* ==========================================================
    2. 2-COLUMN PROJECTS GRID
 ========================================================= */
 .projectsGrid {
@@ -801,6 +1068,27 @@
 @media (max-width: 520px) {
   .projectsSection {
     padding: 3.5rem 0.85rem 3rem;
+  }
+
+  .filterWrapper {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .filterTrack {
+    padding: 0.25rem;
+    gap: 0.25rem;
+  }
+
+  .filterBtn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.82rem;
+    gap: 0.35rem;
+  }
+
+  .filterCount {
+    font-size: 0.68rem;
+    padding: 0.1rem 0.4rem;
   }
 
   .projectsGrid {

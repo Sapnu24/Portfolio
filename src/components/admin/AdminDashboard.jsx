@@ -2003,14 +2003,14 @@ export default function AdminDashboard({ isDemo = false }) {
 
         <div className={styles.formGrid}>
           <label>
-            Indeed Profile URL
+            Upwork Profile URL
             <input
               type="url"
-              value={heroForm.indeedUrl || ""}
+              value={heroForm.upworkUrl || ""}
               onChange={(e) =>
-                setHeroForm({ ...heroForm, indeedUrl: e.target.value })
+                setHeroForm({ ...heroForm, upworkUrl: e.target.value })
               }
-              placeholder="https://www.indeed.com/profile/yourprofile"
+              placeholder="https://www.upwork.com/freelancers/yourprofile"
             />
           </label>
           <label>

@@ -1,10 +1,26 @@
 import { useEffect, useState, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import styles from "@/styles/Projects.module.css";
-import { FaClock, FaUsers, FaUser, FaGithub, FaCheckCircle } from "react-icons/fa";
+import { FaUsers, FaUser, FaGithub, FaCheckCircle } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
-import { Sparkles, Maximize2, X } from "lucide-react";
-import { getProjects, getCachedProjects, sortProjects } from "@/services/projectServices";
+import {
+  Sparkles,
+  Maximize2,
+  X,
+  Layers,
+  Globe,
+  Server,
+  Laptop,
+  Smartphone,
+  FolderKanban,
+  RotateCcw,
+} from "lucide-react";
+import {
+  getProjects,
+  getCachedProjects,
+  sortProjects,
+  inferProjectCategory,
+} from "@/services/projectServices";
 import { getTechBadgeData } from "@/utils/techIcons";
 
 const headerVariants = {
@@ -24,27 +40,56 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
+      staggerChildren: 0.12,
       delayChildren: 0.05,
     },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 35, scale: 0.98 },
+  hidden: { opacity: 0, y: 30, scale: 0.96 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.55,
+      duration: 0.45,
       ease: [0.22, 1, 0.36, 1],
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.94,
+    y: 15,
+    transition: {
+      duration: 0.25,
+      ease: "easeIn",
     },
   },
 };
 
+function getCategoryIcon(category, size = 14) {
+  const lower = (category || "").toLowerCase();
+  if (lower === "all") return <Layers size={size} className={styles.filterIcon} />;
+  if (lower.includes("site") || lower.includes("portal"))
+    return <Globe size={size} className={styles.filterIcon} />;
+  if (
+    lower.includes("system") ||
+    lower.includes("server") ||
+    lower.includes("backend") ||
+    lower.includes("dms")
+  )
+    return <Server size={size} className={styles.filterIcon} />;
+  if (lower.includes("app") || lower.includes("application"))
+    return <Laptop size={size} className={styles.filterIcon} />;
+  if (lower.includes("mobile") || lower.includes("ios") || lower.includes("android"))
+    return <Smartphone size={size} className={styles.filterIcon} />;
+  return <FolderKanban size={size} className={styles.filterIcon} />;
+}
+
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [projects, setProjects] = useState(getCachedProjects);
 
   useEffect(() => {
@@ -103,6 +148,42 @@ const Projects = () => {
     );
   }, [sortedProjects]);
 
+  // Compute category list and item counts dynamically
+  const categoryTabs = useMemo(() => {
+    const counts = { All: displayedProjects.length };
+    const categoriesSet = new Set();
+
+    displayedProjects.forEach((p) => {
+      const cat = inferProjectCategory(p);
+      categoriesSet.add(cat);
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+
+    const ordered = ["All"];
+    if (categoriesSet.has("Websites")) ordered.push("Websites");
+    if (categoriesSet.has("Systems")) ordered.push("Systems");
+    categoriesSet.forEach((cat) => {
+      if (!ordered.includes(cat)) {
+        ordered.push(cat);
+      }
+    });
+
+    return ordered.map((cat) => ({
+      id: cat,
+      label: cat,
+      count: counts[cat] || 0,
+    }));
+  }, [displayedProjects]);
+
+  // Filtered projects according to selected category
+  const filteredProjects = useMemo(() => {
+    if (selectedCategory === "All") return displayedProjects;
+    return displayedProjects.filter((p) => {
+      const cat = inferProjectCategory(p);
+      return cat.toLowerCase() === selectedCategory.toLowerCase();
+    });
+  }, [displayedProjects, selectedCategory]);
+
   return (
     <section id="projects" className={styles.projectsSection}>
       <div className={styles.container}>
@@ -124,6 +205,42 @@ const Projects = () => {
           <p className={styles.subtitle}>
             A curated portfolio of production-grade web applications and systems engineered, developed, and delivered by Sean Marion Velasco.
           </p>
+
+          {/* Category Filter Tabs */}
+          {categoryTabs.length > 1 && (
+            <div className={styles.filterWrapper}>
+              <div
+                className={styles.filterTrack}
+                role="tablist"
+                aria-label="Filter projects by category"
+              >
+                {categoryTabs.map((tab) => {
+                  const isActive = selectedCategory.toLowerCase() === tab.id.toLowerCase();
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      className={`${styles.filterBtn} ${isActive ? styles.filterBtnActive : ""}`}
+                      onClick={() => setSelectedCategory(tab.id)}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeCategoryHighlight"
+                          className={styles.activeBackground}
+                          transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                        />
+                      )}
+                      {getCategoryIcon(tab.id, 14)}
+                      <span>{tab.label}</span>
+                      <span className={styles.filterCount}>{tab.count}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* 2-Column Projects Grid with Staggered Scroll Animation */}
@@ -131,156 +248,207 @@ const Projects = () => {
           className={styles.projectsGrid}
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
+          animate="visible"
+          layout
         >
-          {displayedProjects.map((project) => {
-            const isMaster = project.isMasterFeatured === true || project.isMasterFeatured === "true";
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.length > 0 ? (
+              filteredProjects.map((project) => {
+                const isMaster =
+                  project.isMasterFeatured === true || project.isMasterFeatured === "true";
+                const projectCategory = inferProjectCategory(project);
 
-            return (
-              <motion.div
-                key={project.id || project.title}
-                className={`${styles.projectCard} ${isMaster ? styles.masterCard : ""}`}
-                variants={cardVariants}
-                layout
-                whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
-              >
-                {/* Master Featured Badge */}
-                {isMaster && (
-                  <div className={styles.masterBadgeWrapper}>
-                    <span className={styles.masterBadge}>
-                      <span className={styles.masterPulseDot} />
-                      Latest Works
-                    </span>
-                  </div>
-                )}
-
-                {/* Project Image Frame with Zoom Overlay */}
-                <div className={styles.projectImageContainer}>
-                  <button
-                    type="button"
-                    className={styles.projectImageButton}
-                    onClick={() => setSelectedProject(project)}
-                    aria-label={`View ${project.title} screenshot`}
-                    title="Click to zoom image"
+                return (
+                  <motion.div
+                    key={project.id || project.title}
+                    className={`${styles.projectCard} ${isMaster ? styles.masterCard : ""}`}
+                    variants={cardVariants}
+                    layout
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
                   >
-                    <img
-                      src={project.image || "/img/projects/portfoliov1.png"}
-                      alt={project.title}
-                      className={styles.projectImage}
-                      loading="eager"
-                      decoding="async"
-                      onError={(e) => {
-                        if (project.id === "kam-maalam-website" && e.target.src !== "/img/projects/KMUwebsite.png") {
-                          e.target.src = "/img/projects/KMUwebsite.png";
-                        } else if (project.id === "portfolio-website" && e.target.src !== "/img/projects/portfoliov1.png") {
-                          e.target.src = "/img/projects/portfoliov1.png";
-                        } else if (project.id === "acv-adoption" && e.target.src !== "/img/projects/acv.png") {
-                          e.target.src = "/img/projects/acv.png";
-                        } else if (!e.target.src.endsWith("/img/projects/portfoliov1.png")) {
-                          e.target.src = "/img/projects/portfoliov1.png";
-                        }
-                      }}
-                    />
+                    {/* Master Featured Badge */}
+                    {isMaster && (
+                      <div className={styles.masterBadgeWrapper}>
+                        <span className={styles.masterBadge}>
+                          <span className={styles.masterPulseDot} />
+                          Latest Works
+                        </span>
+                      </div>
+                    )}
 
-                    <div className={styles.imageOverlay}>
-                      <Maximize2 size={20} className={styles.zoomIcon} />
-                      <span>Click to preview</span>
+                    {/* Project Image Frame with Zoom Overlay */}
+                    <div className={styles.projectImageContainer}>
+                      <button
+                        type="button"
+                        className={styles.projectImageButton}
+                        onClick={() => setSelectedProject(project)}
+                        aria-label={`View ${project.title} screenshot`}
+                        title="Click to zoom image"
+                      >
+                        <img
+                          src={project.image || "/img/projects/portfoliov1.png"}
+                          alt={project.title}
+                          className={styles.projectImage}
+                          loading="eager"
+                          decoding="async"
+                          onError={(e) => {
+                            if (
+                              project.id === "kam-maalam-website" &&
+                              e.target.src !== "/img/projects/KMUwebsite.png"
+                            ) {
+                              e.target.src = "/img/projects/KMUwebsite.png";
+                            } else if (
+                              project.id === "portfolio-website" &&
+                              e.target.src !== "/img/projects/portfoliov1.png"
+                            ) {
+                              e.target.src = "/img/projects/portfoliov1.png";
+                            } else if (
+                              project.id === "acv-adoption" &&
+                              e.target.src !== "/img/projects/acv.png"
+                            ) {
+                              e.target.src = "/img/projects/acv.png";
+                            } else if (!e.target.src.endsWith("/img/projects/portfoliov1.png")) {
+                              e.target.src = "/img/projects/portfoliov1.png";
+                            }
+                          }}
+                        />
+
+                        <div className={styles.imageOverlay}>
+                          <Maximize2 size={20} className={styles.zoomIcon} />
+                          <span>Click to preview</span>
+                        </div>
+                      </button>
                     </div>
-                  </button>
-                </div>
 
-                {/* Project Content */}
-                <div className={styles.projectContent}>
-                  <div className={styles.projectHeader}>
-                    <h3 className={styles.projectTitle}>{project.title}</h3>
-                    <span
-                      className={`${styles.statusBadge} ${project.status === "Completed"
-                        ? styles.statusCompleted
-                        : project.status === "Deployment"
-                          ? styles.statusDeployment
-                          : styles.statusProgress
-                        }`}
-                    >
-                      {project.status === "Completed" && <FaCheckCircle size={10} />}
-                      {project.status || "In Progress"}
-                    </span>
-                  </div>
+                    {/* Project Content */}
+                    <div className={styles.projectContent}>
+                      <div className={styles.projectHeader}>
+                        <h3 className={styles.projectTitle}>{project.title}</h3>
+                        <span
+                          className={`${styles.statusBadge} ${
+                            project.status === "Completed"
+                              ? styles.statusCompleted
+                              : project.status === "Deployment"
+                                ? styles.statusDeployment
+                                : styles.statusProgress
+                          }`}
+                        >
+                          {project.status === "Completed" && <FaCheckCircle size={10} />}
+                          {project.status || "In Progress"}
+                        </span>
+                      </div>
 
-                  <p className={styles.projectDescription}>{project.description}</p>
+                      <p className={styles.projectDescription}>{project.description}</p>
 
-                  {/* Technology Tags with Auto-Mapped Branding & Icons */}
-                  <div className={styles.projectTags}>
-                    {(Array.isArray(project.technologies) ? project.technologies : []).map(
-                      (tech, index) => {
-                        const badge = getTechBadgeData(tech);
-                        const IconComponent = badge.icon;
-                        return (
-                          <span
-                            key={index}
-                            className={styles.tag}
-                            style={{
-                              "--tech-color": badge.color,
-                              color: badge.color,
-                              backgroundColor: `${badge.color}15`,
-                              borderColor: `${badge.color}35`,
-                            }}
-                            title={`${tech} (${badge.name})`}
+                      {/* Technology Tags with Auto-Mapped Branding & Icons */}
+                      <div className={styles.projectTags}>
+                        {(Array.isArray(project.technologies) ? project.technologies : []).map(
+                          (tech, index) => {
+                            const badge = getTechBadgeData(tech);
+                            const IconComponent = badge.icon;
+                            return (
+                              <span
+                                key={index}
+                                className={styles.tag}
+                                style={{
+                                  "--tech-color": badge.color,
+                                  color: badge.color,
+                                  backgroundColor: `${badge.color}15`,
+                                  borderColor: `${badge.color}35`,
+                                }}
+                                title={`${tech} (${badge.name})`}
+                              >
+                                {IconComponent && (
+                                  <IconComponent
+                                    size={12}
+                                    className={styles.tagIcon}
+                                    style={{ color: badge.color }}
+                                  />
+                                )}
+                                <span>{tech}</span>
+                              </span>
+                            );
+                          }
+                        )}
+                      </div>
+
+                      {/* Meta Stats: Category Badge & Team */}
+                      <div className={styles.projectMeta}>
+                        <span
+                          className={styles.categoryBadge}
+                          title={`Category: ${projectCategory}`}
+                        >
+                          {getCategoryIcon(projectCategory, 12)}
+                          <span>{projectCategory}</span>
+                        </span>
+
+                        <div className={styles.metaItem}>
+                          {project.team === "Team" ? (
+                            <FaUsers size={14} className={styles.metaIcon} />
+                          ) : (
+                            <FaUser size={13} className={styles.metaIcon} />
+                          )}
+                          <span>{project.team || "Solo"}</span>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className={styles.projectLinks}>
+                        {project.demoUrl && project.demoUrl !== "#" && (
+                          <a
+                            href={project.demoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`${styles.btn} ${styles.primary}`}
                           >
-                            {IconComponent && (
-                              <IconComponent size={12} className={styles.tagIcon} style={{ color: badge.color }} />
-                            )}
-                            <span>{tech}</span>
-                          </span>
-                        );
-                      }
-                    )}
-                  </div>
-
-                  {/* Meta Stats: Duration & Team */}
-                  <div className={styles.projectMeta}>
-                    <div className={styles.metaItem}>
-                      <FaClock size={13} className={styles.metaIcon} />
-                      <span>{project.duration || "N/A"}</span>
+                            <FiExternalLink size={16} />
+                            <span>Live Demo</span>
+                          </a>
+                        )}
+                        {project.githubUrl && (
+                          <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`${styles.btn} ${styles.secondary}`}
+                          >
+                            <FaGithub size={18} />
+                          </a>
+                        )}
+                      </div>
                     </div>
-                    <div className={styles.metaItem}>
-                      {project.team === "Team" ? (
-                        <FaUsers size={14} className={styles.metaIcon} />
-                      ) : (
-                        <FaUser size={13} className={styles.metaIcon} />
-                      )}
-                      <span>{project.team || "Solo"}</span>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className={styles.projectLinks}>
-                    {project.demoUrl && project.demoUrl !== "#" && (
-                      <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`${styles.btn} ${styles.primary}`}
-                      >
-                        <FiExternalLink size={16} />
-                        <span>Live Demo</span>
-                      </a>
-                    )}
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`${styles.btn} ${styles.secondary}`}
-                      >
-                        <FaGithub size={18} />
-                      </a>
-                    )}
-                  </div>
+                  </motion.div>
+                );
+              })
+            ) : (
+              <motion.div
+                key="empty-state"
+                className={styles.emptyState}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <div className={styles.emptyIconWrapper}>
+                  <FolderKanban size={26} />
                 </div>
+                <h3 className={styles.emptyTitle}>No Projects in &ldquo;{selectedCategory}&rdquo;</h3>
+                <p className={styles.emptyDesc}>
+                  There are currently no featured projects listed under this category.
+                </p>
+                <button
+                  type="button"
+                  className={styles.resetBtn}
+                  onClick={() => setSelectedCategory("All")}
+                >
+                  <RotateCcw size={14} />
+                  <span>Show All Projects</span>
+                </button>
               </motion.div>
-            );
-          })}
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
 
