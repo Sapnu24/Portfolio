@@ -225,4 +225,52 @@
         padding: 0.8rem 1rem;
         font-size: 0.9rem;
     }
+}
+
+/* ========================================================== */
+/* DARK THEME STYLES ([data-theme="dark"] / .dark-theme)      */
+/* ========================================================== */
+
+:global([data-theme="dark"]) .loginCard,
+:global(html.dark-theme) .loginCard,
+:global(body.dark-theme) .loginCard {
+    background: #111827;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65), 0 0 25px rgba(79, 70, 229, 0.15);
+}
+
+:global([data-theme="dark"]) .loginBrand h1,
+:global(html.dark-theme) .loginBrand h1 {
+    color: #f8fafc;
+}
+
+:global([data-theme="dark"]) .loginForm label,
+:global(html.dark-theme) .loginForm label {
+    color: #cbd5e1;
+}
+
+:global([data-theme="dark"]) .inputWithIcon,
+:global(html.dark-theme) .inputWithIcon {
+    background: #0f172a;
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    color: #94a3b8;
+}
+
+:global([data-theme="dark"]) .inputWithIcon:focus-within,
+:global(html.dark-theme) .inputWithIcon:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+:global([data-theme="dark"]) .inputWithIcon input,
+:global(html.dark-theme) .inputWithIcon input {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+:global([data-theme="dark"]) .loginHint,
+:global(html.dark-theme) .loginHint {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    color: #94a3b8;
 }

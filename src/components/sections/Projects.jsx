@@ -20,6 +20,7 @@ import {
   getCachedProjects,
   sortProjects,
   inferProjectCategory,
+  formatExternalUrl,
 } from "@/services/projectServices";
 import { getTechBadgeData } from "@/utils/techIcons";
 
@@ -91,6 +92,7 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [projects, setProjects] = useState(getCachedProjects);
+  const [activePopover, setActivePopover] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -132,6 +134,21 @@ const Projects = () => {
       document.body.style.overflow = "";
     };
   }, [selectedProject]);
+
+  // Auto-dismiss popover after 3.5s or on outside click
+  useEffect(() => {
+    if (!activePopover) return;
+    const timer = setTimeout(() => {
+      setActivePopover(null);
+    }, 3500);
+
+    const handleDocClick = () => setActivePopover(null);
+    window.addEventListener("click", handleDocClick);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("click", handleDocClick);
+    };
+  }, [activePopover]);
 
   const sortedProjects = useMemo(() => sortProjects(projects), [projects]);
 
@@ -313,13 +330,12 @@ const Projects = () => {
                       <div className={styles.projectHeader}>
                         <h3 className={styles.projectTitle}>{project.title}</h3>
                         <span
-                          className={`${styles.statusBadge} ${
-                            project.status === "Completed"
+                          className={`${styles.statusBadge} ${project.status === "Completed"
                               ? styles.statusCompleted
                               : project.status === "Deployment"
                                 ? styles.statusDeployment
                                 : styles.statusProgress
-                          }`}
+                            }`}
                         >
                           {project.status === "Completed" && <FaCheckCircle size={10} />}
                           {project.status || "In Progress"}
@@ -338,19 +354,12 @@ const Projects = () => {
                               <span
                                 key={index}
                                 className={styles.tag}
-                                style={{
-                                  "--tech-color": badge.color,
-                                  color: badge.color,
-                                  backgroundColor: `${badge.color}15`,
-                                  borderColor: `${badge.color}35`,
-                                }}
                                 title={`${tech} (${badge.name})`}
                               >
                                 {IconComponent && (
                                   <IconComponent
                                     size={12}
                                     className={styles.tagIcon}
-                                    style={{ color: badge.color }}
                                   />
                                 )}
                                 <span>{tech}</span>
@@ -380,29 +389,151 @@ const Projects = () => {
                         </div>
                       </div>
 
-                      {/* Action Buttons */}
+                      {/* Action Buttons (Strict Equal Length 50/50 Pair) */}
                       <div className={styles.projectLinks}>
-                        {project.demoUrl && project.demoUrl !== "#" && (
-                          <a
-                            href={project.demoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`${styles.btn} ${styles.primary}`}
-                          >
-                            <FiExternalLink size={16} />
-                            <span>Live Demo</span>
-                          </a>
-                        )}
-                        {project.githubUrl && (
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`${styles.btn} ${styles.secondary}`}
-                          >
-                            <FaGithub size={18} />
-                          </a>
-                        )}
+                        {(() => {
+                          const demoUrl = formatExternalUrl(
+                            project.demoUrl || project.demoLink || project.liveUrl || project.link
+                          );
+                          const githubUrl = formatExternalUrl(
+                            project.githubUrl || project.githubLink || project.repoUrl
+                          );
+
+                          return (
+                            <>
+                              {/* Live Demo Button (Hero & Navbar Primary Gradient Pill) */}
+                              {demoUrl ? (
+                                <a
+                                  href={demoUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={`${styles.cardBtn} ${styles.primaryDemoBtn}`}
+                                >
+                                  <span>Live Demo</span>
+                                  <FiExternalLink size={15} className={styles.btnArrow} />
+                                </a>
+                              ) : (
+                                <div className={styles.popoverWrapper}>
+                                  <button
+                                    type="button"
+                                    className={`${styles.cardBtn} ${styles.primaryDemoBtn}`}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setActivePopover((prev) =>
+                                        prev?.id === `${project.id}-demo`
+                                          ? null
+                                          : {
+                                            id: `${project.id}-demo`,
+                                            title: "Live Demo Unavailable",
+                                            text: "Live demo is not available yet for this project (in development / internal system).",
+                                          }
+                                      );
+                                    }}
+                                    title="Live Demo not available yet — Click for info"
+                                  >
+                                    <span>Live Demo</span>
+                                    <FiExternalLink size={15} className={styles.btnArrow} />
+                                  </button>
+                                  <AnimatePresence>
+                                    {activePopover?.id === `${project.id}-demo` && (
+                                      <motion.div
+                                        className={styles.inlinePopover}
+                                        initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                                        transition={{ duration: 0.16, ease: "easeOut" }}
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        <div className={styles.popoverArrow} />
+                                        <div className={styles.popoverHeaderRow}>
+                                          <span className={styles.popoverDot} />
+                                          <strong>{activePopover.title}</strong>
+                                          <button
+                                            type="button"
+                                            className={styles.popoverMiniClose}
+                                            onClick={() => setActivePopover(null)}
+                                            aria-label="Close"
+                                          >
+                                            <X size={12} />
+                                          </button>
+                                        </div>
+                                        <p className={styles.popoverText}>{activePopover.text}</p>
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                              )}
+
+                              {/* GitHub Button (Equal Length Secondary Pill) */}
+                              {githubUrl ? (
+                                <a
+                                  href={githubUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={`${styles.cardBtn} ${styles.secondaryGithubBtn}`}
+                                  title="View GitHub Repository"
+                                  aria-label={`${project.title} GitHub Repository`}
+                                >
+                                  <FaGithub size={16} />
+                                  <span>Code</span>
+                                </a>
+                              ) : (
+                                <div className={styles.popoverWrapper}>
+                                  <button
+                                    type="button"
+                                    className={`${styles.cardBtn} ${styles.secondaryGithubBtn}`}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setActivePopover((prev) =>
+                                        prev?.id === `${project.id}-github`
+                                          ? null
+                                          : {
+                                            id: `${project.id}-github`,
+                                            title: "Private Repository",
+                                            text: "Source code is confidential or under client NDA. Available upon request.",
+                                          }
+                                      );
+                                    }}
+                                    title="Private repository — Click for info"
+                                    aria-label={`${project.title} Private Codebase`}
+                                  >
+                                    <FaGithub size={16} />
+                                    <span>Code</span>
+                                  </button>
+                                  <AnimatePresence>
+                                    {activePopover?.id === `${project.id}-github` && (
+                                      <motion.div
+                                        className={`${styles.inlinePopover} ${styles.inlinePopoverRight}`}
+                                        initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                                        transition={{ duration: 0.16, ease: "easeOut" }}
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        <div className={`${styles.popoverArrow} ${styles.popoverArrowRight}`} />
+                                        <div className={styles.popoverHeaderRow}>
+                                          <span className={`${styles.popoverDot} ${styles.popoverDotYellow}`} />
+                                          <strong>{activePopover.title}</strong>
+                                          <button
+                                            type="button"
+                                            className={styles.popoverMiniClose}
+                                            onClick={() => setActivePopover(null)}
+                                            aria-label="Close"
+                                          >
+                                            <X size={12} />
+                                          </button>
+                                        </div>
+                                        <p className={styles.popoverText}>{activePopover.text}</p>
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                              )}
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
                   </motion.div>
@@ -502,17 +633,143 @@ const Projects = () => {
                 <p className={styles.imageViewerDesc}>{selectedProject.description}</p>
               </div>
               <div className={styles.footerRight}>
-                {selectedProject.demoUrl && selectedProject.demoUrl !== "#" && (
-                  <a
-                    href={selectedProject.demoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.modalActionBtn}
-                  >
-                    <FiExternalLink size={14} />
-                    <span>Open Live Demo</span>
-                  </a>
-                )}
+                {(() => {
+                  const modalDemoUrl = formatExternalUrl(
+                    selectedProject.demoUrl || selectedProject.demoLink || selectedProject.liveUrl || selectedProject.link
+                  );
+                  const modalGithubUrl = formatExternalUrl(
+                    selectedProject.githubUrl || selectedProject.githubLink || selectedProject.repoUrl
+                  );
+
+                  return (
+                    <>
+                      {modalDemoUrl ? (
+                        <a
+                          href={modalDemoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${styles.modalActionBtn} ${styles.modalPrimaryBtn}`}
+                        >
+                          <span>Open Live Demo</span>
+                          <FiExternalLink size={15} className={styles.btnArrow} />
+                        </a>
+                      ) : (
+                        <div className={styles.modalPopoverWrapper}>
+                          <button
+                            type="button"
+                            className={`${styles.modalActionBtn} ${styles.modalPrimaryBtn} ${styles.btnUnavailable}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setActivePopover((prev) =>
+                                prev?.id === `modal-${selectedProject.id}-demo`
+                                  ? null
+                                  : {
+                                    id: `modal-${selectedProject.id}-demo`,
+                                    title: "Live Demo Unavailable",
+                                    text: "Live demo not yet available for this project (in development / internal system).",
+                                  }
+                              );
+                            }}
+                          >
+                            <span>Live Demo</span>
+                            <FiExternalLink size={15} className={styles.btnArrow} />
+                          </button>
+                          <AnimatePresence>
+                            {activePopover?.id === `modal-${selectedProject.id}-demo` && (
+                              <motion.div
+                                className={`${styles.inlinePopover} ${styles.modalInlinePopover}`}
+                                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                                transition={{ duration: 0.16, ease: "easeOut" }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className={`${styles.popoverArrow} ${styles.popoverArrowBottom}`} />
+                                <div className={styles.popoverHeaderRow}>
+                                  <span className={styles.popoverDot} />
+                                  <strong>{activePopover.title}</strong>
+                                  <button
+                                    type="button"
+                                    className={styles.popoverMiniClose}
+                                    onClick={() => setActivePopover(null)}
+                                    aria-label="Close"
+                                  >
+                                    <X size={12} />
+                                  </button>
+                                </div>
+                                <p className={styles.popoverText}>{activePopover.text}</p>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      )}
+
+                      {modalGithubUrl ? (
+                        <a
+                          href={modalGithubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${styles.modalActionBtn} ${styles.modalSecondaryBtn}`}
+                          style={{ marginLeft: "0.6rem" }}
+                        >
+                          <FaGithub size={15} />
+                          <span>View GitHub</span>
+                        </a>
+                      ) : (
+                        <div className={styles.modalPopoverWrapper} style={{ marginLeft: "0.6rem" }}>
+                          <button
+                            type="button"
+                            className={`${styles.modalActionBtn} ${styles.modalSecondaryBtn} ${styles.btnUnavailableSecondary}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setActivePopover((prev) =>
+                                prev?.id === `modal-${selectedProject.id}-github`
+                                  ? null
+                                  : {
+                                    id: `modal-${selectedProject.id}-github`,
+                                    title: "Private Repository",
+                                    text: "Source code is confidential or under client NDA. Available upon request.",
+                                  }
+                              );
+                            }}
+                          >
+                            <FaGithub size={15} />
+                            <span>GitHub</span>
+                          </button>
+                          <AnimatePresence>
+                            {activePopover?.id === `modal-${selectedProject.id}-github` && (
+                              <motion.div
+                                className={`${styles.inlinePopover} ${styles.modalInlinePopover} ${styles.inlinePopoverRight}`}
+                                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                                transition={{ duration: 0.16, ease: "easeOut" }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className={`${styles.popoverArrow} ${styles.popoverArrowRight} ${styles.popoverArrowBottom}`} />
+                                <div className={styles.popoverHeaderRow}>
+                                  <span className={`${styles.popoverDot} ${styles.popoverDotYellow}`} />
+                                  <strong>{activePopover.title}</strong>
+                                  <button
+                                    type="button"
+                                    className={styles.popoverMiniClose}
+                                    onClick={() => setActivePopover(null)}
+                                    aria-label="Close"
+                                  >
+                                    <X size={12} />
+                                  </button>
+                                </div>
+                                <p className={styles.popoverText}>{activePopover.text}</p>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             </div>
           </div>

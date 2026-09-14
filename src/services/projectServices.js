@@ -13,6 +13,36 @@ import {
 
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
+export const PROJECTS_STORAGE_KEY = "smv_personal_projects_v6";
+const LOCAL_STORAGE_KEY = PROJECTS_STORAGE_KEY;
+
+/**
+ * Safely format and validate external URLs (auto-prefixes https://, discards '#' and empty values)
+ */
+export function formatExternalUrl(url) {
+  if (!url || typeof url !== "string") return "";
+  const trimmed = url.trim();
+  if (
+    !trimmed ||
+    trimmed === "#" ||
+    trimmed.toLowerCase() === "none" ||
+    trimmed.toLowerCase() === "null" ||
+    trimmed.toLowerCase() === "n/a" ||
+    trimmed.toLowerCase() === "undefined"
+  ) {
+    return "";
+  }
+  if (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("mailto:") ||
+    trimmed.startsWith("tel:")
+  ) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
+
 export const DEFAULT_PROJECTS = [
   {
     id: "wellpet-vetcore-pro",
@@ -28,8 +58,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: true,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 10,
     createdAt: "2026-03-10T00:00:00.000Z",
   },
@@ -47,8 +77,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 9,
     createdAt: "2026-03-01T00:00:00.000Z",
   },
@@ -66,8 +96,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 8,
     createdAt: "2026-02-25T00:00:00.000Z",
   },
@@ -85,8 +115,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 7,
     createdAt: "2026-02-20T00:00:00.000Z",
   },
@@ -104,8 +134,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 6,
     createdAt: "2026-02-18T00:00:00.000Z",
   },
@@ -123,8 +153,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 5,
     createdAt: "2026-02-16T00:00:00.000Z",
   },
@@ -142,8 +172,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 4,
     createdAt: "2026-02-15T00:00:00.000Z",
   },
@@ -161,8 +191,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 3,
     createdAt: "2026-01-20T00:00:00.000Z",
   },
@@ -180,8 +210,8 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 2,
     createdAt: "2026-01-10T00:00:00.000Z",
   },
@@ -199,15 +229,12 @@ export const DEFAULT_PROJECTS = [
     isMasterFeatured: false,
     image: "/img/projects/project-generic-thumbnail.jpg",
     mobileImage: "/img/projects/project-generic-thumbnail.jpg",
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "",
+    githubUrl: "https://github.com/Sapnu24",
     order: 1,
     createdAt: "2026-01-05T00:00:00.000Z",
   },
 ];
-
-export const PROJECTS_STORAGE_KEY = "smv_personal_projects_v6";
-const LOCAL_STORAGE_KEY = PROJECTS_STORAGE_KEY;
 
 // Map default mobile images for automatic migration
 const DEFAULT_MOBILE_MAP = {
@@ -276,7 +303,11 @@ export function getCachedProjects() {
       if (Array.isArray(parsed) && parsed.length > 0) {
         const enriched = parsed.map((p) => ({
           ...p,
-          category: inferProjectCategory(p),
+          category: (p.category && typeof p.category === "string" && p.category.trim())
+            ? p.category.trim()
+            : inferProjectCategory(p),
+          demoUrl: formatExternalUrl(p.demoUrl || p.demoLink || p.liveUrl || p.link),
+          githubUrl: formatExternalUrl(p.githubUrl || p.githubLink || p.repoUrl),
           mobileImage: p.mobileImage || DEFAULT_MOBILE_MAP[p.id] || p.image,
         }));
         return sortProjects(enriched);
@@ -327,10 +358,16 @@ export async function getProjects() {
       const data = docSnap.data();
       const isMaster = Boolean(data.isMasterFeatured);
       const isFeatured = Boolean(data.featured || isMaster);
+      const category = (data.category && typeof data.category === "string" && data.category.trim())
+        ? data.category.trim()
+        : inferProjectCategory({ id: docSnap.id, ...data });
+
       return {
         id: docSnap.id,
         ...data,
-        category: inferProjectCategory({ id: docSnap.id, ...data }),
+        category,
+        demoUrl: formatExternalUrl(data.demoUrl || data.demoLink || data.liveUrl || data.link),
+        githubUrl: formatExternalUrl(data.githubUrl || data.githubLink || data.repoUrl),
         isMasterFeatured: isMaster,
         featured: isFeatured,
         technologies: Array.isArray(data.technologies)
@@ -628,38 +665,61 @@ export async function uploadProjectThumbnail(file, onProgress) {
 
 
 /**
- * Add a new project to Firestore
+ * Add a new project to Firestore and sync local cache
  */
 export async function addProject(projectData) {
+  const category = (projectData.category && typeof projectData.category === "string" && projectData.category.trim())
+    ? projectData.category.trim()
+    : inferProjectCategory(projectData);
+
   const payload = {
     ...projectData,
+    category,
+    demoUrl: formatExternalUrl(projectData.demoUrl || projectData.demoLink || projectData.liveUrl || projectData.link || ""),
+    githubUrl: formatExternalUrl(projectData.githubUrl || projectData.githubLink || projectData.repoUrl || ""),
     order: Number(projectData.order) || Date.now(),
     createdAt: new Date().toISOString(),
-  };
-
-  if (!isFirebaseConfigured || !db) {
-    const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
-    const list = cached ? JSON.parse(cached) : [...DEFAULT_PROJECTS];
-    const newId = `proj-${Date.now()}`;
-    const newItem = { id: newId, ...payload };
-    list.push(newItem);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
-    return newId;
-  }
-
-  const docRef = await addDoc(collection(db, "projects"), payload);
-  return docRef.id;
-}
-
-/**
- * Update an existing project in Firestore
- */
-export async function updateProject(id, projectData) {
-  const payload = {
-    ...projectData,
     updatedAt: new Date().toISOString(),
   };
 
+  let newId = `proj-${Date.now()}`;
+
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = await addDoc(collection(db, "projects"), payload);
+      if (docRef?.id) newId = docRef.id;
+    } catch (err) {
+      console.warn("Could not add project to Firestore (saving to local cache):", err);
+    }
+  }
+
+  // Always update local cache immediately
+  const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const list = cached ? JSON.parse(cached) : [...DEFAULT_PROJECTS];
+  const newItem = { id: newId, ...payload };
+  const updatedList = [newItem, ...list.filter((p) => p.id !== newId)];
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedList));
+
+  return newId;
+}
+
+/**
+ * Update an existing project in Firestore and sync local cache
+ */
+export async function updateProject(id, projectData) {
+  const category = (projectData.category && typeof projectData.category === "string" && projectData.category.trim())
+    ? projectData.category.trim()
+    : inferProjectCategory(projectData);
+
+  const payload = {
+    ...projectData,
+    category,
+    demoUrl: formatExternalUrl(projectData.demoUrl || projectData.demoLink || projectData.liveUrl || projectData.link || ""),
+    githubUrl: formatExternalUrl(projectData.githubUrl || projectData.githubLink || projectData.repoUrl || ""),
+    updatedAt: new Date().toISOString(),
+  };
+
+  // Always update local cache immediately
   const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (cached) {
     const list = JSON.parse(cached).map((p) =>
@@ -668,17 +728,18 @@ export async function updateProject(id, projectData) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
   }
 
-  if (!isFirebaseConfigured || !db) {
-    return;
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = doc(db, "projects", id);
+      await setDoc(docRef, payload, { merge: true });
+    } catch (err) {
+      console.warn("Could not update project in Firestore (saved locally):", err);
+    }
   }
-
-  const docRef = doc(db, "projects", id);
-  await setDoc(docRef, payload, { merge: true });
 }
 
-
 /**
- * Delete a project from Firestore
+ * Delete a project from Firestore and sync local cache
  */
 export async function deleteProject(id) {
   const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -687,10 +748,12 @@ export async function deleteProject(id) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
   }
 
-  if (!isFirebaseConfigured || !db) {
-    return;
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = doc(db, "projects", id);
+      await deleteDoc(docRef);
+    } catch (err) {
+      console.warn("Could not delete project from Firestore (deleted locally):", err);
+    }
   }
-
-  const docRef = doc(db, "projects", id);
-  await deleteDoc(docRef);
 }

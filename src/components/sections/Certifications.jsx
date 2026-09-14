@@ -130,16 +130,10 @@ const Certifications = () => {
                         <span
                           key={index}
                           className={styles.tag}
-                          style={{
-                            "--tech-color": badge.color,
-                            color: badge.color,
-                            backgroundColor: `${badge.color}15`,
-                            borderColor: `${badge.color}35`,
-                          }}
                           title={`${skill} (${badge.name})`}
                         >
                           {IconComp && (
-                            <IconComp size={11} style={{ color: badge.color }} />
+                            <IconComp size={11} className={styles.tagIcon} />
                           )}
                           <span>{skill}</span>
                         </span>

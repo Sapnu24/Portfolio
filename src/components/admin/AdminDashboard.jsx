@@ -31,9 +31,13 @@ import {
   Loader2,
   RefreshCw,
   Zap,
+  Globe,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 import styles from "@/styles/AdminDashboard.module.css";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import {
   getProjects,
   addProject,
@@ -43,6 +47,8 @@ import {
   seedProjectsToFirestore,
   setMasterFeaturedProject,
   DEFAULT_PROJECTS,
+  formatExternalUrl,
+  inferProjectCategory,
 } from "@/services/projectServices";
 import {
   getHeroProfile,
@@ -131,6 +137,8 @@ export default function AdminDashboard({ isDemo = false }) {
   // 2. Banner Skills state
   const [bannerSkills, setBannerSkills] = useState(DEFAULT_BANNER_SKILLS);
   const [showBannerModal, setShowBannerModal] = useState(false);
+  const [bannerSearch, setBannerSearch] = useState("");
+  const [bannerFilter, setBannerFilter] = useState("all"); // "all" | "hero" | "carousel" | "hidden"
   const [bannerForm, setBannerForm] = useState({
     name: "",
     iconKey: "react",
@@ -148,6 +156,7 @@ export default function AdminDashboard({ isDemo = false }) {
   const [projectTagInput, setProjectTagInput] = useState("");
   const [projectForm, setProjectForm] = useState({
     title: "",
+    category: "Websites",
     status: "Completed",
     duration: "1 year",
     team: "Solo",
@@ -391,6 +400,7 @@ export default function AdminDashboard({ isDemo = false }) {
     setProjectTagInput("");
     setProjectForm({
       title: "",
+      category: "Websites",
       status: "Completed",
       duration: "1 year",
       team: "Solo",
@@ -409,8 +419,16 @@ export default function AdminDashboard({ isDemo = false }) {
   const handleOpenEditProject = (project) => {
     setEditingProject(project);
     setProjectTagInput("");
+    const cleanDemoUrl = formatExternalUrl(
+      project.demoUrl || project.demoLink || project.liveUrl || project.link
+    );
+    const cleanGithubUrl = formatExternalUrl(
+      project.githubUrl || project.githubLink || project.repoUrl
+    );
+
     setProjectForm({
       title: project.title || "",
+      category: project.category || inferProjectCategory(project) || "Websites",
       status: project.status || "Completed",
       duration: project.duration || "",
       team: project.team || "Solo",
@@ -421,8 +439,8 @@ export default function AdminDashboard({ isDemo = false }) {
           : [],
       description: project.description || "",
       image: project.image || "/img/projects/project-generic-thumbnail.jpg",
-      demoUrl: project.demoUrl || "",
-      githubUrl: project.githubUrl || "",
+      demoUrl: cleanDemoUrl,
+      githubUrl: cleanGithubUrl || "https://github.com/Sapnu24",
       featured: Boolean(project.featured),
       isMasterFeatured: Boolean(project.isMasterFeatured),
     });
@@ -519,8 +537,14 @@ export default function AdminDashboard({ isDemo = false }) {
       return;
     }
     await withLoading("save-project", async () => {
+      const formattedDemoUrl = formatExternalUrl(projectForm.demoUrl);
+      const formattedGithubUrl = formatExternalUrl(projectForm.githubUrl);
+
       const payload = {
         ...projectForm,
+        category: (projectForm.category && projectForm.category.trim()) ? projectForm.category.trim() : "Websites",
+        demoUrl: formattedDemoUrl,
+        githubUrl: formattedGithubUrl,
         technologies: Array.isArray(projectForm.technologies)
           ? projectForm.technologies
           : typeof projectForm.technologies === "string"
@@ -1182,20 +1206,6 @@ export default function AdminDashboard({ isDemo = false }) {
             />
           </label>
           <label>
-            LinkedIn Profile URL
-            <input
-              type="url"
-              value={heroForm.linkedinUrl || ""}
-              onChange={(e) =>
-                setHeroForm({ ...heroForm, linkedinUrl: e.target.value })
-              }
-              placeholder="https://linkedin.com"
-            />
-          </label>
-        </div>
-
-        <div className={styles.formGrid}>
-          <label>
             Dynamic Projects Handled / Done
             <input
               type="text"
@@ -1232,6 +1242,22 @@ export default function AdminDashboard({ isDemo = false }) {
   // 4. BANNER CAROUSEL & HERO TECH STACKS
   const renderBanner = () => {
     const heroCount = bannerSkills.filter((s) => s.showInHero).length;
+    const carouselCount = bannerSkills.filter((s) => s.isVisible !== false).length;
+    const hiddenCount = bannerSkills.filter((s) => s.isVisible === false).length;
+
+    const filteredBannerSkills = bannerSkills.filter((s) => {
+      if (bannerFilter === "hero" && !s.showInHero) return false;
+      if (bannerFilter === "carousel" && s.isVisible === false) return false;
+      if (bannerFilter === "hidden" && s.isVisible !== false) return false;
+      if (bannerSearch.trim()) {
+        const q = bannerSearch.trim().toLowerCase();
+        return (
+          s.name?.toLowerCase().includes(q) ||
+          s.iconKey?.toLowerCase().includes(q)
+        );
+      }
+      return true;
+    });
 
     return (
       <section className={styles.panel}>
@@ -1239,14 +1265,19 @@ export default function AdminDashboard({ isDemo = false }) {
           <div>
             <h2>Tech Stacks & Banner Skills Manager</h2>
             <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
-              Manage technologies, carousel display, and choose up to 12 featured skills to display in your Hero section.
+              Manage technologies, carousel marquee visibility, and choose up to 12 featured skills for your Hero section.
             </span>
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
-            <div className={styles.heroSkillCounterBadge}>
-              <Sparkles size={14} color="#b45309" />
+            <div
+              className={`${styles.heroSkillCounterBadge} ${
+                heroCount >= 12 ? styles.heroSkillCounterFull : ""
+              }`}
+            >
+              <Sparkles size={14} />
               <span>
                 Featured in Hero: <strong>{heroCount}/12</strong>
+                {heroCount >= 12 ? " (Hero Full)" : ` (${12 - heroCount} left)`}
               </span>
             </div>
             <button
@@ -1304,94 +1335,201 @@ export default function AdminDashboard({ isDemo = false }) {
           </div>
         </div>
 
-        <div className={styles.bannerSkillsGrid}>
-          {bannerSkills.map((s) => {
-            const inHero = Boolean(s.showInHero);
-            return (
-              <div
-                key={s.id}
-                className={`${styles.bannerSkillCard} ${inHero ? styles.bannerSkillCardInHero : ""
-                  }`}
+        {/* Toolbar: Search and Filter Tabs */}
+        <div className={styles.bannerToolbar}>
+          <div className={styles.bannerSearchBox}>
+            <Search size={15} className={styles.bannerSearchIcon} />
+            <input
+              type="text"
+              placeholder="Search tech (e.g. React, Laravel, Docker, Python)..."
+              value={bannerSearch}
+              onChange={(e) => setBannerSearch(e.target.value)}
+              className={styles.bannerSearchInput}
+            />
+            {bannerSearch && (
+              <button
+                type="button"
+                onClick={() => setBannerSearch("")}
+                className={styles.bannerSearchClear}
+                title="Clear search"
               >
-                <div className={styles.bannerSkillInfo}>
-                  <div className={styles.bannerSkillIconWrap}>
-                    {getTechIcon(s.iconKey || s.name, 18)}
-                  </div>
-                  <div className={styles.bannerSkillNameGroup}>
-                    <strong>{s.name}</strong>
-                    {inHero && (
-                      <span className={styles.inHeroMiniBadge}>Hero Featured</span>
-                    )}
-                  </div>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  {/* Hero Section Toggle Button */}
-                  <button
-                    type="button"
-                    className={styles.iconButton}
-                    disabled={crudLoading[`hero-skill-${s.id}`]}
-                    title={
-                      inHero
-                        ? "Remove from Hero section"
-                        : "Display in Hero section (up to 12)"
-                    }
-                    onClick={() => handleToggleHeroSkill(s)}
-                    style={{
-                      color: inHero ? "#b45309" : "#64748b",
-                      background: inHero ? "#fef3c7" : "#f1f5f9",
-                      border: inHero
-                        ? "1px solid #fcd34d"
-                        : "1px solid transparent",
-                    }}
-                  >
-                    {crudLoading[`hero-skill-${s.id}`] ? (
-                      <Loader2 size={16} className={styles.spinner} />
-                    ) : (
-                      <Sparkles size={16} />
-                    )}
-                  </button>
+                <X size={14} />
+              </button>
+            )}
+          </div>
 
-                  {/* Carousel Visibility Toggle Button */}
-                  <button
-                    type="button"
-                    className={styles.iconButton}
-                    disabled={crudLoading[`vis-skill-${s.id}`]}
-                    title={
-                      s.isVisible !== false
-                        ? "Visible in carousel (click to hide)"
-                        : "Hidden from carousel (click to show)"
-                    }
-                    onClick={() => handleToggleBannerVisibility(s)}
-                    style={{
-                      color: s.isVisible !== false ? "#16a34a" : "#94a3b8",
-                      background: s.isVisible !== false ? "#dcfce7" : "#f1f5f9",
-                    }}
-                  >
-                    {crudLoading[`vis-skill-${s.id}`] ? (
-                      <Loader2 size={16} className={styles.spinner} />
-                    ) : (
-                      <Activity size={16} />
-                    )}
-                  </button>
-
-                  <button
-                    type="button"
-                    className={`${styles.iconButton} ${styles.deleteBtn}`}
-                    title="Remove tech stack"
-                    disabled={crudLoading[`del-banner-${s.id}`]}
-                    onClick={() => handleDeleteBannerSkill(s.id)}
-                  >
-                    {crudLoading[`del-banner-${s.id}`] ? (
-                      <Loader2 size={16} className={styles.spinner} />
-                    ) : (
-                      <Trash2 size={16} />
-                    )}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+          <div className={styles.bannerFilterTabs}>
+            <button
+              type="button"
+              className={`${styles.bannerFilterBtn} ${
+                bannerFilter === "all" ? styles.bannerFilterBtnActive : ""
+              }`}
+              onClick={() => setBannerFilter("all")}
+            >
+              <span>All Tech</span>
+              <span className={styles.bannerFilterBadge}>{bannerSkills.length}</span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.bannerFilterBtn} ${
+                bannerFilter === "hero" ? styles.bannerFilterBtnActive : ""
+              }`}
+              onClick={() => setBannerFilter("hero")}
+            >
+              <Sparkles size={13} />
+              <span>Hero Featured</span>
+              <span className={styles.bannerFilterBadge}>{heroCount}/12</span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.bannerFilterBtn} ${
+                bannerFilter === "carousel" ? styles.bannerFilterBtnActive : ""
+              }`}
+              onClick={() => setBannerFilter("carousel")}
+            >
+              <Globe size={13} />
+              <span>In Carousel</span>
+              <span className={styles.bannerFilterBadge}>{carouselCount}</span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.bannerFilterBtn} ${
+                bannerFilter === "hidden" ? styles.bannerFilterBtnActive : ""
+              }`}
+              onClick={() => setBannerFilter("hidden")}
+            >
+              <EyeOff size={13} />
+              <span>Hidden</span>
+              <span className={styles.bannerFilterBadge}>{hiddenCount}</span>
+            </button>
+          </div>
         </div>
+
+        {/* Tech Stacks Grid */}
+        {filteredBannerSkills.length === 0 ? (
+          <div className={styles.bannerEmptyState}>
+            <p>No technologies match your current search or filter criteria.</p>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => {
+                setBannerSearch("");
+                setBannerFilter("all");
+              }}
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          <div className={styles.bannerSkillsGrid}>
+            {filteredBannerSkills.map((s) => {
+              const inHero = Boolean(s.showInHero);
+              const isHidden = s.isVisible === false;
+
+              return (
+                <div
+                  key={s.id}
+                  className={`${styles.bannerSkillCard} ${
+                    inHero ? styles.bannerSkillCardInHero : ""
+                  } ${isHidden ? styles.bannerSkillCardHidden : ""}`}
+                >
+                  <div className={styles.bannerSkillMain}>
+                    <div className={styles.bannerSkillIconWrap}>
+                      {getTechIcon(s.iconKey || s.name, 20)}
+                    </div>
+                    <div className={styles.bannerSkillInfoGroup}>
+                      <span className={styles.bannerSkillName} title={s.name}>
+                        {s.name}
+                      </span>
+                      <div className={styles.bannerSkillBadges}>
+                        {inHero && (
+                          <span className={styles.inHeroMiniBadge}>
+                            <Sparkles size={10} /> Hero
+                          </span>
+                        )}
+                        {!isHidden ? (
+                          <span className={styles.carouselActiveBadge}>Carousel</span>
+                        ) : (
+                          <span className={styles.carouselHiddenBadge}>Hidden</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.bannerSkillActions}>
+                    {/* Hero Toggle */}
+                    <button
+                      type="button"
+                      className={`${styles.bannerActionBtn} ${
+                        inHero
+                          ? styles.bannerActionHeroActive
+                          : styles.bannerActionHeroInactive
+                      }`}
+                      disabled={crudLoading[`hero-skill-${s.id}`]}
+                      title={
+                        inHero
+                          ? "Featured in Hero section (Click to remove)"
+                          : heroCount >= 12
+                          ? "Hero section is full (12/12). Unfeature one to add this."
+                          : "Feature in Hero section (up to 12)"
+                      }
+                      onClick={() => handleToggleHeroSkill(s)}
+                    >
+                      {crudLoading[`hero-skill-${s.id}`] ? (
+                        <Loader2 size={14} className={styles.spinner} />
+                      ) : (
+                        <Sparkles size={14} />
+                      )}
+                      <span className={styles.bannerActionText}>
+                        {inHero ? "In Hero" : "Hero"}
+                      </span>
+                    </button>
+
+                    {/* Carousel Visibility Toggle */}
+                    <button
+                      type="button"
+                      className={`${styles.bannerActionBtn} ${
+                        !isHidden
+                          ? styles.bannerActionVisActive
+                          : styles.bannerActionVisInactive
+                      }`}
+                      disabled={crudLoading[`vis-skill-${s.id}`]}
+                      title={
+                        !isHidden
+                          ? "Visible in Carousel (Click to hide)"
+                          : "Hidden from Carousel (Click to show)"
+                      }
+                      onClick={() => handleToggleBannerVisibility(s)}
+                    >
+                      {crudLoading[`vis-skill-${s.id}`] ? (
+                        <Loader2 size={14} className={styles.spinner} />
+                      ) : !isHidden ? (
+                        <Eye size={14} />
+                      ) : (
+                        <EyeOff size={14} />
+                      )}
+                    </button>
+
+                    {/* Delete */}
+                    <button
+                      type="button"
+                      className={`${styles.bannerActionBtn} ${styles.bannerActionDelete}`}
+                      title="Remove tech stack"
+                      disabled={crudLoading[`del-banner-${s.id}`]}
+                      onClick={() => handleDeleteBannerSkill(s.id)}
+                    >
+                      {crudLoading[`del-banner-${s.id}`] ? (
+                        <Loader2 size={14} className={styles.spinner} />
+                      ) : (
+                        <Trash2 size={14} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
     );
   };
@@ -1447,155 +1585,159 @@ export default function AdminDashboard({ isDemo = false }) {
       {loadingProjects ? (
         <p style={{ padding: "1.5rem" }}>Loading projects...</p>
       ) : (
-        <div className={styles.projectTable}>
-          <div className={styles.projectTableHeader}>
-            <span>Project</span>
-            <span>Status</span>
-            <span>Duration</span>
-            <span>Tech Stack</span>
-            <span style={{ textAlign: "right" }}>Actions</span>
-          </div>
-          {filteredProjects.map((p) => {
-            const statusClass =
-              p.status === "Completed"
-                ? styles.statusCompleted
-                : p.status === "Deployment"
-                  ? styles.statusDeployment
-                  : styles.statusProgress;
+        <div className={styles.projectTableWrapper}>
+          <div className={styles.projectTable}>
+            <div className={styles.projectTableHeader}>
+              <span>Project</span>
+              <span>Category</span>
+              <span>Status</span>
+              <span>Duration</span>
+              <span>Tech Stack</span>
+              <span style={{ textAlign: "right" }}>Actions</span>
+            </div>
+            {filteredProjects.map((p) => {
+              const statusClass =
+                p.status === "Completed"
+                  ? styles.statusCompleted
+                  : p.status === "Deployment"
+                    ? styles.statusDeployment
+                    : styles.statusProgress;
 
-            return (
-              <div key={p.id} className={styles.projectTableRow}>
-                <div className={styles.mobileFieldRow}>
-                  <strong style={{ fontSize: "0.95rem", color: "var(--primary-color, #4f46e5)" }}>
-                    {p.title}
-                  </strong>
-                  {p.isMasterFeatured && (
-                    <span
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "0.25rem",
-                        background: "linear-gradient(135deg, #4f46e5, #06b6d4)",
-                        color: "#ffffff",
-                        fontSize: "0.68rem",
-                        fontWeight: 700,
-                        padding: "0.15rem 0.5rem",
-                        borderRadius: "9999px",
-                        marginTop: "0.25rem",
-                        width: "fit-content",
-                        boxShadow: "0 2px 8px rgba(79, 70, 229, 0.3)",
-                      }}
-                    >
-                      Master Featured (#1 in Dev)
-                    </span>
-                  )}
-                  {p.featured && !p.isMasterFeatured && (
-                    <small
-                      style={{
-                        display: "block",
-                        color: "var(--accent-color, #06b6d4)",
-                        fontWeight: 600,
-                        marginTop: "0.15rem",
-                      }}
-                    >
-                      ★ Featured
-                    </small>
-                  )}
-                </div>
-
-                <div className={styles.mobileFieldRow}>
-                  <span className={styles.mobileFieldLabel}>Status</span>
-                  <span className={`${styles.statusBadge} ${statusClass}`}>{p.status || "In progress"}</span>
-                </div>
-
-                <div className={styles.mobileFieldRow}>
-                  <span className={styles.mobileFieldLabel}>Duration</span>
-                  <span style={{ fontSize: "0.85rem", color: "#475569" }}>{p.duration || "—"}</span>
-                </div>
-
-                <div className={styles.mobileFieldRow}>
-                  <span className={styles.mobileFieldLabel}>Tech Stack</span>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem", alignItems: "center" }}>
-                    {Array.isArray(p.technologies) && p.technologies.length > 0 ? (
-                      p.technologies.map((t, idx) => {
-                        const badge = getTechBadgeData(t);
-                        const Icon = badge.icon;
-                        return (
-                          <span
-                            key={idx}
-                            style={{
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "0.25rem",
-                              padding: "0.15rem 0.5rem",
-                              borderRadius: "9999px",
-                              fontSize: "0.72rem",
-                              fontWeight: 600,
-                              color: badge.color,
-                              backgroundColor: `${badge.color}14`,
-                              border: `1px solid ${badge.color}35`,
-                            }}
-                            title={t}
-                          >
-                            {Icon && <Icon size={11} style={{ color: badge.color }} />}
-                            <span>{t}</span>
-                          </span>
-                        );
-                      })
-                    ) : (
-                      <span style={{ fontSize: "0.85rem", color: "#64748b" }}>—</span>
+              return (
+                <div key={p.id} className={styles.projectTableRow}>
+                  <div className={styles.mobileFieldRow}>
+                    <strong className={styles.projectTitleText}>
+                      {p.title}
+                    </strong>
+                    {p.isMasterFeatured && (
+                      <span className={styles.masterFeaturedBadge}>
+                        Master Featured (#1 in Dev)
+                      </span>
                     )}
+                    {p.featured && !p.isMasterFeatured && (
+                      <small className={styles.featuredBadge}>
+                        ★ Featured
+                      </small>
+                    )}
+                    {/* Live Demo & GitHub link indicators */}
+                    <div className={styles.projectLinksRow}>
+                      {formatExternalUrl(p.demoUrl) ? (
+                        <a
+                          href={formatExternalUrl(p.demoUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.projectDemoLink}
+                          title={`Live Demo: ${formatExternalUrl(p.demoUrl)}`}
+                        >
+                          <Globe size={11} /> Live Demo
+                        </a>
+                      ) : (
+                        <span
+                          className={styles.projectNoDemoBadge}
+                          title="No Live Demo URL configured (button hidden on portfolio)"
+                        >
+                          No Demo Link
+                        </span>
+                      )}
+                      {formatExternalUrl(p.githubUrl) && (
+                        <a
+                          href={formatExternalUrl(p.githubUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.projectGithubLink}
+                          title={`GitHub: ${formatExternalUrl(p.githubUrl)}`}
+                        >
+                          <ExternalLink size={11} /> GitHub
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={styles.mobileFieldRow}>
+                    <span className={styles.mobileFieldLabel}>Category</span>
+                    <span className={styles.categoryBadge}>
+                      {p.category || inferProjectCategory(p)}
+                    </span>
+                  </div>
+
+                  <div className={styles.mobileFieldRow}>
+                    <span className={styles.mobileFieldLabel}>Status</span>
+                    <span className={`${styles.statusBadge} ${statusClass}`}>{p.status || "In progress"}</span>
+                  </div>
+
+                  <div className={styles.mobileFieldRow}>
+                    <span className={styles.mobileFieldLabel}>Duration</span>
+                    <span className={styles.durationText}>{p.duration || "—"}</span>
+                  </div>
+
+                  <div className={styles.mobileFieldRow}>
+                    <span className={styles.mobileFieldLabel}>Tech Stack</span>
+                    <div className={styles.techStackRow}>
+                      {Array.isArray(p.technologies) && p.technologies.length > 0 ? (
+                        p.technologies.map((t, idx) => {
+                          const badge = getTechBadgeData(t);
+                          const Icon = badge.icon;
+                          return (
+                            <span
+                              key={idx}
+                              className={styles.techBadgeChip}
+                              title={t}
+                            >
+                              {Icon && <Icon size={11} className={styles.techBadgeIcon} />}
+                              <span>{t}</span>
+                            </span>
+                          );
+                        })
+                      ) : (
+                        <span style={{ fontSize: "0.85rem", color: "#64748b" }}>—</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={styles.rowActions}>
+                    <button
+                      type="button"
+                      className={`${styles.iconButton} ${p.isMasterFeatured ? styles.masterStarBtnActive : styles.masterStarBtn}`}
+                      disabled={crudLoading[`star-proj-${p.id}`]}
+                      title={
+                        p.isMasterFeatured
+                          ? "Master Featured (Latest Works) - Click to unpin"
+                          : "Pin as Master Featured (Latest Works #1)"
+                      }
+                      onClick={() => handleToggleMasterFeatured(p.id)}
+                    >
+                      {crudLoading[`star-proj-${p.id}`] ? (
+                        <Loader2 size={16} className={styles.spinner} />
+                      ) : (
+                        <Star size={16} fill={p.isMasterFeatured ? "#f59e0b" : "none"} />
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.iconButton}
+                      title="Edit project"
+                      onClick={() => handleOpenEditProject(p)}
+                    >
+                      <Pencil size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.iconButton} ${styles.deleteBtn}`}
+                      title="Delete project"
+                      disabled={crudLoading[`del-proj-${p.id}`]}
+                      onClick={() => handleDeleteProject(p.id)}
+                    >
+                      {crudLoading[`del-proj-${p.id}`] ? (
+                        <Loader2 size={16} className={styles.spinner} />
+                      ) : (
+                        <Trash2 size={16} />
+                      )}
+                    </button>
                   </div>
                 </div>
-
-                <div className={styles.rowActions}>
-                  <button
-                    type="button"
-                    className={styles.iconButton}
-                    disabled={crudLoading[`star-proj-${p.id}`]}
-                    style={{
-                      color: p.isMasterFeatured ? "#f59e0b" : "#64748b",
-                      background: p.isMasterFeatured ? "#fef3c7" : "transparent",
-                      border: p.isMasterFeatured ? "1px solid #fde68a" : "1px solid #e2e8f0",
-                    }}
-                    title={
-                      p.isMasterFeatured
-                        ? "Master Featured (Latest Works) - Click to unpin"
-                        : "Pin as Master Featured (Latest Works #1)"
-                    }
-                    onClick={() => handleToggleMasterFeatured(p.id)}
-                  >
-                    {crudLoading[`star-proj-${p.id}`] ? (
-                      <Loader2 size={16} className={styles.spinner} />
-                    ) : (
-                      <Star size={16} fill={p.isMasterFeatured ? "#f59e0b" : "none"} />
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.iconButton}
-                    title="Edit project"
-                    onClick={() => handleOpenEditProject(p)}
-                  >
-                    <Pencil size={16} />
-                  </button>
-                  <button
-                    type="button"
-                    className={`${styles.iconButton} ${styles.deleteBtn}`}
-                    title="Delete project"
-                    disabled={crudLoading[`del-proj-${p.id}`]}
-                    onClick={() => handleDeleteProject(p.id)}
-                  >
-                    {crudLoading[`del-proj-${p.id}`] ? (
-                      <Loader2 size={16} className={styles.spinner} />
-                    ) : (
-                      <Trash2 size={16} />
-                    )}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
     </section>
@@ -1638,8 +1780,8 @@ export default function AdminDashboard({ isDemo = false }) {
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${mobileMenuOpen ? styles.sidebarOpen : ""}`}>
         <div className={styles.sidebarHeader}>
-          <a href="/" className={styles.brand}>
-            SMV.
+          <a href="/" className={styles.brand} title="Back to Portfolio">
+            SMV<span className={styles.brandDot}>.</span>
           </a>
           <button
             type="button"
@@ -1700,14 +1842,16 @@ export default function AdminDashboard({ isDemo = false }) {
           </div>
           <div className={styles.topbarActions}>
             <div className={styles.searchBox}>
-              <Search size={18} />
+              <Search size={18} className={styles.searchIcon} />
               <input
                 type="search"
+                className={styles.searchInput}
                 placeholder="Search projects or stack..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+            <ThemeToggle compact />
             <a
               href="/"
               target="_blank"
@@ -1854,6 +1998,41 @@ export default function AdminDashboard({ isDemo = false }) {
 
               <div className={styles.formGrid}>
                 <div>
+                  <label>Project Category</label>
+                  <select
+                    value={
+                      ["Websites", "Systems", "Mobile Apps", "Full Stack", "UI/UX Design", "IoT & Hardware", "Cloud & DevOps"].includes(projectForm.category)
+                        ? projectForm.category
+                        : "Other"
+                    }
+                    onChange={(e) => {
+                      if (e.target.value === "Other") {
+                        setProjectForm({ ...projectForm, category: "" });
+                      } else {
+                        setProjectForm({ ...projectForm, category: e.target.value });
+                      }
+                    }}
+                  >
+                    <option value="Websites">Websites (Web Apps, Portals, Landing Pages)</option>
+                    <option value="Systems">Systems (Management Systems, POS, ERP, DMS)</option>
+                    <option value="Mobile Apps">Mobile Apps (iOS, Android, PWA, Flutter)</option>
+                    <option value="Full Stack">Full Stack (Backend + Frontend Platforms)</option>
+                    <option value="UI/UX Design">UI/UX Design (Prototypes & Interfaces)</option>
+                    <option value="IoT & Hardware">IoT & Hardware (Telemetry, Embedded)</option>
+                    <option value="Cloud & DevOps">Cloud & DevOps (Serverless, Monitoring)</option>
+                    <option value="Other">Custom Category (Type below)...</option>
+                  </select>
+                  {(!["Websites", "Systems", "Mobile Apps", "Full Stack", "UI/UX Design", "IoT & Hardware", "Cloud & DevOps"].includes(projectForm.category) || projectForm.category === "") && (
+                    <input
+                      type="text"
+                      style={{ marginTop: "0.45rem" }}
+                      placeholder="Type custom category (e.g. AI Tools, Web3, Blockchain)..."
+                      value={projectForm.category}
+                      onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })}
+                    />
+                  )}
+                </div>
+                <div>
                   <label>Status</label>
                   <select
                     value={projectForm.status}
@@ -1866,6 +2045,9 @@ export default function AdminDashboard({ isDemo = false }) {
                     <option value="In Progress">In Progress</option>
                   </select>
                 </div>
+              </div>
+
+              <div className={styles.formGrid}>
                 <div>
                   <label>Team</label>
                   <select
@@ -1878,9 +2060,6 @@ export default function AdminDashboard({ isDemo = false }) {
                     <option value="Team">Team</option>
                   </select>
                 </div>
-              </div>
-
-              <div className={styles.formGrid}>
                 <div>
                   <label>Duration</label>
                   <input
@@ -1892,17 +2071,18 @@ export default function AdminDashboard({ isDemo = false }) {
                     placeholder="e.g. Ongoing, 1 year, 3 weeks"
                   />
                 </div>
-                <div>
-                  <label>Thumbnail Image URL / Path</label>
-                  <input
-                    type="text"
-                    value={projectForm.image}
-                    onChange={(e) =>
-                      setProjectForm({ ...projectForm, image: e.target.value })
-                    }
-                    placeholder="/img/projects/project-generic-thumbnail.jpg"
-                  />
-                </div>
+              </div>
+
+              <div>
+                <label>Thumbnail Image URL / Path</label>
+                <input
+                  type="text"
+                  value={projectForm.image}
+                  onChange={(e) =>
+                    setProjectForm({ ...projectForm, image: e.target.value })
+                  }
+                  placeholder="/img/projects/project-generic-thumbnail.jpg"
+                />
               </div>
 
               {/* Technologies Tag Input */}
@@ -1919,16 +2099,8 @@ export default function AdminDashboard({ isDemo = false }) {
                       <span
                         key={idx}
                         className={styles.tagPill}
-                        style={{
-                          color: badge.color,
-                          backgroundColor: `${badge.color}15`,
-                          borderColor: `${badge.color}35`,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "0.35rem",
-                        }}
                       >
-                        {Icon && <Icon size={12} style={{ color: badge.color }} />}
+                        {Icon && <Icon size={12} className={styles.tagPillIcon} />}
                         <span>{t}</span>
                         <button
                           type="button"
@@ -2019,22 +2191,13 @@ export default function AdminDashboard({ isDemo = false }) {
                           type="button"
                           className={`${styles.tagQuickAddChip} ${isAdded ? styles.tagQuickAddChipActive : ""
                             }`}
-                          style={
-                            isAdded
-                              ? {
-                                borderColor: badge.color,
-                                color: badge.color,
-                                backgroundColor: `${badge.color}18`,
-                              }
-                              : undefined
-                          }
                           onClick={() => handleToggleProjectTag(item.name)}
                           title={isAdded ? `Remove ${item.name}` : `Add ${item.name}`}
                         >
                           {Icon && (
                             <Icon
                               size={11}
-                              style={{ color: isAdded ? badge.color : "#64748b" }}
+                              className={styles.quickAddIcon}
                             />
                           )}
                           <span>{item.name}</span>
@@ -2076,6 +2239,9 @@ export default function AdminDashboard({ isDemo = false }) {
                     }
                     placeholder="https://..."
                   />
+                  <span style={{ fontSize: "0.72rem", color: "#64748b", marginTop: "0.25rem", display: "block" }}>
+                    Leave blank to hide Live Demo button on portfolio.
+                  </span>
                 </div>
                 <div>
                   <label>GitHub Repository URL</label>
@@ -2090,6 +2256,9 @@ export default function AdminDashboard({ isDemo = false }) {
                     }
                     placeholder="https://github.com/..."
                   />
+                  <span style={{ fontSize: "0.72rem", color: "#64748b", marginTop: "0.25rem", display: "block" }}>
+                    Leave blank to hide GitHub button on portfolio.
+                  </span>
                 </div>
               </div>
 

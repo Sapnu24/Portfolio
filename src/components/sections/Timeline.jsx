@@ -131,18 +131,9 @@ export default function CareerRoadmap() {
                           <span
                             className={styles.tagPill}
                             key={i}
-                            style={{
-                              "--tag-color": badge.color,
-                              color: badge.color,
-                              backgroundColor: `${badge.color}14`,
-                              borderColor: `${badge.color}35`,
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "0.35rem",
-                            }}
                             title={`${tag} (${badge.name})`}
                           >
-                            {IconComp && <IconComp size={11} style={{ color: badge.color }} />}
+                            {IconComp && <IconComp size={11} className={styles.tagIcon} />}
                             <span>{tag}</span>
                           </span>
                         );

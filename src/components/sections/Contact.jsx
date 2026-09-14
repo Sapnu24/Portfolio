@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send, Sparkles, CheckCircle2, MessageSquare, ExternalLink, Briefcase } from "lucide-react";
-import { FaGithub, FaLinkedin, FaPaperPlane } from "react-icons/fa";
+import { FaGithub, FaPaperPlane } from "react-icons/fa";
 import { SiUpwork } from "react-icons/si";
 import styles from "@/styles/Contact.module.css";
 import { getHeroProfile, getCachedHeroProfile, DEFAULT_PROFILE } from "@/services/profileServices";
@@ -273,18 +273,6 @@ export default function ContactPage() {
                     <FaGithub size={18} />
                   </a>
                 )}
-                {/* {profile.linkedinUrl && (
-                  <a
-                    href={profile.linkedinUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn Profile"
-                    title="LinkedIn"
-                    className={styles.socialBtn}
-                  >
-                    <FaLinkedin size={18} />
-                  </a>
-                )} */}
                 {profile.upworkUrl && (
                   <a
                     href={profile.upworkUrl}

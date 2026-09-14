@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { SiUpwork } from "react-icons/si";
 import { Mail } from "lucide-react";
 import { motion } from "framer-motion";
@@ -54,18 +54,6 @@ export default function Footer() {
               <FaGithub size={18} />
             </a>
           )}
-          {/* {profile.linkedinUrl && (
-            <a
-              href={profile.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn Profile"
-              title="LinkedIn"
-              className={styles.socialBtn}
-            >
-              <FaLinkedin size={18} />
-            </a>
-          )} */}
           {profile.upworkUrl && (
             <a
               href={profile.upworkUrl}

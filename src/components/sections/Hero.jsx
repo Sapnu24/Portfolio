@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { SiUpwork } from "react-icons/si";
 import {
   ArrowRight,
@@ -16,6 +16,7 @@ import { getHeroProfile, getCachedHeroProfile, DEFAULT_PROFILE } from "@/service
 import { getProjectCount, getCachedProjectCount } from "@/services/projectServices";
 import { getBannerSkills, getCachedBannerSkills, DEFAULT_BANNER_SKILLS } from "@/services/bannerSkillsServices";
 import { getTechIcon } from "@/utils/techIcons";
+import Button from "@/components/ui/Button";
 import styles from "@/styles/Hero.module.css";
 
 const getInitialHeroSkills = () => {
@@ -161,11 +162,16 @@ export default function Hero() {
           {/* Action CTAs & Social Bar */}
           <div className={styles.ctaAndSocialWrapper}>
             <div className={styles.actionGroup}>
-              <a href="#projects" className={styles.primaryBtn}>
-                <span>Explore My Work</span>
-                <span className={styles.projectCountBadge}>{displayProjects}</span>
-                <ArrowRight size={17} className={styles.btnArrow} />
-              </a>
+              <Button
+                variant="primary"
+                size="md"
+                shape="pill"
+                href="#projects"
+                badge={displayProjects}
+                showArrow
+              >
+                Explore My Work
+              </Button>
 
               <div className={styles.secondaryActionRow}>
                 <a
@@ -198,18 +204,6 @@ export default function Hero() {
                   className={styles.socialIcon}
                 >
                   <FaGithub size={19} />
-                </a>
-              )}
-              {profile.linkedinUrl && (
-                <a
-                  href={profile.linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn Profile"
-                  title="LinkedIn"
-                  className={styles.socialIcon}
-                >
-                  <FaLinkedin size={18} />
                 </a>
               )}
               {profile.upworkUrl && (

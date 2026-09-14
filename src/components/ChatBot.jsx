@@ -116,7 +116,6 @@ CRITICAL SCOPE RESTRICTION:
 - Email: ${profile?.email || "seanmarionvelasco.work@gmail.com"}
 - Availability: Available for Upwork Contracts, Fixed Projects, and Dedicated Sprints
 - Upwork: ${profile?.upworkUrl || "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share"}
-- LinkedIn: ${profile?.linkedinUrl || "https://linkedin.com"}
 - GitHub: ${profile?.githubUrl || "https://github.com/Sapnu24"}
 
 === KEY CASE STUDIES & DELIVERABLES ===

@@ -406,3 +406,126 @@
     gap: 0.3rem;
   }
 }
+
+/* ========================================================== */
+/* DARK THEME STYLES ([data-theme="dark"] / .dark-theme)      */
+/* ========================================================== */
+
+:global([data-theme="dark"]) .comboboxTrigger,
+:global(html.dark-theme) .comboboxTrigger {
+  background: #0f172a;
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #f8fafc;
+}
+
+:global([data-theme="dark"]) .comboboxTrigger:hover,
+:global(html.dark-theme) .comboboxTrigger:hover {
+  background: #1e293b;
+  border-color: #6366f1;
+}
+
+:global([data-theme="dark"]) .comboboxTriggerActive,
+:global(html.dark-theme) .comboboxTriggerActive {
+  background: #1e293b !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+}
+
+:global([data-theme="dark"]) .triggerLabel,
+:global(html.dark-theme) .triggerLabel {
+  color: #f8fafc;
+}
+
+:global([data-theme="dark"]) .triggerCategory,
+:global(html.dark-theme) .triggerCategory,
+:global([data-theme="dark"]) .triggerChevron,
+:global(html.dark-theme) .triggerChevron {
+  color: #94a3b8;
+}
+
+:global([data-theme="dark"]) .popover,
+:global(html.dark-theme) .popover {
+  background: #111827;
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 20px 40px -4px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+:global([data-theme="dark"]) .searchInput,
+:global(html.dark-theme) .searchInput {
+  background: #0f172a !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+}
+
+:global([data-theme="dark"]) .searchInput:focus,
+:global(html.dark-theme) .searchInput:focus {
+  background: #1e293b !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25) !important;
+}
+
+:global([data-theme="dark"]) .categoryPill,
+:global(html.dark-theme) .categoryPill {
+  background: #0f172a;
+  border-color: rgba(99, 102, 241, 0.2);
+  color: #94a3b8;
+}
+
+:global([data-theme="dark"]) .categoryPill:hover,
+:global(html.dark-theme) .categoryPill:hover {
+  background: #1e293b;
+  color: #cbd5e1;
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+:global([data-theme="dark"]) .metaRow,
+:global(html.dark-theme) .metaRow {
+  color: #94a3b8;
+}
+
+:global([data-theme="dark"]) .iconGrid,
+:global(html.dark-theme) .iconGrid {
+  background: #0f172a;
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+:global([data-theme="dark"]) .iconCard,
+:global(html.dark-theme) .iconCard {
+  background: #111827;
+  border-color: rgba(99, 102, 241, 0.2);
+  color: #cbd5e1;
+}
+
+:global([data-theme="dark"]) .iconCard:hover,
+:global(html.dark-theme) .iconCard:hover {
+  background: #1e293b;
+  border-color: #6366f1;
+  color: #ffffff;
+}
+
+:global([data-theme="dark"]) .iconCardActive,
+:global(html.dark-theme) .iconCardActive {
+  background: rgba(99, 102, 241, 0.28) !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 1.5px rgba(99, 102, 241, 0.35) !important;
+  color: #22d3ee !important;
+}
+
+:global([data-theme="dark"]) .checkIndicator,
+:global(html.dark-theme) .checkIndicator {
+  background: #1e293b;
+  color: #22d3ee;
+}
+
+:global([data-theme="dark"]) .emptyState,
+:global(html.dark-theme) .emptyState {
+  color: #94a3b8;
+}
+
+:global([data-theme="dark"]) .resetBtn,
+:global(html.dark-theme) .resetBtn {
+  background: #1e293b;
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #cbd5e1;
+}

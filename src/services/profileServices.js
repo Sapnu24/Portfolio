@@ -8,7 +8,7 @@ export const DEFAULT_PROFILE = {
   role: "Web Developer – Full Stack",
   bio: "Dedicated freelance full-stack developer committed to crafting clean, reliable, and high-performance web applications that help businesses bring their digital vision to life.",
   githubUrl: "https://github.com/Sapnu24",
-  linkedinUrl: "https://linkedin.com",
+  linkedinUrl: "",
   upworkUrl: "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share",
   email: "seanmarionvelasco.work@gmail.com",
   yearsExperience: "1+",

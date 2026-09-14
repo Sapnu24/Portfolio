@@ -126,20 +126,28 @@ export async function addBannerSkill(skillData) {
     showInHero: skillData.showInHero !== undefined ? Boolean(skillData.showInHero) : true,
     order: Number(skillData.order) || Date.now(),
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
-  if (!isFirebaseConfigured || !db) {
-    const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
-    const list = cached ? JSON.parse(cached) : [...DEFAULT_BANNER_SKILLS];
-    const newId = `bs-${Date.now()}`;
-    const newItem = { id: newId, ...payload };
-    list.push(newItem);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
-    return newId;
+  let newId = `bs-${Date.now()}`;
+
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = await addDoc(collection(db, "banner_skills"), payload);
+      if (docRef?.id) newId = docRef.id;
+    } catch (err) {
+      console.warn("Could not add banner skill to Firestore (saving to local cache):", err);
+    }
   }
 
-  const docRef = await addDoc(collection(db, "banner_skills"), payload);
-  return docRef.id;
+  // Always update local cache immediately
+  const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const list = cached ? JSON.parse(cached) : [...DEFAULT_BANNER_SKILLS];
+  const newItem = { id: newId, ...payload };
+  const updatedList = [...list.filter((s) => s.id !== newId), newItem];
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedList));
+
+  return newId;
 }
 
 /**
@@ -161,12 +169,14 @@ export async function updateBannerSkill(id, skillData) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
   }
 
-  if (!isFirebaseConfigured || !db) {
-    return;
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = doc(db, "banner_skills", id);
+      await setDoc(docRef, payload, { merge: true });
+    } catch (err) {
+      console.warn("Could not update banner skill in Firestore (saved locally):", err);
+    }
   }
-
-  const docRef = doc(db, "banner_skills", id);
-  await setDoc(docRef, payload, { merge: true });
 }
 
 /**
@@ -179,12 +189,14 @@ export async function deleteBannerSkill(id) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
   }
 
-  if (!isFirebaseConfigured || !db) {
-    return;
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = doc(db, "banner_skills", id);
+      await deleteDoc(docRef);
+    } catch (err) {
+      console.warn("Could not delete banner skill from Firestore (deleted locally):", err);
+    }
   }
-
-  const docRef = doc(db, "banner_skills", id);
-  await deleteDoc(docRef);
 }
 
 /**
