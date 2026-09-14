@@ -11,13 +11,11 @@ export const DEFAULT_PROFILE = {
   linkedinUrl: "https://linkedin.com",
   upworkUrl: "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share",
   email: "seanmarionvelasco.work@gmail.com",
-  phone: "",
-  yearsExperience: "2-3 years",
+  yearsExperience: "1+",
   programmingStartYear: 2023,
-  resumeUrl: "",
 };
 
-export const LOCAL_STORAGE_KEY = "smv_personal_profile_settings_v5";
+export const LOCAL_STORAGE_KEY = "smv_personal_profile_settings_v6";
 
 /**
  * Read cached hero and profile settings synchronously from localStorage for instant, flicker-free rendering
@@ -31,7 +29,6 @@ export function getCachedHeroProfile() {
         return {
           ...DEFAULT_PROFILE,
           ...parsed,
-          upworkUrl: parsed.upworkUrl || parsed.indeedUrl || DEFAULT_PROFILE.upworkUrl,
         };
       }
     }
@@ -45,9 +42,7 @@ export function getCachedHeroProfile() {
  * Fetch hero and profile settings from Firestore with local fallback
  */
 export async function getHeroProfile() {
-  // Check local cache first for instant UI response or fallback
   const localData = getCachedHeroProfile();
-
 
   if (!isFirebaseConfigured || !db) {
     return localData;
@@ -63,7 +58,8 @@ export async function getHeroProfile() {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));
       return merged;
     } else {
-      // Document doesn't exist yet, return local/default data
+      // Document doesn't exist yet, seed it automatically
+      await setDoc(docRef, { ...DEFAULT_PROFILE, updatedAt: new Date().toISOString() });
       return localData;
     }
   } catch (error) {
@@ -99,71 +95,33 @@ export async function updateHeroProfile(profileData) {
   }
 }
 
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-}
-
 /**
- * Upload a PDF resume file to Firebase Storage with automatic fallback
+ * Seed Hero Profile to Firestore if not exists or forced
  */
-export async function uploadResumeFile(file, onProgress) {
-  if (!file) throw new Error("No file selected for upload.");
-
-  if (!isFirebaseConfigured || !storage) {
-    if (onProgress) {
-      onProgress(50);
-      await new Promise((r) => setTimeout(r, 100));
-      onProgress(100);
-    }
-    return await fileToBase64(file);
+export async function seedHeroProfileToFirestore(force = false) {
+  if (!isFirebaseConfigured || !db) {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_PROFILE));
+    return DEFAULT_PROFILE;
   }
 
   try {
-    const cleanFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const storageRef = ref(storage, `resumes/${Date.now()}_${cleanFileName}`);
-    const uploadTask = uploadBytesResumable(storageRef, file, {
-      contentType: file.type || "application/pdf",
-    });
+    const docRef = doc(db, "settings", "hero");
+    if (!force) {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const existing = { ...DEFAULT_PROFILE, ...docSnap.data() };
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(existing));
+        return existing;
+      }
+    }
 
-    return await new Promise((resolve, reject) => {
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          if (onProgress) onProgress(progress);
-        },
-        async (error) => {
-          console.warn("Firebase Storage upload fallback triggered:", error);
-          if (onProgress) onProgress(100);
-          try {
-            const base64 = await fileToBase64(file);
-            resolve(base64);
-          } catch (e) {
-            reject(e);
-          }
-        },
-        async () => {
-          try {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(downloadURL);
-          } catch (err) {
-            const base64 = await fileToBase64(file);
-            resolve(base64);
-          }
-        }
-      );
-    });
+    await setDoc(docRef, { ...DEFAULT_PROFILE, updatedAt: new Date().toISOString() });
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_PROFILE));
+    return DEFAULT_PROFILE;
   } catch (err) {
-    console.warn("Firebase Storage error, falling back to Base64:", err);
-    if (onProgress) onProgress(100);
-    return await fileToBase64(file);
+    console.warn("Failed to seed hero profile:", err);
+    return DEFAULT_PROFILE;
   }
 }
+
 

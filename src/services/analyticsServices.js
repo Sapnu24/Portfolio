@@ -1,7 +1,7 @@
 import { db, isFirebaseConfigured } from "@/lib/firebaseClient";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 
-const STORAGE_KEY = "portfolio_live_analytics_data_v2";
+const STORAGE_KEY = "portfolio_live_analytics_data_v3";
 const SESSION_VISITOR_KEY = "portfolio_session_visitor_id";
 
 const getTodayKey = () => new Date().toISOString().split("T")[0];
@@ -12,12 +12,10 @@ export const DEFAULT_ANALYTICS = {
   avgSessionSeconds: 165,
   pageCounts: {
     "/": 1,
-    "/#about": 0,
-    "/#career": 0,
+    "/#nextSection": 0,
+    "/#skills": 0,
     "/#projects": 0,
-    "/#certifications": 0,
     "/#contact": 0,
-    "/resume": 0,
   },
   deviceCounts: {
     desktop: 1,
@@ -28,6 +26,7 @@ export const DEFAULT_ANALYTICS = {
     direct: 1,
     github: 0,
     linkedin: 0,
+    upwork: 0,
     search: 0,
     other: 0,
   },
@@ -93,6 +92,56 @@ export async function getLiveAnalytics() {
 }
 
 /**
+ * Subscribe to live Firestore analytics changes in real-time
+ */
+export function subscribeToLiveAnalytics(callback) {
+  if (!isFirebaseConfigured || !db) {
+    const handleLocalUpdate = (e) => {
+      if (e.detail && callback) callback(e.detail);
+    };
+    window.addEventListener("portfolio-analytics-update", handleLocalUpdate);
+    return () => window.removeEventListener("portfolio-analytics-update", handleLocalUpdate);
+  }
+
+  try {
+    const docRef = doc(db, "analytics", "realtime_metrics");
+    const unsubscribeFirestore = onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const live = docSnap.data();
+          const merged = {
+            ...DEFAULT_ANALYTICS,
+            ...live,
+            pageCounts: { ...DEFAULT_ANALYTICS.pageCounts, ...(live.pageCounts || {}) },
+            deviceCounts: { ...DEFAULT_ANALYTICS.deviceCounts, ...(live.deviceCounts || {}) },
+            referrerCounts: { ...DEFAULT_ANALYTICS.referrerCounts, ...(live.referrerCounts || {}) },
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+          if (callback) callback(merged);
+        }
+      },
+      (error) => {
+        console.warn("Real-time analytics snapshot listener error:", error);
+      }
+    );
+
+    const handleLocalUpdate = (e) => {
+      if (e.detail && callback) callback(e.detail);
+    };
+    window.addEventListener("portfolio-analytics-update", handleLocalUpdate);
+
+    return () => {
+      unsubscribeFirestore();
+      window.removeEventListener("portfolio-analytics-update", handleLocalUpdate);
+    };
+  } catch (err) {
+    console.warn("Failed to attach Firestore live listener:", err);
+    return () => {};
+  }
+}
+
+/**
  * Detect Device Category
  */
 function getDeviceCategory() {
@@ -119,10 +168,23 @@ function getReferrerCategory() {
   if (!ref) return "direct";
   if (ref.includes("github.com")) return "github";
   if (ref.includes("linkedin.com") || ref.includes("lnkd.in")) return "linkedin";
+  if (ref.includes("upwork.com")) return "upwork";
   if (ref.includes("google.") || ref.includes("bing.") || ref.includes("duckduckgo.") || ref.includes("yahoo.")) {
     return "search";
   }
   return "other";
+}
+
+/**
+ * Normalize section hash to clean key
+ */
+function normalizePath(rawPath) {
+  if (!rawPath || rawPath === "/") return "/";
+  if (rawPath.includes("about") || rawPath.includes("nextSection")) return "/#nextSection";
+  if (rawPath.includes("skills")) return "/#skills";
+  if (rawPath.includes("projects")) return "/#projects";
+  if (rawPath.includes("contact")) return "/#contact";
+  return rawPath;
 }
 
 /**
@@ -137,7 +199,7 @@ export async function recordPageView(rawPath = "/") {
     return;
   }
 
-  const path = rawPath || window.location.hash || "/";
+  const path = normalizePath(rawPath || window.location.hash || "/");
   const device = getDeviceCategory();
   const referrer = getReferrerCategory();
   const today = getTodayKey();
@@ -236,3 +298,4 @@ export async function resetAnalyticsData() {
 
   return resetData;
 }
+

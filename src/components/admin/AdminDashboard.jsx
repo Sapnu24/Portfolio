@@ -4,35 +4,21 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, isFirebaseConfigured } from "@/lib/firebaseClient";
 import {
   BriefcaseBusiness,
-  CalendarClock,
   CheckCircle2,
   FolderKanban,
   ImagePlus,
   LogOut,
-  Mail,
   Pencil,
   Plus,
   Save,
   Search,
-  Settings,
   Trash2,
-  Upload,
-  UserRound,
   X,
-  FileText,
-  Eye,
   Sparkles,
-  Palette,
   ExternalLink,
-  Code,
   Check,
-  Award,
-  GraduationCap,
   Briefcase,
   Layers,
-  Phone,
-  Globe,
-  Sliders,
   Menu,
   Star,
   BarChart3,
@@ -41,8 +27,10 @@ import {
   Users,
   Monitor,
   Smartphone,
-  Zap,
+  Compass,
   Loader2,
+  RefreshCw,
+  Zap,
 } from "lucide-react";
 
 import styles from "@/styles/AdminDashboard.module.css";
@@ -54,27 +42,14 @@ import {
   uploadProjectThumbnail,
   seedProjectsToFirestore,
   setMasterFeaturedProject,
+  DEFAULT_PROJECTS,
 } from "@/services/projectServices";
 import {
   getHeroProfile,
   updateHeroProfile,
-  uploadResumeFile,
+  seedHeroProfileToFirestore,
   DEFAULT_PROFILE,
 } from "@/services/profileServices";
-import {
-  getSkillCategories,
-  addSkillCategory,
-  updateSkillCategory,
-  deleteSkillCategory,
-  DEFAULT_SKILL_CATEGORIES,
-} from "@/services/skillServices";
-import {
-  getTimelineItems,
-  addTimelineItem,
-  updateTimelineItem,
-  deleteTimelineItem,
-  DEFAULT_TIMELINE,
-} from "@/services/timelineServices";
 import {
   getBannerSkills,
   addBannerSkill,
@@ -83,14 +58,19 @@ import {
   seedBannerSkillsToFirestore,
   DEFAULT_BANNER_SKILLS,
 } from "@/services/bannerSkillsServices";
-import { getTechIcon, detectTechKey, getAllTechOptions, getTechBadgeData } from "@/utils/techIcons";
-import TechIconPicker from "./TechIconPicker";
 import {
   getLiveAnalytics,
+  subscribeToLiveAnalytics,
   triggerTestVisit,
   resetAnalyticsData,
   DEFAULT_ANALYTICS,
 } from "@/services/analyticsServices";
+import {
+  ensureDatabaseSeeded,
+  seedAllDatabaseRecords,
+} from "@/services/seedServices";
+import { getTechIcon, detectTechKey, getAllTechOptions, getTechBadgeData } from "@/utils/techIcons";
+import TechIconPicker from "./TechIconPicker";
 
 const POPULAR_STACK_SUGGESTIONS = [
   { name: "Cloudflare Pages", key: "cloudflarepages" },
@@ -113,211 +93,16 @@ const POPULAR_STACK_SUGGESTIONS = [
 const adminPages = [
   { id: "overview", label: "Overview", icon: FolderKanban },
   { id: "analytics", label: "Analytics & Traffic", icon: BarChart3 },
-  { id: "hero", label: "Home / Hero", icon: Sparkles },
-  { id: "about", label: "About & Skills", icon: Palette },
-  /* [UNCOMMENT WHEN FIRST CLIENT CLOSES]
-  { id: "experience", label: "Milestones", icon: CalendarClock },
-  */
-  { id: "banner", label: "Banner Skills", icon: Layers },
-  { id: "projects", label: "Projects", icon: BriefcaseBusiness },
-  { id: "profile", label: "Profile & Resume", icon: UserRound },
+  { id: "hero", label: "Home / Hero & Profile", icon: Sparkles },
+  { id: "banner", label: "Tech Stacks & Banner", icon: Layers },
+  { id: "projects", label: "Projects Showcase", icon: BriefcaseBusiness },
 ];
-
-// Fictitious generic mock records for Employer Demo Mode (100% isolated from real database)
-const FAKE_DEMO_DATA = {
-  hero: {
-    badge: "Full-Stack Web Developer",
-    name: "Alex Morgan",
-    titles: [
-      "Full-Stack Engineer",
-      "React & Laravel Developer",
-      "UI/UX Architect",
-      "Cloud Solutions Specialist",
-    ],
-    bio: "Passionate web application engineer with 4+ years of experience building high-performance SPAs, reactive dashboard portals, and enterprise REST APIs.",
-    githubUrl: "https://github.com/example/demo-developer",
-    linkedinUrl: "https://linkedin.com",
-    email: "seanmarionvelasco.work@gmail.com",
-    phone: "+1 (555) 019-2834",
-    location: "San Francisco, CA / Remote",
-    avatar: "/img/projects/portfoliov1.png",
-    resumeUrl: "",
-    stats: {
-      experienceYears: "4+",
-      completedProjects: "25+",
-      satisfactionRate: "100%",
-    },
-  },
-  categories: [
-    {
-      id: "demo-cat-1",
-      title: "Frontend & UI/UX Design",
-      icon: "code",
-      color: "#4f46e5",
-      skills: [
-        "React JS",
-        "TypeScript",
-        "Tailwind CSS",
-        "JavaScript (ES6+)",
-        "WordPress",
-        "Figma",
-        "Bootstrap",
-        "Responsive Layouts",
-      ],
-    },
-    {
-      id: "demo-cat-2",
-      title: "Backend & API Architecture",
-      icon: "server",
-      color: "#06b6d4",
-      skills: [
-        "Laravel PHP",
-        "PHP",
-        "MySQL",
-        "RESTful APIs",
-        "Node.js",
-        "PostgreSQL",
-        "Database Design",
-      ],
-    },
-    {
-      id: "demo-cat-3",
-      title: "DevOps & Cloud Tools",
-      icon: "laptop",
-      color: "#f59e0b",
-      skills: [
-        "Cloudflare Pages",
-        "Cloudflare Workers",
-        "Render",
-        "Railway",
-        "Git & GitHub",
-        "Vite",
-        "Postman",
-        "Docker",
-        "npm",
-      ],
-    },
-    {
-      id: "demo-cat-4",
-      title: "UI/UX & Design Systems",
-      icon: "brush",
-      color: "#8b5cf6",
-      skills: [
-        "Glassmorphism",
-        "Micro-interactions",
-        "Design Tokens",
-        "Wireframing",
-        "Figma",
-        "Accessibility",
-      ],
-    },
-  ],
-  timeline: [
-    {
-      id: "demo-time-1",
-      role: "Lead Full-Stack Web Developer",
-      company: "TechNova Cloud Solutions",
-      period: "2025 — Present",
-      description:
-        "Leading frontend architecture and backend API integrations for enterprise analytics dashboards and microservices.",
-      tags: ["React JS", "Laravel PHP", "Cloudflare Pages", "MySQL", "Vite"],
-      iconType: "briefcase",
-    },
-    {
-      id: "demo-time-2",
-      role: "Web Application Developer",
-      company: "Apex Digital Labs",
-      period: "2023 — 2025",
-      description:
-        "Engineered scalable customer portals, responsive user interfaces, and automated payment webhook pipelines.",
-      tags: ["JavaScript", "Bootstrap", "PHP", "Render", "REST APIs"],
-      iconType: "briefcase",
-    },
-    {
-      id: "demo-time-3",
-      role: "B.S. in Computer Science & IT",
-      company: "Institute of Technology",
-      period: "2019 — 2023",
-      description:
-        "Graduated with honors in Software Engineering, Database Systems, Network Architecture, and Web Development.",
-      tags: ["Computer Science", "Database Systems", "Software Engineering"],
-      iconType: "graduation",
-    },
-  ],
-  bannerSkills: [
-    { id: "demo-b-1", name: "React JS", icon: "FaReact" },
-    { id: "demo-b-2", name: "Laravel PHP", icon: "FaLaravel" },
-    { id: "demo-b-3", name: "JavaScript", icon: "FaJs" },
-    { id: "demo-b-4", name: "MySQL", icon: "FaDatabase" },
-    { id: "demo-b-5", name: "Bootstrap", icon: "FaBootstrap" },
-    { id: "demo-b-6", name: "HTML5", icon: "FaHtml5" },
-    { id: "demo-b-7", name: "CSS3", icon: "FaCss3Alt" },
-    { id: "demo-b-8", name: "Git", icon: "FaGitAlt" },
-    { id: "demo-b-9", name: "Cloudflare Pages", icon: "SiCloudflarepages" },
-    { id: "demo-b-10", name: "Cloudflare Workers", icon: "SiCloudflareworkers" },
-    { id: "demo-b-11", name: "Render", icon: "SiRender" },
-  ],
-  projects: [
-    {
-      id: "demo-proj-1",
-      title: "CloudMetrics Enterprise Analytics",
-      description:
-        "High-throughput cloud metrics aggregation portal featuring real-time stream processing, customizable charts, and automated team alerting.",
-      technologies: ["React JS", "TypeScript", "Node.js", "Cloudflare Pages", "PostgreSQL", "Tailwind CSS"],
-      status: "In progress",
-      duration: "6 months",
-      team: "Team",
-      featured: true,
-      isMasterFeatured: true,
-      image: "/img/projects/mainweb.png",
-      demoUrl: "https://demo.example.com",
-      githubUrl: "https://github.com/example/demo-analytics",
-      order: 3,
-      createdAt: "2026-03-01T00:00:00.000Z",
-    },
-    {
-      id: "demo-proj-2",
-      title: "Nexus Payment & E-Commerce Gateway",
-      description:
-        "Distributed e-commerce checkout and inventory management engine handling asynchronous payment webhooks and automated order dispatch.",
-      technologies: ["Laravel PHP", "Render", "MySQL", "Redis", "Bootstrap"],
-      status: "Completed",
-      duration: "1 year",
-      team: "Solo",
-      featured: true,
-      isMasterFeatured: false,
-      image: "/img/projects/portfoliov1.png",
-      demoUrl: "https://demo.example.com",
-      githubUrl: "https://github.com/example/demo-ecommerce",
-      order: 2,
-      createdAt: "2026-02-01T00:00:00.000Z",
-    },
-    {
-      id: "demo-proj-3",
-      title: "HealthPulse Telehealth Consultation Portal",
-      description:
-        "HIPAA-compliant patient booking portal with integrated WebRTC video consultations, encrypted records, and real-time appointment reminders.",
-      technologies: ["JavaScript", "React JS", "CSS", "Express", "MongoDB"],
-      status: "Completed",
-      duration: "8 months",
-      team: "Team",
-      featured: true,
-      isMasterFeatured: false,
-      image: "/img/projects/admin.png",
-      demoUrl: "https://demo.example.com",
-      githubUrl: "https://github.com/example/demo-telehealth",
-      order: 1,
-      createdAt: "2026-01-01T00:00:00.000Z",
-    },
-  ],
-};
 
 export default function AdminDashboard({ isDemo = false }) {
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState("overview");
   const activePageMeta = adminPages.find((page) => page.id === activePage);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [analyticsTimeframe, setAnalyticsTimeframe] = useState("7d");
   const [analyticsData, setAnalyticsData] = useState(DEFAULT_ANALYTICS);
 
   // Lock body scroll on mobile when sidebar drawer is open
@@ -340,54 +125,23 @@ export default function AdminDashboard({ isDemo = false }) {
   };
 
   // 1. Hero & Profile state
-  const [heroForm, setHeroForm] = useState(isDemo ? FAKE_DEMO_DATA.hero : DEFAULT_PROFILE);
+  const [heroForm, setHeroForm] = useState(DEFAULT_PROFILE);
   const [savingHero, setSavingHero] = useState(false);
 
-  // 2. Skill Categories state
-  const [categories, setCategories] = useState(
-    isDemo ? FAKE_DEMO_DATA.categories : DEFAULT_SKILL_CATEGORIES
-  );
-  const [newTagInputs, setNewTagInputs] = useState({});
-  const [editingCategory, setEditingCategory] = useState(null);
-  const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const [categoryForm, setCategoryForm] = useState({
-    title: "",
-    icon: "code",
-    color: "#4f46e5",
-    skills: [],
-  });
-
-  // 3. Career Roadmap state
-  const [timelineItems, setTimelineItems] = useState(
-    isDemo ? FAKE_DEMO_DATA.timeline : DEFAULT_TIMELINE
-  );
-  const [editingTimeline, setEditingTimeline] = useState(null);
-  const [showTimelineModal, setShowTimelineModal] = useState(false);
-  const [timelineTagInput, setTimelineTagInput] = useState("");
-  const [timelineForm, setTimelineForm] = useState({
-    role: "",
-    company: "",
-    period: "06/2025 - 06/2026",
-    description: "",
-    tags: ["React JS", "Laravel PHP", "Bootstrap"],
-    iconType: "briefcase",
-  });
-
-  // 4. Banner Skills state
-  const [bannerSkills, setBannerSkills] = useState(
-    isDemo ? FAKE_DEMO_DATA.bannerSkills : DEFAULT_BANNER_SKILLS
-  );
+  // 2. Banner Skills state
+  const [bannerSkills, setBannerSkills] = useState(DEFAULT_BANNER_SKILLS);
   const [showBannerModal, setShowBannerModal] = useState(false);
   const [bannerForm, setBannerForm] = useState({
     name: "",
     iconKey: "react",
     iconUrl: "",
     isVisible: true,
+    showInHero: true,
   });
 
-  // 5. Projects state
-  const [projectList, setProjectList] = useState(isDemo ? FAKE_DEMO_DATA.projects : []);
-  const [loadingProjects, setLoadingProjects] = useState(!isDemo);
+  // 3. Projects state
+  const [projectList, setProjectList] = useState([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingProject, setEditingProject] = useState(null);
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -396,13 +150,14 @@ export default function AdminDashboard({ isDemo = false }) {
     title: "",
     status: "Completed",
     duration: "1 year",
-    team: "Sean Marion Velasco (with my team)",
-    technologies: ["Laravel PHP", "MySQL", "Bootstrap"],
+    team: "Solo",
+    technologies: ["React", "Laravel PHP", "Tailwind CSS"],
     description: "",
     image: "/img/projects/project-generic-thumbnail.jpg",
     demoUrl: "",
     githubUrl: "https://github.com/Sapnu24",
     featured: true,
+    isMasterFeatured: false,
   });
 
   const allTechOptions = useMemo(() => getAllTechOptions(), []);
@@ -443,13 +198,7 @@ export default function AdminDashboard({ isDemo = false }) {
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Resume Upload & Preview state
-  const [resumeUploadProgress, setResumeUploadProgress] = useState(null);
-  const [uploadingResume, setUploadingResume] = useState(false);
-  const [showResumePreview, setShowResumePreview] = useState(false);
-  const resumeFileInputRef = useRef(null);
-
-  // Universal CRUD loading tracker for responsive button UX
+  // Universal CRUD loading tracker
   const [crudLoading, setCrudLoading] = useState({});
 
   const withLoading = async (key, asyncFn) => {
@@ -461,7 +210,7 @@ export default function AdminDashboard({ isDemo = false }) {
     }
   };
 
-  // Check Admin session (Completely skipped in Demo Mode)
+  // Check Admin session
   useEffect(() => {
     if (isDemo) return;
     if (isFirebaseConfigured && auth) {
@@ -482,49 +231,27 @@ export default function AdminDashboard({ isDemo = false }) {
     }
   }, [navigate, isDemo]);
 
-  // Load all initial data from services
+  // Load all initial data and subscribe to live Firestore updates
   useEffect(() => {
-    // Realtime analytics update listener
-    const handleAnalyticsUpdate = (e) => {
-      if (e.detail) {
-        setAnalyticsData(e.detail);
-      }
-    };
-    window.addEventListener("portfolio-analytics-update", handleAnalyticsUpdate);
-
-    // Initial load
-    getLiveAnalytics().then((data) => {
-      if (data) setAnalyticsData(data);
+    // 1. Subscribe to real-time analytics
+    const unsubscribeAnalytics = subscribeToLiveAnalytics((liveData) => {
+      if (liveData) setAnalyticsData(liveData);
     });
 
-    if (isDemo) {
-      setHeroForm(FAKE_DEMO_DATA.hero);
-      setCategories(FAKE_DEMO_DATA.categories);
-      setTimelineItems(FAKE_DEMO_DATA.timeline);
-      setBannerSkills(FAKE_DEMO_DATA.bannerSkills);
-      setProjectList(FAKE_DEMO_DATA.projects);
-      setCertifications(FAKE_DEMO_DATA.certifications);
-      setLoadingProjects(false);
-      return () => {
-        window.removeEventListener("portfolio-analytics-update", handleAnalyticsUpdate);
-      };
-    }
+    // 2. Auto-seed check on mount
+    ensureDatabaseSeeded().catch((err) => console.warn("Auto-seed error:", err));
 
+    // 3. Load all admin records
     async function loadAllAdminData() {
       try {
-        const [heroData, catsData, timelineData, bannerData, projData, liveAnalytics] =
-          await Promise.all([
-            getHeroProfile(),
-            getSkillCategories(),
-            getTimelineItems(),
-            getBannerSkills(),
-            getProjects(),
-            getLiveAnalytics(),
-          ]);
+        const [heroData, bannerData, projData, liveAnalytics] = await Promise.all([
+          getHeroProfile(),
+          getBannerSkills(),
+          getProjects(),
+          getLiveAnalytics(),
+        ]);
 
         if (heroData) setHeroForm(heroData);
-        if (catsData) setCategories(catsData);
-        if (timelineData) setTimelineItems(timelineData);
         if (bannerData) setBannerSkills(bannerData);
         if (projData) setProjectList(projData);
         if (liveAnalytics) setAnalyticsData(liveAnalytics);
@@ -537,15 +264,11 @@ export default function AdminDashboard({ isDemo = false }) {
     loadAllAdminData();
 
     return () => {
-      window.removeEventListener("portfolio-analytics-update", handleAnalyticsUpdate);
+      if (unsubscribeAnalytics) unsubscribeAnalytics();
     };
   }, [isDemo]);
 
   const handleLogout = async () => {
-    if (isDemo) {
-      navigate("/");
-      return;
-    }
     localStorage.removeItem("portfolioAdminSession");
     if (isFirebaseConfigured && auth) {
       try {
@@ -558,24 +281,19 @@ export default function AdminDashboard({ isDemo = false }) {
   };
 
   // ==========================================
-  // ==========================================
   // HERO & PROFILE HANDLERS
   // ==========================================
   const handleSaveHero = async (e) => {
     if (e) e.preventDefault();
     await withLoading("save-hero", async () => {
-      if (isDemo) {
-        showToast("Hero and profile settings saved! (Demo Sandbox)");
-        return;
-      }
       setSavingHero(true);
       try {
         await updateHeroProfile(heroForm);
-        showToast("Hero and profile settings saved successfully!");
+        showToast("Hero & Profile settings saved successfully!");
       } catch (err) {
         console.error("Save hero failed:", err);
         if (err.code === "permission-denied" || err.message?.toLowerCase().includes("permission")) {
-          showToast("Session not authenticated with Firebase. Please log out and sign in at /admin.");
+          showToast("Session not authenticated with Firebase. Please sign in at /admin.");
         } else {
           showToast(err.message || "Failed to save hero settings.");
         }
@@ -584,312 +302,6 @@ export default function AdminDashboard({ isDemo = false }) {
       }
     });
   };
-
-
-  const handleResumeFileSelect = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (isDemo) {
-      showToast("Resume PDF preview updated! (Demo Sandbox)");
-      return;
-    }
-
-    setUploadingResume(true);
-    setResumeUploadProgress(10);
-
-    try {
-      const url = await uploadResumeFile(file, (p) => setResumeUploadProgress(p));
-      const updated = { ...heroForm, resumeUrl: url };
-      setHeroForm(updated);
-      await updateHeroProfile(updated);
-      showToast("Resume PDF uploaded and saved!");
-    } catch (err) {
-      console.error("Resume upload failed:", err);
-      alert(err.message || "Failed to upload resume PDF.");
-    } finally {
-      setUploadingResume(false);
-      setResumeUploadProgress(null);
-    }
-  };
-
-  // ==========================================
-  // ABOUT ME & CATEGORIZED SKILLS HANDLERS
-  // ==========================================
-  const handleAddTagToCategory = async (catId) => {
-    const text = (newTagInputs[catId] || "").trim();
-    if (!text) return;
-
-    const cat = categories.find((c) => c.id === catId);
-    if (!cat) return;
-
-    const currentSkills = Array.isArray(cat.skills) ? cat.skills : [];
-    if (currentSkills.includes(text)) {
-      setNewTagInputs((prev) => ({ ...prev, [catId]: "" }));
-      return;
-    }
-
-    await withLoading(`add-tag-${catId}`, async () => {
-      const updatedSkills = [...currentSkills, text];
-      const updatedCat = { ...cat, skills: updatedSkills };
-
-      setCategories((prev) =>
-        prev.map((c) => (c.id === catId ? updatedCat : c))
-      );
-      setNewTagInputs((prev) => ({ ...prev, [catId]: "" }));
-
-      if (isDemo) {
-        showToast(`Added "${text}" to ${cat.title} (Demo Sandbox)`);
-        return;
-      }
-
-      try {
-        await updateSkillCategory(catId, updatedCat);
-        showToast(`Added "${text}" to ${cat.title}`);
-      } catch (err) {
-        console.warn("Skill update failed:", err);
-      }
-    });
-  };
-
-  const handleRemoveTagFromCategory = async (catId, tagToRemove) => {
-    const cat = categories.find((c) => c.id === catId);
-    if (!cat) return;
-
-    const currentSkills = Array.isArray(cat.skills) ? cat.skills : [];
-    const updatedSkills = currentSkills.filter((t) => t !== tagToRemove);
-    const updatedCat = { ...cat, skills: updatedSkills };
-
-    setCategories((prev) =>
-      prev.map((c) => (c.id === catId ? updatedCat : c))
-    );
-
-    if (isDemo) {
-      showToast(`Removed "${tagToRemove}" (Demo Sandbox)`);
-      return;
-    }
-
-    try {
-      await updateSkillCategory(catId, updatedCat);
-      showToast(`Removed "${tagToRemove}"`);
-    } catch (err) {
-      console.warn("Skill update failed:", err);
-    }
-  };
-
-  const handleOpenAddCategory = () => {
-    setEditingCategory(null);
-    setCategoryForm({
-      title: "",
-      icon: "code",
-      color: "#4f46e5",
-      skills: [],
-    });
-    setShowCategoryModal(true);
-  };
-
-  const handleOpenEditCategory = (cat) => {
-    setEditingCategory(cat);
-    setCategoryForm({
-      title: cat.title || "",
-      icon: cat.icon || "code",
-      color: cat.color || "#4f46e5",
-      skills: Array.isArray(cat.skills) ? [...cat.skills] : [],
-    });
-    setShowCategoryModal(true);
-  };
-
-  const handleDeleteCategory = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) return;
-    await withLoading(`del-cat-${id}`, async () => {
-      if (isDemo) {
-        setCategories((prev) => prev.filter((c) => c.id !== id));
-        showToast("Category deleted. (Demo Sandbox)");
-        return;
-      }
-      try {
-        await deleteSkillCategory(id);
-        setCategories((prev) => prev.filter((c) => c.id !== id));
-        showToast("Category deleted.");
-      } catch (err) {
-        console.error(err);
-      }
-    });
-  };
-
-  const handleSaveAllCategories = async () => {
-    await withLoading("save-all-categories", async () => {
-      if (isDemo) {
-        showToast("All skill categories saved! (Demo Sandbox)");
-        return;
-      }
-      try {
-        for (const cat of categories) {
-          await updateSkillCategory(cat.id, cat);
-        }
-        showToast("All skill categories saved to database!");
-      } catch (err) {
-        console.error("Failed to sync categories:", err);
-        showToast(err.message || "Failed to save categories.");
-      }
-    });
-  };
-
-  const handleSaveCategoryModal = async (e) => {
-    e.preventDefault();
-    await withLoading("save-category", async () => {
-      if (isDemo) {
-        if (editingCategory) {
-          const updated = { ...editingCategory, ...categoryForm };
-          setCategories((prev) =>
-            prev.map((c) => (c.id === editingCategory.id ? updated : c))
-          );
-          showToast("Category updated! (Demo Sandbox)");
-        } else {
-          const newId = `demo-cat-${Date.now()}`;
-          setCategories((prev) => [...prev, { id: newId, ...categoryForm }]);
-          showToast("Category added! (Demo Sandbox)");
-        }
-        setShowCategoryModal(false);
-        return;
-      }
-      if (editingCategory) {
-        const updated = { ...editingCategory, ...categoryForm };
-        await updateSkillCategory(editingCategory.id, updated);
-        setCategories((prev) =>
-          prev.map((c) => (c.id === editingCategory.id ? updated : c))
-        );
-        showToast("Category updated!");
-      } else {
-        const newId = await addSkillCategory(categoryForm);
-        setCategories((prev) => [...prev, { id: newId, ...categoryForm }]);
-        showToast("Category added!");
-      }
-      setShowCategoryModal(false);
-    });
-  };
-
-
-  // ==========================================
-  // CAREER ROADMAP / TIMELINE HANDLERS
-  // ==========================================
-  const handleOpenAddTimeline = () => {
-    setEditingTimeline(null);
-    setTimelineTagInput("");
-    setTimelineForm({
-      role: "",
-      company: "",
-      period: "",
-      description: "",
-      tags: [],
-      iconType: "briefcase",
-    });
-    setShowTimelineModal(true);
-  };
-
-  const handleOpenEditTimeline = (item) => {
-    setEditingTimeline(item);
-    setTimelineTagInput("");
-    setTimelineForm({
-      role: item.role || "",
-      company: item.company || "",
-      period: item.period || "",
-      description: item.description || "",
-      tags: Array.isArray(item.tags) ? [...item.tags] : [],
-      iconType: item.iconType || "briefcase",
-    });
-    setShowTimelineModal(true);
-  };
-
-  const handleDeleteTimeline = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this timeline entry?"))
-      return;
-    await withLoading(`del-timeline-${id}`, async () => {
-      if (isDemo) {
-        setTimelineItems((prev) => prev.filter((item) => item.id !== id));
-        showToast("Timeline entry deleted. (Demo Sandbox)");
-        return;
-      }
-      try {
-        await deleteTimelineItem(id);
-        setTimelineItems((prev) => prev.filter((item) => item.id !== id));
-        showToast("Timeline entry deleted.");
-      } catch (err) {
-        console.error(err);
-      }
-    });
-  };
-
-  const handleSaveTimelineModal = async (e) => {
-    e.preventDefault();
-    await withLoading("save-timeline", async () => {
-      if (isDemo) {
-        if (editingTimeline) {
-          const updated = { ...editingTimeline, ...timelineForm };
-          setTimelineItems((prev) =>
-            prev.map((item) => (item.id === editingTimeline.id ? updated : item))
-          );
-          showToast("Timeline updated! (Demo Sandbox)");
-        } else {
-          const newId = `demo-time-${Date.now()}`;
-          setTimelineItems((prev) => [...prev, { id: newId, ...timelineForm }]);
-          showToast("Timeline entry added! (Demo Sandbox)");
-        }
-        setShowTimelineModal(false);
-        return;
-      }
-      if (editingTimeline) {
-        const updated = { ...editingTimeline, ...timelineForm };
-        await updateTimelineItem(editingTimeline.id, updated);
-        setTimelineItems((prev) =>
-          prev.map((item) => (item.id === editingTimeline.id ? updated : item))
-        );
-        showToast("Timeline updated!");
-      } else {
-        const newId = await addTimelineItem(timelineForm);
-        setTimelineItems((prev) => [...prev, { id: newId, ...timelineForm }]);
-        showToast("Timeline entry added!");
-      }
-      setShowTimelineModal(false);
-    });
-  };
-
-  const handleSaveAllTimeline = async () => {
-    await withLoading("save-all-timeline", async () => {
-      if (isDemo) {
-        showToast("All career roadmap entries saved! (Demo Sandbox)");
-        return;
-      }
-      try {
-        for (const item of timelineItems) {
-          await updateTimelineItem(item.id, item);
-        }
-        showToast("All career roadmap entries saved to database!");
-      } catch (err) {
-        console.error("Failed to sync timeline:", err);
-        showToast(err.message || "Failed to save timeline entries.");
-      }
-    });
-  };
-
-  const handleSaveAllBannerSkills = async () => {
-    await withLoading("save-all-banner", async () => {
-      if (isDemo) {
-        showToast("All banner skills saved! (Demo Sandbox)");
-        return;
-      }
-      try {
-        for (const skill of bannerSkills) {
-          await updateBannerSkill(skill.id, skill);
-        }
-        showToast("All banner skills saved to database!");
-      } catch (err) {
-        console.error("Failed to sync banner skills:", err);
-        showToast(err.message || "Failed to save banner skills.");
-      }
-    });
-  };
-
 
   // ==========================================
   // BANNER CAROUSEL & HERO TECH STACK HANDLERS
@@ -900,7 +312,7 @@ export default function AdminDashboard({ isDemo = false }) {
     const nextStatus = !isCurrentlyInHero;
 
     if (nextStatus && currentHeroCount >= 12) {
-      showToast("Maximum of 12 skills can be featured in the Hero section. Please remove one first.");
+      showToast("Maximum of 12 skills can be featured in the Hero section. Please unfeature one first.");
       return;
     }
 
@@ -909,10 +321,6 @@ export default function AdminDashboard({ isDemo = false }) {
       setBannerSkills((prev) =>
         prev.map((s) => (s.id === skill.id ? updated : s))
       );
-      if (isDemo) {
-        showToast(`${skill.name} ${nextStatus ? "featured in" : "removed from"} Hero section! (Demo Sandbox)`);
-        return;
-      }
       try {
         await updateBannerSkill(skill.id, updated);
         showToast(`${skill.name} ${nextStatus ? "featured in" : "removed from"} Hero section!`);
@@ -928,10 +336,6 @@ export default function AdminDashboard({ isDemo = false }) {
       setBannerSkills((prev) =>
         prev.map((s) => (s.id === skill.id ? updated : s))
       );
-      if (isDemo) {
-        showToast(`${skill.name} carousel visibility updated. (Demo Sandbox)`);
-        return;
-      }
       try {
         await updateBannerSkill(skill.id, updated);
         showToast(`${skill.name} carousel visibility updated.`);
@@ -944,11 +348,6 @@ export default function AdminDashboard({ isDemo = false }) {
   const handleDeleteBannerSkill = async (id) => {
     if (!window.confirm("Remove this tech stack from the banner and hero?")) return;
     await withLoading(`del-banner-${id}`, async () => {
-      if (isDemo) {
-        setBannerSkills((prev) => prev.filter((s) => s.id !== id));
-        showToast("Tech stack removed. (Demo Sandbox)");
-        return;
-      }
       try {
         await deleteBannerSkill(id);
         setBannerSkills((prev) => prev.filter((s) => s.id !== id));
@@ -959,17 +358,23 @@ export default function AdminDashboard({ isDemo = false }) {
     });
   };
 
+  const handleSaveAllBannerSkills = async () => {
+    await withLoading("save-all-banner", async () => {
+      try {
+        for (const skill of bannerSkills) {
+          await updateBannerSkill(skill.id, skill);
+        }
+        showToast("All banner skills saved to database!");
+      } catch (err) {
+        console.error("Failed to sync banner skills:", err);
+        showToast(err.message || "Failed to save banner skills.");
+      }
+    });
+  };
+
   const handleSaveBannerSkillModal = async (e) => {
     e.preventDefault();
     await withLoading("save-banner", async () => {
-      if (isDemo) {
-        const newId = `demo-banner-${Date.now()}`;
-        setBannerSkills((prev) => [...prev, { id: newId, ...bannerForm }]);
-        showToast(`Added ${bannerForm.name} to tech stacks! (Demo Sandbox)`);
-        setShowBannerModal(false);
-        setBannerForm({ name: "", iconKey: "react", iconUrl: "", isVisible: true, showInHero: true });
-        return;
-      }
       const newId = await addBannerSkill(bannerForm);
       setBannerSkills((prev) => [...prev, { id: newId, ...bannerForm }]);
       showToast(`Added ${bannerForm.name} to tech stacks!`);
@@ -979,7 +384,7 @@ export default function AdminDashboard({ isDemo = false }) {
   };
 
   // ==========================================
-  // PROJECTS & DRAG AND DROP THUMBNAIL HANDLERS
+  // PROJECTS & THUMBNAIL HANDLERS
   // ==========================================
   const handleOpenAddProject = () => {
     setEditingProject(null);
@@ -987,14 +392,13 @@ export default function AdminDashboard({ isDemo = false }) {
     setProjectForm({
       title: "",
       status: "Completed",
-      duration: "",
+      duration: "1 year",
       team: "Solo",
-      technologies: [],
+      technologies: ["React", "Laravel PHP"],
       description: "",
-      image: "",
-      mobileImage: "",
+      image: "/img/projects/project-generic-thumbnail.jpg",
       demoUrl: "",
-      githubUrl: "",
+      githubUrl: "https://github.com/Sapnu24",
       featured: true,
       isMasterFeatured: false,
     });
@@ -1016,8 +420,7 @@ export default function AdminDashboard({ isDemo = false }) {
           ? project.technologies.split(",").map((s) => s.trim()).filter(Boolean)
           : [],
       description: project.description || "",
-      image: project.image || "",
-      mobileImage: project.mobileImage || "",
+      image: project.image || "/img/projects/project-generic-thumbnail.jpg",
       demoUrl: project.demoUrl || "",
       githubUrl: project.githubUrl || "",
       featured: Boolean(project.featured),
@@ -1031,29 +434,6 @@ export default function AdminDashboard({ isDemo = false }) {
     const target = projectList.find((p) => p.id === id);
     const newStatus = !target?.isMasterFeatured;
     await withLoading(`star-proj-${id}`, async () => {
-      if (isDemo) {
-        setProjectList((prev) => {
-          const updated = prev.map((p) => ({
-            ...p,
-            isMasterFeatured: p.id === id ? newStatus : false,
-            featured: p.id === id && newStatus ? true : p.featured,
-          }));
-          updated.sort((a, b) => {
-            if (a.isMasterFeatured && !b.isMasterFeatured) return -1;
-            if (!a.isMasterFeatured && b.isMasterFeatured) return 1;
-            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : (Number(a.order) || 0);
-            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : (Number(b.order) || 0);
-            return dateB - dateA;
-          });
-          return updated;
-        });
-        showToast(
-          newStatus
-            ? `🌟 Set "${target?.title || "Project"}" as Master Featured (#1 in Dev)! (Demo Sandbox)`
-            : `Removed Master Featured priority from "${target?.title || "Project"}".`
-        );
-        return;
-      }
       try {
         await setMasterFeaturedProject(id, newStatus);
         setProjectList((prev) => {
@@ -1086,11 +466,6 @@ export default function AdminDashboard({ isDemo = false }) {
   const handleDeleteProject = async (id) => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
     await withLoading(`del-proj-${id}`, async () => {
-      if (isDemo) {
-        setProjectList((prev) => prev.filter((p) => p.id !== id));
-        showToast("Project deleted. (Demo Sandbox)");
-        return;
-      }
       try {
         await deleteProject(id);
         setProjectList((prev) => prev.filter((p) => p.id !== id));
@@ -1101,38 +476,9 @@ export default function AdminDashboard({ isDemo = false }) {
     });
   };
 
-  const handleSeedProjects = async () => {
-    if (!window.confirm("Seed and sync all 10 portfolio projects to your Firebase Firestore?")) return;
-    await withLoading("seed-projects", async () => {
-      try {
-        const seeded = await seedProjectsToFirestore(true);
-        setProjectList(seeded);
-        showToast("Successfully seeded 10 projects to Firebase Firestore!");
-      } catch (err) {
-        console.error("Seeding projects failed:", err);
-        showToast(err.message || "Failed to seed projects.");
-      }
-    });
-  };
-
-  const handleSeedBannerSkills = async () => {
-    if (!window.confirm("Seed and sync all 36 curated technologies to your Firebase Firestore?")) return;
-    await withLoading("seed-banner", async () => {
-      try {
-        const seeded = await seedBannerSkillsToFirestore(true);
-        setBannerSkills(seeded);
-        showToast("Successfully seeded 36 tech stacks to Firebase Firestore!");
-      } catch (err) {
-        console.error("Seeding skills failed:", err);
-        showToast(err.message || "Failed to seed banner skills.");
-      }
-    });
-  };
-
   const handleThumbnailFileUpload = async (file) => {
     if (!file) return;
 
-    // Instant local preview
     const tempUrl = URL.createObjectURL(file);
     setProjectForm((prev) => ({ ...prev, image: tempUrl }));
     setUploadingImage(true);
@@ -1182,24 +528,6 @@ export default function AdminDashboard({ isDemo = false }) {
             : [],
       };
 
-      if (isDemo) {
-        if (editingProject) {
-          setProjectList((prev) =>
-            prev.map((p) => (p.id === editingProject.id ? { ...p, ...payload } : p))
-          );
-          showToast("Project updated successfully! (Demo Sandbox)");
-        } else {
-          const newId = `demo-proj-${Date.now()}`;
-          setProjectList((prev) => [
-            { id: newId, ...payload, createdAt: new Date().toISOString() },
-            ...prev,
-          ]);
-          showToast("New project added! (Demo Sandbox)");
-        }
-        setShowProjectModal(false);
-        return;
-      }
-
       if (editingProject) {
         try {
           await updateProject(editingProject.id, payload);
@@ -1226,6 +554,29 @@ export default function AdminDashboard({ isDemo = false }) {
     });
   };
 
+  // ==========================================
+  // SEED ALL DATABASE RECORDS HANDLER
+  // ==========================================
+  const handleSeedAllRecords = async () => {
+    if (!window.confirm("Seed all portfolio records (Hero profile, 37 tech stacks, 10 projects, analytics) to your Firebase Firestore?")) return;
+    await withLoading("seed-all", async () => {
+      try {
+        const result = await seedAllDatabaseRecords(true);
+        if (result.hero) setHeroForm(result.hero);
+        const [updatedSkills, updatedProjects] = await Promise.all([
+          getBannerSkills(),
+          getProjects(),
+        ]);
+        if (updatedSkills) setBannerSkills(updatedSkills);
+        if (updatedProjects) setProjectList(updatedProjects);
+        showToast("🌟 Successfully seeded all 10 projects, 37 tech stacks, and Sean's Hero info to Firebase!");
+      } catch (err) {
+        console.error("Seeding all records failed:", err);
+        showToast(err.message || "Failed to seed records to Firebase.");
+      }
+    });
+  };
+
   const filteredProjects = projectList.filter((p) => {
     const query = searchQuery.toLowerCase();
     const titleMatch = p.title?.toLowerCase().includes(query);
@@ -1240,150 +591,158 @@ export default function AdminDashboard({ isDemo = false }) {
   // ==========================================
 
   // 1. OVERVIEW
-  const renderOverview = () => (
-    <>
-      <section className={styles.metricsGrid}>
-        {[
-          {
-            icon: BarChart3,
-            label: "Live Pageviews",
-            value: `${analyticsData.totalPageviews || 1}`,
-            isAnalytics: true,
-          },
-          {
-            icon: Users,
-            label: "Unique Visitors",
-            value: `${analyticsData.uniqueVisitors || 1}`,
-            isAnalytics: true,
-          },
-          {
-            icon: FolderKanban,
-            label: "Total Projects",
-            value: projectList.length.toString(),
-          },
-          {
-            icon: CalendarClock,
-            label: "Programming Exp",
-            value: heroForm.yearsExperience || "1+ yrs",
-          },
-          {
-            icon: Palette,
-            label: "Skill Categories",
-            value: categories.length.toString(),
-          },
-          {
-            icon: Layers,
-            label: "Banner Skills",
-            value: bannerSkills.filter((s) => s.isVisible !== false).length.toString(),
-          },
-        ].map((m, i) => {
-          const Icon = m.icon;
-          return (
-            <div
-              key={i}
-              className={styles.metricCard}
-              style={m.isAnalytics ? { cursor: "pointer", border: "1.5px solid rgba(79, 70, 229, 0.25)", background: "#eef2ff" } : {}}
-              onClick={m.isAnalytics ? () => setActivePage("analytics") : undefined}
-              title={m.isAnalytics ? "Click to open Live Real-time Analytics" : undefined}
-            >
-              <Icon size={26} color={m.isAnalytics ? "var(--primary-color, #4f46e5)" : undefined} />
-              <div>
-                <strong>{m.value}</strong>
-                <span>{m.label}</span>
+  const renderOverview = () => {
+    const heroFeaturedCount = bannerSkills.filter((s) => s.showInHero).length;
+    const activeMarqueeCount = bannerSkills.filter((s) => s.isVisible !== false).length;
+
+    return (
+      <>
+        <section className={styles.metricsGrid}>
+          {[
+            {
+              icon: BarChart3,
+              label: "Live Pageviews",
+              value: `${analyticsData.totalPageviews || 1}`,
+              isAnalytics: true,
+            },
+            {
+              icon: Users,
+              label: "Unique Visitors",
+              value: `${analyticsData.uniqueVisitors || 1}`,
+              isAnalytics: true,
+            },
+            {
+              icon: FolderKanban,
+              label: "Total Projects",
+              value: projectList.length.toString(),
+            },
+            {
+              icon: Sparkles,
+              label: "Years Experience",
+              value: heroForm.yearsExperience || "1+",
+            },
+            {
+              icon: Layers,
+              label: "Marquee Tech Stacks",
+              value: activeMarqueeCount.toString(),
+            },
+            {
+              icon: Zap,
+              label: "Hero Featured Skills",
+              value: `${heroFeaturedCount}/12`,
+            },
+          ].map((m, i) => {
+            const Icon = m.icon;
+            return (
+              <div
+                key={i}
+                className={styles.metricCard}
+                style={m.isAnalytics ? { cursor: "pointer", border: "1.5px solid rgba(79, 70, 229, 0.25)", background: "#eef2ff" } : {}}
+                onClick={m.isAnalytics ? () => setActivePage("analytics") : undefined}
+                title={m.isAnalytics ? "Click to open Live Real-time Analytics" : undefined}
+              >
+                <Icon size={26} color={m.isAnalytics ? "var(--primary-color, #4f46e5)" : undefined} />
+                <div>
+                  <strong>{m.value}</strong>
+                  <span>{m.label}</span>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </section>
+            );
+          })}
+        </section>
 
-      <section className={styles.panel}>
-        <div className={styles.panelHeader}>
-          <h2>Quick Actions & Live Status</h2>
-        </div>
-        <div className={styles.quickActionsGrid}>
-          <button
-            type="button"
-            className={styles.primaryButton}
-            onClick={() => setActivePage("analytics")}
-          >
-            <BarChart3 size={16} /> Live Analytics Hub
-          </button>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={() => setActivePage("hero")}
-          >
-            <Sparkles size={16} /> Home & Hero Info
-          </button>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={handleOpenAddProject}
-          >
-            <Plus size={16} /> Add New Project
-          </button>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={() => setActivePage("about")}
-          >
-            <Palette size={16} /> Skill Categories
-          </button>
-          {/* [UNCOMMENT WHEN FIRST CLIENT CLOSES]
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={handleOpenAddTimeline}
-          >
-            <CalendarClock size={16} /> Milestones
-          </button>
-          */}
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={() => setShowResumePreview(true)}
-          >
-            <Eye size={16} /> Preview Resume
-          </button>
-        </div>
+        <section className={styles.panel}>
+          <div className={styles.panelHeader}>
+            <h2>Quick Actions & Live Status</h2>
+          </div>
+          <div className={styles.quickActionsGrid}>
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={() => setActivePage("analytics")}
+            >
+              <BarChart3 size={16} /> Live Analytics Hub
+            </button>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => setActivePage("hero")}
+            >
+              <Sparkles size={16} /> Home & Hero Profile
+            </button>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={handleOpenAddProject}
+            >
+              <Plus size={16} /> Add New Project
+            </button>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => setActivePage("banner")}
+            >
+              <Layers size={16} /> Tech Stacks Manager
+            </button>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={handleSeedAllRecords}
+              disabled={crudLoading["seed-all"]}
+              title="Seed all Sean's initial records to Firebase"
+              style={{ color: "var(--primary-color, #4f46e5)", borderColor: "rgba(79, 70, 229, 0.35)", background: "rgba(79, 70, 229, 0.05)" }}
+            >
+              {crudLoading["seed-all"] ? (
+                <>
+                  <Loader2 size={16} className={styles.spinner} />
+                  <span>Seeding Firebase...</span>
+                </>
+              ) : (
+                <>
+                  <RefreshCw size={16} />
+                  <span>Seed All Data to Firebase</span>
+                </>
+              )}
+            </button>
+          </div>
 
-        <div className={styles.liveStatusCard}>
-          <h4>Portfolio Live Status</h4>
-          <p>
-            <strong>Active Name:</strong> {heroForm.greeting} {heroForm.name}
-          </p>
-          <p>
-            <strong>Current Role:</strong> {heroForm.role}
-          </p>
-          <p>
-            <strong>Real-time Total Pageviews:</strong>{" "}
-            <span style={{ color: "#059669", fontWeight: 700 }}>
-              {analyticsData.totalPageviews || 1}
-            </span>{" "}
-            (Unique: {analyticsData.uniqueVisitors || 1})
-          </p>
-          <p>
-            <strong>Resume File:</strong> {heroForm.resumeUrl || "None"}
-          </p>
-        </div>
-      </section>
-    </>
-  );
+          <div className={styles.liveStatusCard}>
+            <h4>Portfolio Live Status</h4>
+            <p>
+              <strong>Active Name:</strong> {heroForm.greeting} {heroForm.name}
+            </p>
+            <p>
+              <strong>Current Role:</strong> {heroForm.role}
+            </p>
+            <p>
+              <strong>Real-time Total Pageviews:</strong>{" "}
+              <span style={{ color: "#059669", fontWeight: 700 }}>
+                {analyticsData.totalPageviews || 1}
+              </span>{" "}
+              (Unique Visitors: {analyticsData.uniqueVisitors || 1})
+            </p>
+            <p>
+              <strong>Upwork Freelance Status:</strong>{" "}
+              <span style={{ color: "#10b981", fontWeight: 700 }}>100% Job Success • Top Rated</span>
+            </p>
+          </div>
+        </section>
+      </>
+    );
+  };
 
   // 2. ANALYTICS & TRAFFIC
   const renderAnalytics = () => {
     const totalViews = Math.max(analyticsData.totalPageviews || 1, 1);
     const uniqueVisitors = Math.max(analyticsData.uniqueVisitors || 1, 1);
-    const avgSec = analyticsData.avgSessionSeconds || 165;
-    const avgDurationStr = `${Math.floor(avgSec / 60)}m ${avgSec % 60}s`;
 
-    // Real-time Route Pageviews
+    // Real-time Route Pageviews matching live site components
     const rawPages = [
       { path: "/", label: "Home / Hero Section", count: analyticsData.pageCounts?.["/"] || 1 },
+      { path: "/#nextSection", label: "About / Philosophy", count: analyticsData.pageCounts?.["/#nextSection"] || 0 },
+      { path: "/#skills", label: "Tech Stacks Marquee", count: analyticsData.pageCounts?.["/#skills"] || 0 },
       { path: "/#projects", label: "Projects Showcase", count: analyticsData.pageCounts?.["/#projects"] || 0 },
-      { path: "/#about", label: "About & Skills Matrix", count: analyticsData.pageCounts?.["/#about"] || 0 },
-      { path: "/#contact", label: "Contact & Social Form", count: analyticsData.pageCounts?.["/#contact"] || 0 },
-      { path: "/resume", label: "Resume PDF Downloads", count: analyticsData.pageCounts?.["/resume"] || 0 },
+      { path: "/#contact", label: "Contact & Upwork Form", count: analyticsData.pageCounts?.["/#contact"] || 0 },
     ];
 
     const topPages = rawPages.map((p) => ({
@@ -1399,18 +758,18 @@ export default function AdminDashboard({ isDemo = false }) {
     const devTabletPct = Math.max(100 - devDesktopPct - devMobilePct, 0);
 
     // Real-time Referrers
-    const refCounts = analyticsData.referrerCounts || { direct: 1, github: 0, linkedin: 0, search: 0, other: 0 };
+    const refCounts = analyticsData.referrerCounts || { direct: 1, github: 0, upwork: 0, linkedin: 0, search: 0, other: 0 };
     const refTotal = Math.max(
-      (refCounts.direct || 0) + (refCounts.github || 0) + (refCounts.linkedin || 0) + (refCounts.search || 0) + (refCounts.other || 0),
+      (refCounts.direct || 0) + (refCounts.github || 0) + (refCounts.upwork || 0) + (refCounts.linkedin || 0) + (refCounts.search || 0) + (refCounts.other || 0),
       1
     );
 
     const trafficSources = [
       { source: "Direct Link & Bookmarks", count: refCounts.direct || 0, share: Math.round(((refCounts.direct || 0) / refTotal) * 100) },
       { source: "GitHub Profile & Repos", count: refCounts.github || 0, share: Math.round(((refCounts.github || 0) / refTotal) * 100) },
+      { source: "Upwork Client Traffic", count: refCounts.upwork || 0, share: Math.round(((refCounts.upwork || 0) / refTotal) * 100) },
       { source: "LinkedIn Networking", count: refCounts.linkedin || 0, share: Math.round(((refCounts.linkedin || 0) / refTotal) * 100) },
       { source: "Google & Search Engines", count: refCounts.search || 0, share: Math.round(((refCounts.search || 0) / refTotal) * 100) },
-      { source: "Other External Referrers", count: refCounts.other || 0, share: Math.round(((refCounts.other || 0) / refTotal) * 100) },
     ];
 
     const recentVisits = Array.isArray(analyticsData.recentVisits) && analyticsData.recentVisits.length > 0
@@ -1456,11 +815,11 @@ export default function AdminDashboard({ isDemo = false }) {
                 <h2 style={{ margin: 0 }}>Live Real-Time Traffic & Analytics</h2>
                 <div className={styles.statusPillLive}>
                   <span className={styles.pulseDotGreen} />
-                  <span>Real-Time Database Tracking Live</span>
+                  <span>Real-Time Firestore Tracking Active</span>
                 </div>
               </div>
               <p style={{ margin: 0, fontSize: "0.85rem", color: "#64748b" }}>
-                Live visitor tracking synchronized across Firestore and Vercel Analytics. Real page loads and section clicks increment these numbers dynamically.
+                Live visitor tracking synchronized across Firestore. Real page loads and section views update these numbers instantly.
               </p>
             </div>
 
@@ -1482,13 +841,13 @@ export default function AdminDashboard({ isDemo = false }) {
               </button>
 
               <a
-                href="https://vercel.com/dashboard"
+                href="/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.secondaryButton}
                 style={{ fontSize: "0.82rem", textDecoration: "none" }}
               >
-                <ExternalLink size={15} /> Vercel Cloud Portal
+                <ExternalLink size={15} /> Open Live Site
               </a>
             </div>
           </div>
@@ -1511,7 +870,7 @@ export default function AdminDashboard({ isDemo = false }) {
             <div className={styles.metricCard}>
               <Users size={24} color="#06b6d4" />
               <div>
-                <strong>{totalVisitors}</strong>
+                <strong>{uniqueVisitors}</strong>
                 <span>Unique Visitors</span>
               </div>
             </div>
@@ -1519,8 +878,8 @@ export default function AdminDashboard({ isDemo = false }) {
             <div className={styles.metricCard}>
               <Compass size={24} color="#3b82f6" />
               <div>
-                <strong>{trafficSources.length}</strong>
-                <span>Active Referrers</span>
+                <strong>{trafficSources.filter(s => s.count > 0).length || 1}</strong>
+                <span>Active Channels</span>
               </div>
             </div>
 
@@ -1547,20 +906,20 @@ export default function AdminDashboard({ isDemo = false }) {
                 <div key={idx} className={styles.progressItem}>
                   <div className={styles.progressLabelRow}>
                     <span>
-                      {page.label || page.path}{" "}
+                      {page.label}{" "}
                       <code style={{ fontSize: "0.72rem", color: "#64748b", background: "#f1f5f9", padding: "0.1rem 0.3rem", borderRadius: "4px" }}>
                         {page.path}
                       </code>
                     </span>
                     <span>
-                      <strong>{page.count}</strong> ({page.percent || page.share || 0}%)
+                      <strong>{page.count}</strong> ({page.percent}%)
                     </span>
                   </div>
                   <div className={styles.progressBarTrack}>
                     <div
                       className={styles.progressBarFill}
                       style={{
-                        width: `${Math.max(page.percent || page.share || 0, 3)}%`,
+                        width: `${Math.max(page.percent, 3)}%`,
                         background: idx === 0 ? "var(--primary-color, #4f46e5)" : idx === 1 ? "#06b6d4" : idx === 2 ? "#3b82f6" : "#6366f1",
                       }}
                     />
@@ -1698,14 +1057,14 @@ export default function AdminDashboard({ isDemo = false }) {
     );
   };
 
-  // 3. HOME / HERO SETTINGS
+  // 3. HOME / HERO & PROFILE SETTINGS
   const renderHero = () => (
     <section className={styles.panel}>
       <div className={styles.panelHeader}>
         <div>
-          <h2>Home & Hero Section Settings</h2>
+          <h2>Home, Hero & Profile Settings</h2>
           <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
-            Customize your intro greeting, title, bio, social links, and experience stats.
+            Customize your intro greeting, full name, role, bio, and verified client channels.
           </span>
         </div>
         <button
@@ -1736,7 +1095,7 @@ export default function AdminDashboard({ isDemo = false }) {
               type="text"
               value={heroForm.greeting || ""}
               onChange={(e) => setHeroForm({ ...heroForm, greeting: e.target.value })}
-              placeholder="Hi! I'm"
+              placeholder="Hi, I'm"
             />
           </label>
           <label>
@@ -1757,7 +1116,7 @@ export default function AdminDashboard({ isDemo = false }) {
               type="text"
               value={heroForm.role || ""}
               onChange={(e) => setHeroForm({ ...heroForm, role: e.target.value })}
-              placeholder="Full-Stack Developer (Laravel PHP)"
+              placeholder="Web Developer – Full Stack"
             />
           </label>
           <label>
@@ -1774,17 +1133,40 @@ export default function AdminDashboard({ isDemo = false }) {
         </div>
 
         <label className={styles.textAreaLabel}>
-          Hero Bio / Tagline
+          Hero Bio / Tagline Narrative
           <textarea
             rows="3"
             value={heroForm.bio || ""}
             onChange={(e) => setHeroForm({ ...heroForm, bio: e.target.value })}
-            placeholder="Full-stack developer focused on responsive design, modern web tech, and AI-powered user experiences."
+            placeholder="Dedicated freelance full-stack developer committed to crafting clean, reliable, and high-performance web applications..."
           />
         </label>
 
         <div className={styles.panelHeader} style={{ marginTop: "0.5rem" }}>
-          <h3>Social & Professional Links</h3>
+          <h3>Client Channels & Social Links</h3>
+        </div>
+
+        <div className={styles.formGrid}>
+          <label>
+            Email Address
+            <input
+              type="email"
+              value={heroForm.email || ""}
+              onChange={(e) => setHeroForm({ ...heroForm, email: e.target.value })}
+              placeholder="seanmarionvelasco.work@gmail.com"
+            />
+          </label>
+          <label>
+            Upwork Profile URL
+            <input
+              type="url"
+              value={heroForm.upworkUrl || ""}
+              onChange={(e) =>
+                setHeroForm({ ...heroForm, upworkUrl: e.target.value })
+              }
+              placeholder="https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share"
+            />
+          </label>
         </div>
 
         <div className={styles.formGrid}>
@@ -1796,7 +1178,7 @@ export default function AdminDashboard({ isDemo = false }) {
               onChange={(e) =>
                 setHeroForm({ ...heroForm, githubUrl: e.target.value })
               }
-              placeholder="https://github.com"
+              placeholder="https://github.com/Sapnu24"
             />
           </label>
           <label>
@@ -1807,23 +1189,12 @@ export default function AdminDashboard({ isDemo = false }) {
               onChange={(e) =>
                 setHeroForm({ ...heroForm, linkedinUrl: e.target.value })
               }
-              placeholder="https://linkedin.com/in/yourprofile"
+              placeholder="https://linkedin.com"
             />
           </label>
         </div>
 
         <div className={styles.formGrid}>
-          <label>
-            Upwork Profile URL
-            <input
-              type="url"
-              value={heroForm.upworkUrl || ""}
-              onChange={(e) =>
-                setHeroForm({ ...heroForm, upworkUrl: e.target.value })
-              }
-              placeholder="https://www.upwork.com/freelancers/yourprofile"
-            />
-          </label>
           <label>
             Dynamic Projects Handled / Done
             <input
@@ -1858,274 +1229,7 @@ export default function AdminDashboard({ isDemo = false }) {
     </section>
   );
 
-  // 3. ABOUT ME (CATEGORIZED SKILLS)
-  const renderAboutSkills = () => (
-    <section className={styles.panel}>
-      <div className={styles.panelHeader}>
-        <div>
-          <h2>About Me: Categorized Skills</h2>
-          <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
-            Add, edit, and organize your core skill categories and skill pills (e.g. Frontend, UI/UX, Backend, Collaboration).
-          </span>
-        </div>
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            disabled={crudLoading["save-all-categories"]}
-            onClick={handleSaveAllCategories}
-          >
-            {crudLoading["save-all-categories"] ? (
-              <>
-                <Loader2 size={16} className={styles.spinner} />
-                <span>Saving...</span>
-              </>
-            ) : (
-              <>
-                <Save size={16} />
-                <span>Save All Skills</span>
-              </>
-            )}
-          </button>
-          <button
-            type="button"
-            className={styles.primaryButton}
-            onClick={handleOpenAddCategory}
-          >
-            <Plus size={18} /> New Category
-          </button>
-        </div>
-      </div>
-
-
-      <div className={styles.categoryGrid}>
-        {categories.map((cat) => {
-          const skillsArray = Array.isArray(cat.skills) ? cat.skills : [];
-          return (
-            <div key={cat.id} className={styles.categoryCard}>
-              <div className={styles.categoryHeader}>
-                <h3>
-                  <Code size={18} /> {cat.title}
-                </h3>
-                <div style={{ display: "flex", gap: "0.35rem" }}>
-                  <button
-                    type="button"
-                    className={styles.iconButton}
-                    title="Edit category"
-                    onClick={() => handleOpenEditCategory(cat)}
-                  >
-                    <Pencil size={15} />
-                  </button>
-                  <button
-                    type="button"
-                    className={`${styles.iconButton} ${styles.deleteBtn}`}
-                    title="Delete category"
-                    disabled={crudLoading[`del-cat-${cat.id}`]}
-                    onClick={() => handleDeleteCategory(cat.id)}
-                  >
-                    {crudLoading[`del-cat-${cat.id}`] ? (
-                      <Loader2 size={15} className={styles.spinner} />
-                    ) : (
-                      <Trash2 size={15} />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Tag Pills Container */}
-              <div className={styles.tagContainer}>
-                {skillsArray.map((skill, idx) => {
-                  const badge = getTechBadgeData(skill);
-                  const Icon = badge.icon;
-                  return (
-                    <span
-                      key={idx}
-                      className={styles.tagPill}
-                      style={{
-                        color: badge.color,
-                        backgroundColor: `${badge.color}15`,
-                        borderColor: `${badge.color}35`,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "0.35rem",
-                      }}
-                    >
-                      {Icon && <Icon size={12} style={{ color: badge.color }} />}
-                      <span>{skill}</span>
-                      <button
-                        type="button"
-                        className={styles.tagRemoveBtn}
-                        onClick={() => handleRemoveTagFromCategory(cat.id, skill)}
-                        title={`Remove ${skill}`}
-                      >
-                        <X size={13} />
-                      </button>
-                    </span>
-                  );
-                })}
-
-                <input
-                  type="text"
-                  placeholder="+ Add skill (Press Enter)"
-                  className={styles.tagInputField}
-                  value={newTagInputs[cat.id] || ""}
-                  onChange={(e) =>
-                    setNewTagInputs({
-                      ...newTagInputs,
-                      [cat.id]: e.target.value,
-                    })
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleAddTagToCategory(cat.id);
-                    }
-                  }}
-                />
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <button
-                  type="button"
-                  disabled={crudLoading[`add-tag-${cat.id}`]}
-                  style={{
-                    background: "transparent",
-                    border: 0,
-                    color: "var(--primary-color, #4f46e5)",
-                    fontSize: "0.8rem",
-                    fontWeight: 700,
-                    cursor: crudLoading[`add-tag-${cat.id}`] ? "not-allowed" : "pointer",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.25rem",
-                  }}
-                  onClick={() => handleAddTagToCategory(cat.id)}
-                >
-                  {crudLoading[`add-tag-${cat.id}`] ? (
-                    <>
-                      <Loader2 size={12} className={styles.spinner} />
-                      <span>Adding...</span>
-                    </>
-                  ) : (
-                    "+ Add Tag"
-                  )}
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-
-  // 4. CAREER ROADMAP / TIMELINE
-  const renderExperience = () => (
-    <section className={styles.panel}>
-      <div className={styles.panelHeader}>
-        <div>
-          <h2>Career Roadmap & Experience Timeline</h2>
-          <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
-            Manage your career progression, institution/company milestones, descriptions, and technology tags.
-          </span>
-        </div>
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            disabled={crudLoading["save-all-timeline"]}
-            onClick={handleSaveAllTimeline}
-          >
-            {crudLoading["save-all-timeline"] ? (
-              <>
-                <Loader2 size={16} className={styles.spinner} />
-                <span>Saving...</span>
-              </>
-            ) : (
-              <>
-                <Save size={16} />
-                <span>Save All Roadmap</span>
-              </>
-            )}
-          </button>
-          <button
-            type="button"
-            className={styles.primaryButton}
-            onClick={handleOpenAddTimeline}
-          >
-            <Plus size={18} /> Add Timeline Entry
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.timelineStack}>
-        {timelineItems.map((item) => {
-          const tagsArray = Array.isArray(item.tags) ? item.tags : [];
-          return (
-            <div key={item.id} className={styles.timelineCard}>
-              <div className={styles.timelineCardHeader}>
-                <div>
-                  <h3>{item.role}</h3>
-                  <p>{item.company}</p>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <span className={styles.timelinePeriod}>{item.period}</span>
-                  <button
-                    type="button"
-                    className={styles.iconButton}
-                    title="Edit entry"
-                    onClick={() => handleOpenEditTimeline(item)}
-                  >
-                    <Pencil size={15} />
-                  </button>
-                  <button
-                    type="button"
-                    className={`${styles.iconButton} ${styles.deleteBtn}`}
-                    title="Delete entry"
-                    disabled={crudLoading[`del-timeline-${item.id}`]}
-                    onClick={() => handleDeleteTimeline(item.id)}
-                  >
-                    {crudLoading[`del-timeline-${item.id}`] ? (
-                      <Loader2 size={15} className={styles.spinner} />
-                    ) : (
-                      <Trash2 size={15} />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <p className={styles.timelineDesc}>{item.description}</p>
-
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                {tagsArray.map((t, idx) => {
-                  const badge = getTechBadgeData(t);
-                  const Icon = badge.icon;
-                  return (
-                    <span
-                      key={idx}
-                      className={styles.tagPill}
-                      style={{
-                        color: badge.color,
-                        backgroundColor: `${badge.color}15`,
-                        borderColor: `${badge.color}35`,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "0.35rem",
-                      }}
-                    >
-                      {Icon && <Icon size={12} style={{ color: badge.color }} />}
-                      <span>{t}</span>
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-
-  // 5. BANNER CAROUSEL & HERO TECH STACKS
+  // 4. BANNER CAROUSEL & HERO TECH STACKS
   const renderBanner = () => {
     const heroCount = bannerSkills.filter((s) => s.showInHero).length;
 
@@ -2149,8 +1253,16 @@ export default function AdminDashboard({ isDemo = false }) {
               type="button"
               className={styles.secondaryButton}
               disabled={crudLoading["seed-banner"]}
-              onClick={handleSeedBannerSkills}
-              title="Seed all 36 curated technologies to Firebase"
+              onClick={() => {
+                if (window.confirm("Seed and sync all 37 curated technologies to Firebase Firestore?")) {
+                  withLoading("seed-banner", async () => {
+                    const seeded = await seedBannerSkillsToFirestore(true);
+                    setBannerSkills(seeded);
+                    showToast("Successfully seeded 37 tech stacks to Firebase Firestore!");
+                  });
+                }
+              }}
+              title="Seed all 37 curated technologies to Firebase"
             >
               {crudLoading["seed-banner"] ? (
                 <>
@@ -2258,7 +1370,7 @@ export default function AdminDashboard({ isDemo = false }) {
                     {crudLoading[`vis-skill-${s.id}`] ? (
                       <Loader2 size={16} className={styles.spinner} />
                     ) : (
-                      <Eye size={16} />
+                      <Activity size={16} />
                     )}
                   </button>
 
@@ -2284,7 +1396,7 @@ export default function AdminDashboard({ isDemo = false }) {
     );
   };
 
-  // 6. PROJECTS (DRAG & DROP)
+  // 5. PROJECTS
   const renderProjects = () => (
     <section className={styles.panel}>
       <div className={styles.panelHeader}>
@@ -2298,9 +1410,17 @@ export default function AdminDashboard({ isDemo = false }) {
           <button
             type="button"
             className={styles.secondaryButton}
-            onClick={handleSeedProjects}
+            onClick={() => {
+              if (window.confirm("Seed all 10 portfolio projects to your Firebase Firestore?")) {
+                withLoading("seed-projects", async () => {
+                  const seeded = await seedProjectsToFirestore(true);
+                  setProjectList(seeded);
+                  showToast("Successfully seeded 10 projects to Firebase Firestore!");
+                });
+              }
+            }}
             disabled={crudLoading["seed-projects"]}
-            title="Seed RIET Website and ACV Vet Capstone to Firebase"
+            title="Seed all 10 projects to Firebase"
           >
             {crudLoading["seed-projects"] ? (
               <>
@@ -2336,9 +1456,6 @@ export default function AdminDashboard({ isDemo = false }) {
             <span style={{ textAlign: "right" }}>Actions</span>
           </div>
           {filteredProjects.map((p) => {
-            const stack = Array.isArray(p.technologies)
-              ? p.technologies.join(", ")
-              : p.technologies || "";
             const statusClass =
               p.status === "Completed"
                 ? styles.statusCompleted
@@ -2484,165 +1601,16 @@ export default function AdminDashboard({ isDemo = false }) {
     </section>
   );
 
-  // 7. PROFILE & RESUME
-  const renderProfile = () => (
-    <section className={styles.panel}>
-      <div className={styles.panelHeader}>
-        <div>
-          <h2>Profile & Resume Manager</h2>
-          <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
-            Update your contact info, upload your updated PDF resume, and preview it in real-time.
-          </span>
-        </div>
-        <button
-          type="button"
-          className={styles.primaryButton}
-          onClick={handleSaveHero}
-          disabled={savingHero || crudLoading["save-hero"]}
-        >
-          {crudLoading["save-hero"] || savingHero ? (
-            <>
-              <Loader2 size={18} className={styles.spinner} />
-              <span>Saving...</span>
-            </>
-          ) : (
-            <>
-              <Save size={18} />
-              <span>Save Profile</span>
-            </>
-          )}
-        </button>
-      </div>
-
-      <div className={styles.formGrid}>
-        <label>
-          Full Name
-          <input
-            type="text"
-            value={heroForm.name || ""}
-            onChange={(e) => setHeroForm({ ...heroForm, name: e.target.value })}
-          />
-        </label>
-        <label>
-          Job Title
-          <input
-            type="text"
-            value={heroForm.role || ""}
-            onChange={(e) => setHeroForm({ ...heroForm, role: e.target.value })}
-          />
-        </label>
-        <label>
-          Email Address
-          <input
-            type="email"
-            value={heroForm.email || ""}
-            onChange={(e) => setHeroForm({ ...heroForm, email: e.target.value })}
-          />
-        </label>
-        <label>
-          Phone / Mobile
-          <input
-            type="tel"
-            value={heroForm.phone || ""}
-            onChange={(e) => setHeroForm({ ...heroForm, phone: e.target.value })}
-          />
-        </label>
-      </div>
-
-      <label className={styles.textAreaLabel}>
-        Bio Summary
-        <textarea
-          rows="3"
-          value={heroForm.bio || ""}
-          onChange={(e) => setHeroForm({ ...heroForm, bio: e.target.value })}
-        />
-      </label>
-
-      {/* Resume Section with Preview */}
-      <div className={styles.resumeSectionBox}>
-        <div className={styles.resumeCardHeader}>
-          <div className={styles.resumeCardLeft}>
-            <FileText size={28} color="var(--primary-color, #4f46e5)" style={{ flexShrink: 0 }} />
-            <div>
-              <strong style={{ display: "block", color: "var(--primary-color, #4f46e5)" }}>
-                Curriculum Vitae / Resume PDF
-              </strong>
-              <span style={{ fontSize: "0.8rem", color: "#64748b", wordBreak: "break-all" }}>
-                Current File: {heroForm.resumeUrl || "Capabilities_Deck.pdf"}
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.resumeActionBtns}>
-            <button
-              type="button"
-              className={styles.secondaryButton}
-              onClick={() => setShowResumePreview(true)}
-            >
-              <Eye size={16} /> Preview Resume
-            </button>
-            <button
-              type="button"
-              className={styles.primaryButton}
-              onClick={() => resumeFileInputRef.current?.click()}
-              disabled={uploadingResume}
-            >
-              {uploadingResume ? (
-                <>
-                  <Loader2 size={16} className={styles.spinner} />
-                  <span>Uploading...</span>
-                </>
-              ) : (
-                <>
-                  <Upload size={16} />
-                  <span>Upload New PDF</span>
-                </>
-              )}
-            </button>
-            <input
-              type="file"
-              ref={resumeFileInputRef}
-              accept="application/pdf"
-              style={{ display: "none" }}
-              onChange={handleResumeFileSelect}
-            />
-          </div>
-        </div>
-
-        {uploadingResume && resumeUploadProgress !== null && (
-          <div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "#64748b" }}>
-              <span>Uploading resume to Firebase Storage...</span>
-              <span>{resumeUploadProgress}%</span>
-            </div>
-            <div className={styles.progressBarContainer}>
-              <div
-                className={styles.progressBarFill}
-                style={{ width: `${resumeUploadProgress}%` }}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-
   const renderActivePage = () => {
     switch (activePage) {
       case "analytics":
         return renderAnalytics();
       case "hero":
         return renderHero();
-      case "about":
-        return renderAboutSkills();
-      case "experience":
-        return renderExperience();
       case "banner":
         return renderBanner();
       case "projects":
         return renderProjects();
-      case "profile":
-        return renderProfile();
       default:
         return renderOverview();
     }
@@ -2755,7 +1723,6 @@ export default function AdminDashboard({ isDemo = false }) {
         {renderActivePage()}
       </section>
 
-
       {/* ======================================================== */}
       {/* MODAL 1: ADD / EDIT PROJECT (DRAG & DROP THUMBNAIL) */}
       {/* ======================================================== */}
@@ -2793,7 +1760,7 @@ export default function AdminDashboard({ isDemo = false }) {
                   onChange={(e) =>
                     setProjectForm({ ...projectForm, title: e.target.value })
                   }
-                  placeholder="e.g. RIET Website"
+                  placeholder="e.g. WellPet VetCore Pro"
                 />
               </div>
 
@@ -2806,6 +1773,11 @@ export default function AdminDashboard({ isDemo = false }) {
                       src={projectForm.image}
                       alt="Thumbnail Preview"
                       className={styles.previewThumb}
+                      onError={(e) => {
+                        if (!e.target.src.endsWith("/img/projects/project-generic-thumbnail.jpg")) {
+                          e.target.src = "/img/projects/project-generic-thumbnail.jpg";
+                        }
+                      }}
                     />
                     <div className={styles.thumbOverlay}>
                       <button
@@ -2891,7 +1863,7 @@ export default function AdminDashboard({ isDemo = false }) {
                   >
                     <option value="Completed">Completed</option>
                     <option value="Deployment">Deployment</option>
-                    <option value="In progress">In progress</option>
+                    <option value="In Progress">In Progress</option>
                   </select>
                 </div>
                 <div>
@@ -2917,32 +1889,20 @@ export default function AdminDashboard({ isDemo = false }) {
                     onChange={(e) =>
                       setProjectForm({ ...projectForm, duration: e.target.value })
                     }
-                    placeholder="e.g. 1 year, 3 months"
+                    placeholder="e.g. Ongoing, 1 year, 3 weeks"
                   />
                 </div>
                 <div>
-                  <label>Project Image Path</label>
+                  <label>Thumbnail Image URL / Path</label>
                   <input
                     type="text"
                     value={projectForm.image}
                     onChange={(e) =>
                       setProjectForm({ ...projectForm, image: e.target.value })
                     }
-                    placeholder="e.g. /img/projects/my-image.png"
+                    placeholder="/img/projects/project-generic-thumbnail.jpg"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label>Mobile Screenshot Image Path (Optional)</label>
-                <input
-                  type="text"
-                  value={projectForm.mobileImage || ""}
-                  onChange={(e) =>
-                    setProjectForm({ ...projectForm, mobileImage: e.target.value })
-                  }
-                  placeholder="e.g. /img/projects/my-mobile-preview.png"
-                />
               </div>
 
               {/* Technologies Tag Input */}
@@ -3198,272 +2158,7 @@ export default function AdminDashboard({ isDemo = false }) {
       )}
 
       {/* ======================================================== */}
-      {/* MODAL 2: ADD / EDIT CATEGORY */}
-      {/* ======================================================== */}
-      {showCategoryModal && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setShowCategoryModal(false)}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={styles.modalHeader}>
-              <h3>{editingCategory ? "Edit Skill Category" : "New Skill Category"}</h3>
-              <button
-                type="button"
-                className={styles.modalCloseBtn}
-                onClick={() => setShowCategoryModal(false)}
-                aria-label="Close modal"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveCategoryModal} style={{ display: "grid", gap: "1rem" }}>
-              <label>
-                Category Title
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Frontend Development, UI/UX Design"
-                  value={categoryForm.title}
-                  onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })}
-                />
-              </label>
-
-              <div className={styles.formGrid}>
-                <label>
-                  Icon
-                  <select
-                    value={categoryForm.icon}
-                    onChange={(e) => setCategoryForm({ ...categoryForm, icon: e.target.value })}
-                  >
-                    <option value="code">Code (FaCode)</option>
-                    <option value="brush">Design / Brush (FaPaintBrush)</option>
-                    <option value="server">Backend / Server (FaServer)</option>
-                    <option value="users">Collaboration (FaUsers)</option>
-                    <option value="laptop">Laptop (FaLaptopCode)</option>
-                  </select>
-                </label>
-                <label>
-                  Glow Accent Color
-                  <input
-                    type="color"
-                    value={categoryForm.color}
-                    onChange={(e) => setCategoryForm({ ...categoryForm, color: e.target.value })}
-                    style={{ height: "42px", padding: "0.2rem" }}
-                  />
-                </label>
-              </div>
-
-              <div className={styles.modalActions}>
-                <button
-                  type="button"
-                  className={styles.secondaryButton}
-                  onClick={() => setShowCategoryModal(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={styles.primaryButton}
-                  disabled={crudLoading["save-category"]}
-                >
-                  {crudLoading["save-category"] ? (
-                    <>
-                      <Loader2 size={16} className={styles.spinner} />
-                      <span>Saving...</span>
-                    </>
-                  ) : editingCategory ? (
-                    "Save Category"
-                  ) : (
-                    "Create Category"
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ======================================================== */}
-      {/* MODAL 3: ADD / EDIT TIMELINE ENTRY */}
-      {/* ======================================================== */}
-      {showTimelineModal && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setShowTimelineModal(false)}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={styles.modalHeader}>
-              <h3>{editingTimeline ? "Edit Timeline Entry" : "New Career Roadmap Entry"}</h3>
-              <button
-                type="button"
-                className={styles.modalCloseBtn}
-                onClick={() => setShowTimelineModal(false)}
-                aria-label="Close modal"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveTimelineModal} style={{ display: "grid", gap: "1rem" }}>
-              <div className={styles.formGrid}>
-                <label>
-                  Role / Job Title
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Webapp Developer"
-                    value={timelineForm.role}
-                    onChange={(e) => setTimelineForm({ ...timelineForm, role: e.target.value })}
-                  />
-                </label>
-                <label>
-                  Company / Institution
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Pampanga State Agricultural University"
-                    value={timelineForm.company}
-                    onChange={(e) => setTimelineForm({ ...timelineForm, company: e.target.value })}
-                  />
-                </label>
-              </div>
-
-              <div className={styles.formGrid}>
-                <label>
-                  Date Range / Period
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. 06/2025 - 06/2026"
-                    value={timelineForm.period}
-                    onChange={(e) => setTimelineForm({ ...timelineForm, period: e.target.value })}
-                  />
-                </label>
-                <label>
-                  Icon Type
-                  <select
-                    value={timelineForm.iconType}
-                    onChange={(e) => setTimelineForm({ ...timelineForm, iconType: e.target.value })}
-                  >
-                    <option value="briefcase">Work / Briefcase</option>
-                    <option value="graduation">Education / Degree</option>
-                    <option value="laptop">Tech / Coding</option>
-                    <option value="award">Certification / Award</option>
-                  </select>
-                </label>
-              </div>
-
-              <label className={styles.textAreaLabel}>
-                Responsibilities & Accomplishments Description
-                <textarea
-                  rows="3"
-                  required
-                  placeholder="Developing web applications using React JS and Laravel PHP..."
-                  value={timelineForm.description}
-                  onChange={(e) => setTimelineForm({ ...timelineForm, description: e.target.value })}
-                />
-              </label>
-
-              <div>
-                <label>Technologies / Skills Tags</label>
-                <div className={styles.tagContainer}>
-                  {timelineForm.tags.map((tag, idx) => {
-                    const badge = getTechBadgeData(tag);
-                    const Icon = badge.icon;
-                    return (
-                      <span
-                        key={idx}
-                        className={styles.tagPill}
-                        style={{
-                          color: badge.color,
-                          backgroundColor: `${badge.color}15`,
-                          borderColor: `${badge.color}35`,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "0.35rem",
-                        }}
-                      >
-                        {Icon && <Icon size={12} style={{ color: badge.color }} />}
-                        <span>{tag}</span>
-                        <button
-                          type="button"
-                          className={styles.tagRemoveBtn}
-                          onClick={() =>
-                            setTimelineForm({
-                              ...timelineForm,
-                              tags: timelineForm.tags.filter((_, i) => i !== idx),
-                            })
-                          }
-                          title={`Remove ${tag}`}
-                        >
-                          <X size={13} />
-                        </button>
-                      </span>
-                    );
-                  })}
-                  <input
-                    type="text"
-                    placeholder="+ Add tag (Press Enter)"
-                    className={styles.tagInputField}
-                    value={timelineTagInput}
-                    onChange={(e) => setTimelineTagInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        const tag = timelineTagInput.trim();
-                        if (tag && !timelineForm.tags.includes(tag)) {
-                          setTimelineForm({
-                            ...timelineForm,
-                            tags: [...timelineForm.tags, tag],
-                          });
-                          setTimelineTagInput("");
-                        }
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className={styles.modalActions}>
-                <button
-                  type="button"
-                  className={styles.secondaryButton}
-                  onClick={() => setShowTimelineModal(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={styles.primaryButton}
-                  disabled={crudLoading["save-timeline"]}
-                >
-                  {crudLoading["save-timeline"] ? (
-                    <>
-                      <Loader2 size={16} className={styles.spinner} />
-                      <span>Saving...</span>
-                    </>
-                  ) : editingTimeline ? (
-                    "Update Timeline"
-                  ) : (
-                    "Save Entry"
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ======================================================== */}
-      {/* MODAL 4: ADD BANNER SKILL */}
+      {/* MODAL 2: ADD BANNER SKILL */}
       {/* ======================================================== */}
       {showBannerModal && (
         <div
@@ -3475,7 +2170,7 @@ export default function AdminDashboard({ isDemo = false }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.modalHeader}>
-              <h3>Add Upskill Technology to Carousel</h3>
+              <h3>Add Tech Stack to Carousel & Hero</h3>
               <button
                 type="button"
                 className={styles.modalCloseBtn}
@@ -3492,7 +2187,7 @@ export default function AdminDashboard({ isDemo = false }) {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Flutter, Dart, XAMPP, React, Laravel"
+                  placeholder="e.g. Flutter, Dart, React, Laravel"
                   value={bannerForm.name}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -3545,7 +2240,7 @@ export default function AdminDashboard({ isDemo = false }) {
                       }))
                     }
                   />
-                  <span>Display in Hero Section (Featured badge)</span>
+                  <span>Display in Hero Section (Featured badge, up to 12)</span>
                 </label>
 
                 <label className={styles.checkboxContainer}>
@@ -3587,64 +2282,6 @@ export default function AdminDashboard({ isDemo = false }) {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* ======================================================== */}
-      {/* MODAL 6: RESUME PREVIEW IN-APP VIEWER */}
-      {/* ======================================================== */}
-      {showResumePreview && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setShowResumePreview(false)}
-        >
-          <div
-            className={`${styles.modalContent} ${styles.resumeModalContent}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "0.75rem",
-                gap: "0.5rem",
-                flexWrap: "wrap",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
-                <FileText size={22} color="var(--primary-color, #4f46e5)" style={{ flexShrink: 0 }} />
-                <h3 style={{ margin: 0, fontSize: "1.15rem", color: "var(--primary-color, #4f46e5)" }}>
-                  Resume Preview: {heroForm.name}
-                </h3>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <a
-                  href={heroForm.resumeUrl || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.secondaryButton}
-                  style={{ textDecoration: "none", padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}
-                >
-                  <ExternalLink size={14} /> Open in New Tab
-                </a>
-                <button
-                  type="button"
-                  className={styles.modalCloseBtn}
-                  onClick={() => setShowResumePreview(false)}
-                  aria-label="Close modal"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-            </div>
-
-            <iframe
-              src={heroForm.resumeUrl || "#"}
-              title="Resume Preview"
-              className={styles.pdfFrame}
-            />
           </div>
         </div>
       )}
