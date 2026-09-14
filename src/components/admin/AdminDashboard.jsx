@@ -80,6 +80,7 @@ import {
   addBannerSkill,
   updateBannerSkill,
   deleteBannerSkill,
+  seedBannerSkillsToFirestore,
   DEFAULT_BANNER_SKILLS,
 } from "@/services/bannerSkillsServices";
 import { getTechIcon, detectTechKey, getAllTechOptions, getTechBadgeData } from "@/utils/techIcons";
@@ -398,7 +399,7 @@ export default function AdminDashboard({ isDemo = false }) {
     team: "Sean Marion Velasco (with my team)",
     technologies: ["Laravel PHP", "MySQL", "Bootstrap"],
     description: "",
-    image: "/img/projects/riet.png",
+    image: "/img/projects/project-generic-thumbnail.jpg",
     demoUrl: "",
     githubUrl: "https://github.com/Sapnu24",
     featured: true,
@@ -1101,15 +1102,29 @@ export default function AdminDashboard({ isDemo = false }) {
   };
 
   const handleSeedProjects = async () => {
-    if (!window.confirm("Seed and sync only RIET Website and ACV Vet Capstone to your Firebase Firestore?")) return;
+    if (!window.confirm("Seed and sync all 10 portfolio projects to your Firebase Firestore?")) return;
     await withLoading("seed-projects", async () => {
       try {
         const seeded = await seedProjectsToFirestore(true);
         setProjectList(seeded);
-        showToast("Successfully seeded RIET & ACV Vet projects to Firebase!");
+        showToast("Successfully seeded 10 projects to Firebase Firestore!");
       } catch (err) {
-        console.error("Seeding failed:", err);
+        console.error("Seeding projects failed:", err);
         showToast(err.message || "Failed to seed projects.");
+      }
+    });
+  };
+
+  const handleSeedBannerSkills = async () => {
+    if (!window.confirm("Seed and sync all 36 curated technologies to your Firebase Firestore?")) return;
+    await withLoading("seed-banner", async () => {
+      try {
+        const seeded = await seedBannerSkillsToFirestore(true);
+        setBannerSkills(seeded);
+        showToast("Successfully seeded 36 tech stacks to Firebase Firestore!");
+      } catch (err) {
+        console.error("Seeding skills failed:", err);
+        showToast(err.message || "Failed to seed banner skills.");
       }
     });
   };
@@ -2130,6 +2145,25 @@ export default function AdminDashboard({ isDemo = false }) {
                 Featured in Hero: <strong>{heroCount}/12</strong>
               </span>
             </div>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              disabled={crudLoading["seed-banner"]}
+              onClick={handleSeedBannerSkills}
+              title="Seed all 36 curated technologies to Firebase"
+            >
+              {crudLoading["seed-banner"] ? (
+                <>
+                  <Loader2 size={16} className={styles.spinner} />
+                  <span>Seeding...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={16} />
+                  <span>Seed Skills</span>
+                </>
+              )}
+            </button>
             <button
               type="button"
               className={styles.secondaryButton}

@@ -186,3 +186,39 @@ export async function deleteBannerSkill(id) {
   const docRef = doc(db, "banner_skills", id);
   await deleteDoc(docRef);
 }
+
+/**
+ * Seed all default banner skills directly to Firestore
+ */
+export async function seedBannerSkillsToFirestore(override = false) {
+  if (!isFirebaseConfigured || !db) {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_BANNER_SKILLS));
+    return DEFAULT_BANNER_SKILLS;
+  }
+
+  const colRef = collection(db, "banner_skills");
+  const snapshot = await getDocs(colRef);
+
+  if (override && !snapshot.empty) {
+    for (const docSnap of snapshot.docs) {
+      await deleteDoc(doc(db, "banner_skills", docSnap.id));
+    }
+  }
+
+  const seeded = [];
+  for (const skill of DEFAULT_BANNER_SKILLS) {
+    const { id, ...data } = skill;
+    const docRef = doc(db, "banner_skills", id);
+    const payload = {
+      ...data,
+      order: data.order || Date.now(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    await setDoc(docRef, payload, { merge: true });
+    seeded.push({ id, ...payload });
+  }
+
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(seeded));
+  return seeded;
+}

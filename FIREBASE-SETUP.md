@@ -16,7 +16,7 @@ This guide walks you through setting up **Firebase**, **Cloud Firestore**, and *
 
 1. Go to the [Firebase Console](https://console.firebase.google.com/) and sign in with your Google account.
 2. Click **"Add project"** (or **"Create a project"**).
-3. Enter a project name (e.g. `acierto-portfolio`).
+3. Enter a project name (e.g. `smv-portfolio` or `sean-velasco-portfolio`).
 4. (Optional) Google Analytics: You can enable or disable it, then click **"Create project"**.
 5. Wait for the project to finish creating, then click **"Continue"**.
 
@@ -31,29 +31,27 @@ This guide walks you through setting up **Firebase**, **Cloud Firestore**, and *
    ```javascript
    const firebaseConfig = {
      apiKey: "AIzaSyD...",
-     authDomain: "acierto-portfolio.firebaseapp.com",
-     projectId: "acierto-portfolio",
-     storageBucket: "acierto-portfolio.firebasestorage.app",
+     authDomain: "smv-portfolio.firebaseapp.com",
+     projectId: "smv-portfolio",
+     storageBucket: "smv-portfolio.firebasestorage.app",
      messagingSenderId: "123456789012",
      appId: "1:123456789012:web:abcdef123456"
    };
    ```
-5. Copy these values to your `frontend/.env` file.
+5. Copy these values to your root `.env` file.
 
 ---
 
 ## 3. Configure Local Environment Variables
 
-Open `frontend/.env` in your code and fill in the values:
+Create or open `.env` in your project root and populate the values:
 
 ```env
-VITE_GEMINI_KEY=AIzaSyAS3nZ-aYbqWmccVhwQZqDwjfEyRFdf1sY
-
-# Firebase Configuration
-VITE_FIREBASE_API_KEY=AIzaSyD...
-VITE_FIREBASE_AUTH_DOMAIN=acierto-portfolio.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=acierto-portfolio
-VITE_FIREBASE_STORAGE_BUCKET=acierto-portfolio.firebasestorage.app
+# Firebase Web App Configuration
+VITE_FIREBASE_API_KEY=your_firebase_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=smv-portfolio.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=smv-portfolio
+VITE_FIREBASE_STORAGE_BUCKET=smv-portfolio.firebasestorage.app
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789012
 VITE_FIREBASE_APP_ID=1:123456789012:web:abcdef123456
 ```
@@ -68,7 +66,7 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:abcdef123456
 4. Select **"Start in production mode"**, then click **"Create"**.
 
 ### Recommended Firestore Security Rules
-Click the **"Rules"** tab in Firestore and replace the rules with:
+Click the **"Rules"** tab in Firestore and paste these secure rules:
 
 ```javascript
 rules_version = '2';
@@ -84,7 +82,7 @@ service cloud.firestore {
       allow read: if true;
       allow write: if request.auth != null;
     }
-    match /skill_categories/{document} {
+    match /banner_skills/{document} {
       allow read: if true;
       allow write: if request.auth != null;
     }
@@ -92,13 +90,13 @@ service cloud.firestore {
       allow read: if true;
       allow write: if request.auth != null;
     }
-    match /banner_skills/{document} {
-      allow read: if true;
-      allow write: if request.auth != null;
+    match /messages/{document} {
+      allow create: if true; // Allows visitors to send contact messages
+      allow read, update, delete: if request.auth != null;
     }
-    match /certifications/{document} {
-      allow read: if true;
-      allow write: if request.auth != null;
+    match /analytics/{document} {
+      allow create, update: if true;
+      allow read, delete: if request.auth != null;
     }
 
     // Default rule
@@ -113,105 +111,41 @@ Click **"Publish"** to apply the rules.
 
 ---
 
-## 5. Set up Firebase Storage & Security Rules
+## 5. Collections & Initial Database Seeding
 
-1. In Firebase Console left sidebar, click **"Build"** → **"Storage"**.
-2. Click **"Get started"**.
-3. Choose security rules and your storage location (same as Firestore).
-4. Click the **"Rules"** tab in Storage and use the following rules:
+Once Firebase is connected, the admin panel at `/admin` will automatically offer 1-click database synchronization:
 
-```javascript
-rules_version = '2';
+### Active Collections:
+1. **`settings/hero`**:
+   - `name`: `"Sean Marion Velasco"`
+   - `role`: `"Web Developer – Full Stack"`
+   - `yearsExperience`: `"2-3 years"`
+   - `githubUrl`: `"https://github.com/Sapnu24"`
+   - `upworkUrl`: `"https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share"`
+   - `email`: `"seanmarionvelasco.work@gmail.com"`
 
-service firebase.storage {
-  match /b/{bucket}/o {
-    // Project thumbnail images and Resume PDF files
-    match /projects/thumbnails/{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /resumes/{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
+2. **`projects`**:
+   - 10 configured projects with thumbnails, tags, categories (`Systems` / `Websites`), duration, and team info.
 
-    // Catch-all
-    match /{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-  }
-}
-```
-Click **"Publish"** to apply the rules.
+3. **`banner_skills`**:
+   - 36 curated technologies across 4 marquee rows with auto icon mapping and `showInHero` flags.
 
 ---
 
-## 6. Collections & Data Schemas
-
-### 1. `settings/hero` (or `profile`)
-- `greeting` (string): e.g. `"Hi! I'm"`
-- `name` (string): e.g. `"Neil Patrick Acierto"`
-- `role` (string): e.g. `"Full-Stack Developer (Laravel PHP)"`
-- `bio` (string): e.g. `"Full-stack developer focused on responsive design..."`
-- `githubUrl` (string): e.g. `"https://github.com/Neil1227"`
-- `facebookUrl` (string): e.g. `"https://facebook.com/DncngBlde"`
-- `upworkUrl` (string): e.g. `"https://www.upwork.com/freelancers/yourprofile"`
-- `yearsExperience` (string): e.g. `"1+"` (programming years)
-- `resumeUrl` (string): Firebase Storage download URL or `/Acierto_Neil_Patrick_CV.pdf`
-
-### 2. `skill_categories`
-- `title` (string): e.g. `"Frontend Development"`
-- `icon` (string): `"code" | "brush" | "server" | "users" | "laptop"`
-- `color` (string): hex color code
-- `skills` (array of strings): `["React JS", "HTML", "CSS", "JS"]`
-- `order` (number)
-
-### 3. `career_roadmap`
-- `role` (string): e.g. `"Webapp Developer"`
-- `company` (string): e.g. `"Pampanga State Agricultural University"`
-- `period` (string): e.g. `"06/2025 - 06/2026"`
-- `description` (string): Detailed responsibilities and accomplishments
-- `tags` (array of strings): `["React JS", "Laravel PHP", "Bootstrap"]`
-- `iconType` (string): `"briefcase" | "graduation" | "laptop" | "award"`
-- `order` (number)
-
-### 4. `banner_skills`
-- `name` (string): e.g. `"React"`
-- `iconKey` (string): `"react" | "laravel" | "php" | "mysql" | "python" | ...`
-- `iconUrl` (string, optional): Custom icon image URL
-- `isVisible` (boolean): `true | false`
-- `order` (number)
-
-### 5. `projects`
-- `title` (string): e.g. `"RIET Website"`
-- `description` (string): e.g. `"Official institutional website..."`
-- `technologies` (array of strings): `["Laravel PHP", "MySQL", "Bootstrap", "JavaScript"]`
-- `status` (string): `"Completed" | "Deployment" | "In progress"`
-- `duration` (string): `"1 year"`
-- `team` (string): `"Solo" | "Team"`
-- `featured` (boolean): `true | false`
-- `image` (string): Firebase Storage download URL or `/img/projects/riet.png`
-- `demoUrl` (string): URL for demo
-- `githubUrl` (string): URL for GitHub repo
-- `order` (number)
-
----
-
-## 7. Enable Firebase Authentication (for Admin Dashboard)
+## 6. Enable Firebase Authentication (for Admin Dashboard)
 
 1. In Firebase Console sidebar, click **"Build"** → **"Authentication"**.
 2. Click **"Get started"**.
 3. In the **Sign-in method** tab, click **Email/Password**.
 4. Toggle **Enable** (leave Email link disabled), and click **Save**.
 5. Go to the **Users** tab and click **"Add user"**.
-6. Enter your admin email (e.g. `neilpatrickacierto27@gmail.com`) and your secure password.
+6. Enter your admin email (e.g. `seanmarionvelasco.work@gmail.com`) and your secure password.
 
-Now you can log into `http://localhost:5173/admin` with this email and password to manage all content dynamically!
+Now you can log into `http://localhost:5173/admin` or `https://yourdomain.com/admin` with this email and password to manage all content dynamically!
 
 ---
 
-## 8. Update Vercel Environment Variables
+## 7. Update Vercel Environment Variables
 
 When deploying to Vercel:
 1. Go to your [Vercel Dashboard](https://vercel.com).
@@ -228,7 +162,7 @@ When deploying to Vercel:
 
 ---
 
-## 9. Resilience & Fallback
+## 8. Resilience & Fallback
 
 Your codebase is built with an automatic offline/preview fallback:
 - If Firebase environment variables are not yet configured or if Firestore has no documents, your portfolio automatically displays the built-in fallback data and caches local changes in `localStorage`.
