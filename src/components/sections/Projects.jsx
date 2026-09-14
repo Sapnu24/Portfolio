@@ -289,29 +289,14 @@ const Projects = () => {
                         title="Click to zoom image"
                       >
                         <img
-                          src={project.image || "/img/projects/portfoliov1.png"}
+                          src={project.image || "/img/projects/project-generic-thumbnail.jpg"}
                           alt={project.title}
                           className={styles.projectImage}
                           loading="eager"
                           decoding="async"
                           onError={(e) => {
-                            if (
-                              project.id === "kam-maalam-website" &&
-                              e.target.src !== "/img/projects/KMUwebsite.png"
-                            ) {
-                              e.target.src = "/img/projects/KMUwebsite.png";
-                            } else if (
-                              project.id === "portfolio-website" &&
-                              e.target.src !== "/img/projects/portfoliov1.png"
-                            ) {
-                              e.target.src = "/img/projects/portfoliov1.png";
-                            } else if (
-                              project.id === "acv-adoption" &&
-                              e.target.src !== "/img/projects/acv.png"
-                            ) {
-                              e.target.src = "/img/projects/acv.png";
-                            } else if (!e.target.src.endsWith("/img/projects/portfoliov1.png")) {
-                              e.target.src = "/img/projects/portfoliov1.png";
+                            if (!e.target.src.endsWith("/img/projects/project-generic-thumbnail.jpg")) {
+                              e.target.src = "/img/projects/project-generic-thumbnail.jpg";
                             }
                           }}
                         />
@@ -497,14 +482,14 @@ const Projects = () => {
             <div className={styles.imageViewerBody}>
               <div className={styles.desktopImageWrapper}>
                 <img
-                  src={selectedProject.image || "/img/projects/portfoliov1.png"}
+                  src={selectedProject.image || "/img/projects/project-generic-thumbnail.jpg"}
                   alt={`${selectedProject.title} Desktop View`}
                   className={styles.imageViewerImage}
                   loading="eager"
                   decoding="async"
                   onError={(e) => {
-                    if (!e.target.src.endsWith("/img/projects/portfoliov1.png")) {
-                      e.target.src = "/img/projects/portfoliov1.png";
+                    if (!e.target.src.endsWith("/img/projects/project-generic-thumbnail.jpg")) {
+                      e.target.src = "/img/projects/project-generic-thumbnail.jpg";
                     }
                   }}
                 />
