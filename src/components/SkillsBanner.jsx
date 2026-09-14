@@ -24,14 +24,20 @@ const SkillsBanner = () => {
   const visibleSkills = skillList.filter((s) => s.isVisible !== false);
   const displaySkills = visibleSkills.length > 0 ? visibleSkills : DEFAULT_BANNER_SKILLS;
 
-  // Split into 2 rows for bi-directional infinite marquee
-  const midPoint = Math.ceil(displaySkills.length / 2);
-  const firstRow = displaySkills.slice(0, midPoint);
-  const secondRow = displaySkills.slice(midPoint);
+  // Split into 4 balanced rows for rich multi-directional infinite marquee
+  const rowCount = 4;
+  const rows = [[], [], [], []];
+  displaySkills.forEach((skill, index) => {
+    rows[index % rowCount].push(skill);
+  });
 
-  // Duplicate for smooth seamless loop
-  const rowOneDuplicates = [...firstRow, ...firstRow, ...firstRow];
-  const rowTwoDuplicates = [...secondRow, ...secondRow, ...secondRow];
+  // Track style classes for alternating directions and varied pacing
+  const trackClasses = [
+    styles.trackLeft1,
+    styles.trackRight1,
+    styles.trackLeft2,
+    styles.trackRight2,
+  ];
 
   const renderIcon = (skill) => {
     if (skill.iconUrl) {
@@ -59,38 +65,37 @@ const SkillsBanner = () => {
             Professional <span className={styles.titleGradient}>Skill Sets</span>
           </h2>
           <p className={styles.subtitle}>
-            A curated collection of modern web technologies, frameworks, and engineering tools powering our team's production applications.
+            A curated collection of modern web technologies, frameworks, and engineering tools powering high-performance client applications.
           </p>
         </div>
 
-        {/* Dual-Row Bi-Directional Infinite Marquee */}
+        {/* 4-Row Multi-Directional Infinite Marquee System */}
         <div className={styles.marqueeContainer}>
           <div className={styles.fadeOverlayLeft} />
           <div className={styles.fadeOverlayRight} />
 
-          {/* Row 1: Leftward Glide */}
-          <div className={styles.marqueeRow}>
-            <div className={`${styles.marqueeTrack} ${styles.trackLeft}`}>
-              {rowOneDuplicates.map((skill, index) => (
-                <div key={`row1-${skill.id || skill.name}-${index}`} className={styles.skillBadge}>
-                  <span className={styles.skillIconWrapper}>{renderIcon(skill)}</span>
-                  <span className={styles.skillName}>{skill.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          {rows.map((rowItems, rowIndex) => {
+            if (!rowItems.length) return null;
+            // Duplicate 3x for continuous seamless loop
+            const duplicated = [...rowItems, ...rowItems, ...rowItems];
+            const trackClass = trackClasses[rowIndex % trackClasses.length];
 
-          {/* Row 2: Rightward Glide */}
-          <div className={styles.marqueeRow}>
-            <div className={`${styles.marqueeTrack} ${styles.trackRight}`}>
-              {rowTwoDuplicates.map((skill, index) => (
-                <div key={`row2-${skill.id || skill.name}-${index}`} className={styles.skillBadge}>
-                  <span className={styles.skillIconWrapper}>{renderIcon(skill)}</span>
-                  <span className={styles.skillName}>{skill.name}</span>
+            return (
+              <div key={`marquee-row-${rowIndex}`} className={styles.marqueeRow}>
+                <div className={`${styles.marqueeTrack} ${trackClass}`}>
+                  {duplicated.map((skill, index) => (
+                    <div
+                      key={`row${rowIndex}-${skill.id || skill.name}-${index}`}
+                      className={styles.skillBadge}
+                    >
+                      <span className={styles.skillIconWrapper}>{renderIcon(skill)}</span>
+                      <span className={styles.skillName}>{skill.name}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

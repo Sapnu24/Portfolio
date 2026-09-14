@@ -6,7 +6,6 @@ import Navbar from "./components/sections/Navbar";
 import Hero from "./components/sections/Hero";
 import About from "./components/sections/About";
 import Timeline from "./components/sections/Timeline";
-import Certifications from "./components/sections/Certifications";
 import Contact from "./components/sections/Contact";
 import Footer from "./components/sections/Footer";
 import Projects from "./components/sections/Projects";
@@ -40,10 +39,9 @@ function Portfolio() {
       <Hero />
       <main className="portfolioMainContent">
         <About />
-        <Timeline />
+        {/* <Timeline /> -- Milestones section (Uncomment once first client is closed) */}
         <SkillsBanner />
         <Projects />
-        <Certifications />
         <Contact />
       </main>
       <Footer />
@@ -59,11 +57,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Portfolio />} />
           <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard isDemo={false} />} />
-          <Route path="/demo/admin" element={<AdminDashboard isDemo={true} />} />
-          <Route path="/admin/demo" element={<AdminDashboard isDemo={true} />} />
-          <Route path="/admin-demo" element={<AdminDashboard isDemo={true} />} />
-          <Route path="/demo" element={<AdminDashboard isDemo={true} />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

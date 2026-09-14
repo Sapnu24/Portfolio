@@ -1,9 +1,26 @@
-import { Facebook, Instagram, Telegram } from "react-bootstrap-icons";
-import { FaGithub, FaHeart } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { SiUpwork } from "react-icons/si";
+import { Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import styles from "@/styles/Footer.module.css";
+import { getHeroProfile, getCachedHeroProfile } from "@/services/profileServices";
 
 export default function Footer() {
+  const [profile, setProfile] = useState(getCachedHeroProfile);
+
+  useEffect(() => {
+    async function loadFooterProfile() {
+      try {
+        const data = await getHeroProfile();
+        if (data) setProfile(data);
+      } catch {
+        // fallback
+      }
+    }
+    loadFooterProfile();
+  }, []);
+
   return (
     <footer className={styles.footer}>
       <motion.div
@@ -23,28 +40,54 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Quick Navigation / Socials */}
+        {/* Professional Client Channels */}
         <div className={styles.social}>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub Profile"
-            title="GitHub"
-            className={styles.socialBtn}
-          >
-            <FaGithub size={18} />
-          </a>
-          <a
-            href="https://t.me/yourusername"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Telegram"
-            title="Telegram"
-            className={styles.socialBtn}
-          >
-            <Telegram size={18} />
-          </a>
+          {profile.githubUrl && (
+            <a
+              href={profile.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Profile"
+              title="GitHub"
+              className={styles.socialBtn}
+            >
+              <FaGithub size={18} />
+            </a>
+          )}
+          {/* {profile.linkedinUrl && (
+            <a
+              href={profile.linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn Profile"
+              title="LinkedIn"
+              className={styles.socialBtn}
+            >
+              <FaLinkedin size={18} />
+            </a>
+          )} */}
+          {profile.upworkUrl && (
+            <a
+              href={profile.upworkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Upwork Profile"
+              title="Hire on Upwork"
+              className={styles.socialBtn}
+            >
+              <SiUpwork size={17} />
+            </a>
+          )}
+          {profile.email && (
+            <a
+              href={`mailto:${profile.email}`}
+              aria-label="Send Email"
+              title="Email Sean Marion Velasco"
+              className={styles.socialBtn}
+            >
+              <Mail size={17} />
+            </a>
+          )}
         </div>
       </motion.div>
 

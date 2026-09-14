@@ -87,6 +87,7 @@ import {
   SiStripe,
   SiResend,
   SiPnpm,
+  SiGrafana,
 } from "react-icons/si";
 import { GrHeroku } from "react-icons/gr";
 import { TbBrandCSharp, TbBrandOpenai } from "react-icons/tb";
@@ -95,6 +96,8 @@ import { TbBrandCSharp, TbBrandOpenai } from "react-icons/tb";
  * Master Registry of Tech Stacks (Mobile, Web, Backend, Cloud & Database)
  */
 export const TECH_REGISTRY = {
+  // Observability & Monitoring
+  grafana: { name: "Grafana", icon: SiGrafana, category: "tools", color: "#F46800" },
   // Mobile Development
   flutter: { name: "Flutter", icon: SiFlutter, category: "mobile", color: "#02569B" },
   dart: { name: "Dart", icon: SiDart, category: "mobile", color: "#0175C2" },
@@ -280,7 +283,11 @@ export function detectTechKey(rawName = "") {
   if (cleaned.includes("ruby")) return "ruby";
   if (cleaned.includes("csharp") || cleaned === "c#") return "csharp";
   if (cleaned.includes("dotnet") || cleaned === ".net") return "dotnet";
-  if (cleaned.includes("cplus") || cleaned === "c++") return "cplusplus";
+  if (cleaned.includes("grafana")) return "grafana";
+  if (cleaned.includes("gemini")) return "ai";
+  if (cleaned.includes("zustand")) return "redux";
+  if (cleaned.includes("rest") || cleaned.includes("api")) return "graphql";
+  if (cleaned === "c" || cleaned === "cpp" || cleaned === "cc" || cleaned.includes("cplus") || cleaned.includes("cplusplus")) return "cplusplus";
   if (cleaned.includes("docker")) return "docker";
   if (cleaned.includes("aws")) return "aws";
   if (cleaned.includes("git")) return cleaned.includes("github") ? "github" : "git";

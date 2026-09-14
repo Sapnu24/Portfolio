@@ -83,11 +83,11 @@ export default function PortfolioSkeleton({ isVisible = true }) {
             <div className={styles.actionButtons}>
               <div className={`${styles.btnPrimary} ${styles.shimmer}`} />
               <div className={`${styles.btnSecondary} ${styles.shimmer}`} />
-              <div className={`${styles.btnResume} ${styles.shimmer}`} />
             </div>
 
             {/* Social Icons */}
             <div className={styles.socialRow}>
+              <div className={`${styles.socialDot} ${styles.shimmer}`} />
               <div className={`${styles.socialDot} ${styles.shimmer}`} />
               <div className={`${styles.socialDot} ${styles.shimmer}`} />
               <div className={`${styles.socialDot} ${styles.shimmer}`} />

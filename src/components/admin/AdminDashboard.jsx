@@ -82,14 +82,6 @@ import {
   deleteBannerSkill,
   DEFAULT_BANNER_SKILLS,
 } from "@/services/bannerSkillsServices";
-import {
-  getCertifications,
-  addCertification,
-  updateCertification,
-  deleteCertification,
-  seedCertificationsToFirestore,
-  DEFAULT_CERTIFICATIONS,
-} from "@/services/certificationServices";
 import { getTechIcon, detectTechKey, getAllTechOptions, getTechBadgeData } from "@/utils/techIcons";
 import TechIconPicker from "./TechIconPicker";
 import {
@@ -122,10 +114,11 @@ const adminPages = [
   { id: "analytics", label: "Analytics & Traffic", icon: BarChart3 },
   { id: "hero", label: "Home / Hero", icon: Sparkles },
   { id: "about", label: "About & Skills", icon: Palette },
-  { id: "experience", label: "Career Roadmap", icon: CalendarClock },
+  /* [UNCOMMENT WHEN FIRST CLIENT CLOSES]
+  { id: "experience", label: "Milestones", icon: CalendarClock },
+  */
   { id: "banner", label: "Banner Skills", icon: Layers },
   { id: "projects", label: "Projects", icon: BriefcaseBusiness },
-  { id: "certifications", label: "Certifications", icon: Award },
   { id: "profile", label: "Profile & Resume", icon: UserRound },
 ];
 
@@ -143,8 +136,7 @@ const FAKE_DEMO_DATA = {
     bio: "Passionate web application engineer with 4+ years of experience building high-performance SPAs, reactive dashboard portals, and enterprise REST APIs.",
     githubUrl: "https://github.com/example/demo-developer",
     linkedinUrl: "https://linkedin.com",
-    facebookUrl: "https://facebook.com",
-    email: "demo.developer@example.com",
+    email: "seanmarionvelasco.work@gmail.com",
     phone: "+1 (555) 019-2834",
     location: "San Francisco, CA / Remote",
     avatar: "/img/projects/portfoliov1.png",
@@ -317,45 +309,6 @@ const FAKE_DEMO_DATA = {
       createdAt: "2026-01-01T00:00:00.000Z",
     },
   ],
-  certifications: [
-    {
-      id: "demo-cert-1",
-      title: "Professional Full-Stack Systems Engineer",
-      issuer: "Global Web Standards Institute",
-      issueDate: "Feb 2026",
-      credentialUrl: "https://example.com/verify/demo-01",
-      status: "Completed",
-      skills: [
-        "React JS",
-        "JavaScript (ES6+)",
-        "Component Architecture",
-        "State Management",
-        "REST APIs",
-      ],
-      description:
-        "Mastery of enterprise single-page web applications, modern reactive design patterns, and asynchronous backend integration.",
-      featured: true,
-    },
-    {
-      id: "demo-cert-2",
-      title: "Enterprise Backend Architecture & Database Security",
-      issuer: "Cloud & Software Engineering Academy",
-      issueDate: "Jan 2026",
-      credentialUrl: "https://example.com/verify/demo-02",
-      status: "Completed",
-      skills: [
-        "Laravel PHP",
-        "MySQL",
-        "ORM",
-        "API Security",
-        "Middleware",
-        "Caching",
-      ],
-      description:
-        "Advanced certification covering relational database design, query optimization, secure authentication pipelines, and distributed APIs.",
-      featured: true,
-    },
-  ],
 };
 
 export default function AdminDashboard({ isDemo = false }) {
@@ -447,7 +400,7 @@ export default function AdminDashboard({ isDemo = false }) {
     description: "",
     image: "/img/projects/riet.png",
     demoUrl: "",
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/Sapnu24",
     featured: true,
   });
 
@@ -494,26 +447,6 @@ export default function AdminDashboard({ isDemo = false }) {
   const [uploadingResume, setUploadingResume] = useState(false);
   const [showResumePreview, setShowResumePreview] = useState(false);
   const resumeFileInputRef = useRef(null);
-
-  // 6. Certifications state
-  const [certifications, setCertifications] = useState(
-    isDemo ? FAKE_DEMO_DATA.certifications : []
-  );
-  const [loadingCertifications, setLoadingCertifications] = useState(!isDemo);
-  const [certSearchQuery, setCertSearchQuery] = useState("");
-  const [editingCertification, setEditingCertification] = useState(null);
-  const [showCertificationModal, setShowCertificationModal] = useState(false);
-  const [certTagInput, setCertTagInput] = useState("");
-  const [certForm, setCertForm] = useState({
-    title: "",
-    issuer: "",
-    duration: "",
-    description: "",
-    verificationUrl: "",
-    status: "Completed",
-    skills: [],
-    featured: true,
-  });
 
   // Universal CRUD loading tracker for responsive button UX
   const [crudLoading, setCrudLoading] = useState({});
@@ -571,7 +504,6 @@ export default function AdminDashboard({ isDemo = false }) {
       setProjectList(FAKE_DEMO_DATA.projects);
       setCertifications(FAKE_DEMO_DATA.certifications);
       setLoadingProjects(false);
-      setLoadingCertifications(false);
       return () => {
         window.removeEventListener("portfolio-analytics-update", handleAnalyticsUpdate);
       };
@@ -579,14 +511,13 @@ export default function AdminDashboard({ isDemo = false }) {
 
     async function loadAllAdminData() {
       try {
-        const [heroData, catsData, timelineData, bannerData, projData, certsData, liveAnalytics] =
+        const [heroData, catsData, timelineData, bannerData, projData, liveAnalytics] =
           await Promise.all([
             getHeroProfile(),
             getSkillCategories(),
             getTimelineItems(),
             getBannerSkills(),
             getProjects(),
-            getCertifications(),
             getLiveAnalytics(),
           ]);
 
@@ -595,13 +526,11 @@ export default function AdminDashboard({ isDemo = false }) {
         if (timelineData) setTimelineItems(timelineData);
         if (bannerData) setBannerSkills(bannerData);
         if (projData) setProjectList(projData);
-        if (certsData) setCertifications(certsData);
         if (liveAnalytics) setAnalyticsData(liveAnalytics);
       } catch (err) {
         console.error("Error loading admin data:", err);
       } finally {
         setLoadingProjects(false);
-        setLoadingCertifications(false);
       }
     }
     loadAllAdminData();
@@ -1292,127 +1221,6 @@ export default function AdminDashboard({ isDemo = false }) {
   });
 
   // ==========================================
-  // CERTIFICATIONS HANDLERS
-  // ==========================================
-  const handleOpenAddCertification = () => {
-    setEditingCertification(null);
-    setCertTagInput("");
-    setCertForm({
-      title: "",
-      issuer: "",
-      duration: "",
-      description: "",
-      verificationUrl: "",
-      status: "Completed",
-      skills: [],
-      featured: true,
-    });
-    setShowCertificationModal(true);
-  };
-
-  const handleOpenEditCertification = (cert) => {
-    setEditingCertification(cert);
-    setCertTagInput("");
-    setCertForm({
-      title: cert.title || "",
-      issuer: cert.issuer || "",
-      duration: cert.duration || "",
-      description: cert.description || "",
-      verificationUrl: cert.verificationUrl || "",
-      status: cert.status || "Completed",
-      skills: Array.isArray(cert.skills) ? [...cert.skills] : [],
-      featured: Boolean(cert.featured),
-    });
-    setShowCertificationModal(true);
-  };
-
-  const handleDeleteCertification = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this certification?")) return;
-    await withLoading(`del-cert-${id}`, async () => {
-      if (isDemo) {
-        setCertifications((prev) => prev.filter((c) => c.id !== id));
-        showToast("Certification deleted. (Demo Sandbox)");
-        return;
-      }
-      try {
-        await deleteCertification(id);
-        setCertifications((prev) => prev.filter((c) => c.id !== id));
-        showToast("Certification deleted.");
-      } catch (err) {
-        console.error("Delete certification failed:", err);
-        showToast(err.message || "Failed to delete certification.");
-      }
-    });
-  };
-
-  const handleSeedCertifications = async () => {
-    if (!window.confirm("Seed the official Ground Gurus certifications (Laravel PHP & React JS) directly to your Firebase Firestore?")) return;
-    await withLoading("seed-certs", async () => {
-      try {
-        const seeded = await seedCertificationsToFirestore(true);
-        setCertifications(seeded);
-        showToast("Successfully seeded Certifications to Firebase!");
-      } catch (err) {
-        console.error("Seeding certifications failed:", err);
-        showToast(err.message || "Failed to seed certifications.");
-      }
-    });
-  };
-
-  const handleSaveCertificationModal = async (e) => {
-    e.preventDefault();
-    await withLoading("save-cert", async () => {
-      const payload = {
-        ...certForm,
-        skills: Array.isArray(certForm.skills)
-          ? certForm.skills
-          : typeof certForm.skills === "string"
-            ? certForm.skills.split(",").map((s) => s.trim()).filter(Boolean)
-            : [],
-      };
-
-      if (isDemo) {
-        if (editingCertification) {
-          setCertifications((prev) =>
-            prev.map((c) => (c.id === editingCertification.id ? { ...c, ...payload } : c))
-          );
-          showToast("Certification updated successfully! (Demo Sandbox)");
-        } else {
-          const newId = `demo-cert-${Date.now()}`;
-          setCertifications((prev) => [{ id: newId, ...payload }, ...prev]);
-          showToast("New certification added! (Demo Sandbox)");
-        }
-        setShowCertificationModal(false);
-        return;
-      }
-
-      if (editingCertification) {
-        try {
-          await updateCertification(editingCertification.id, payload);
-        } catch (err) {
-          console.warn("Cert update failed:", err);
-        }
-        setCertifications((prev) =>
-          prev.map((c) => (c.id === editingCertification.id ? { ...c, ...payload } : c))
-        );
-        showToast("Certification updated successfully!");
-      } else {
-        let newId = `cert-${Date.now()}`;
-        try {
-          const createdId = await addCertification(payload);
-          if (createdId) newId = createdId;
-        } catch (err) {
-          console.warn("Cert add failed:", err);
-        }
-        setCertifications((prev) => [...prev, { id: newId, ...payload }]);
-        showToast("New certification added!");
-      }
-
-      setShowCertificationModal(false);
-    });
-  };
-
-  // ==========================================
   // PANEL RENDERERS
   // ==========================================
 
@@ -1452,11 +1260,6 @@ export default function AdminDashboard({ isDemo = false }) {
             icon: Layers,
             label: "Banner Skills",
             value: bannerSkills.filter((s) => s.isVisible !== false).length.toString(),
-          },
-          {
-            icon: Award,
-            label: "Certifications",
-            value: certifications.length.toString(),
           },
         ].map((m, i) => {
           const Icon = m.icon;
@@ -1507,24 +1310,19 @@ export default function AdminDashboard({ isDemo = false }) {
           <button
             type="button"
             className={styles.secondaryButton}
-            onClick={() => setActivePage("certifications")}
-          >
-            <Award size={16} /> Certifications
-          </button>
-          <button
-            type="button"
-            className={styles.secondaryButton}
             onClick={() => setActivePage("about")}
           >
             <Palette size={16} /> Skill Categories
           </button>
+          {/* [UNCOMMENT WHEN FIRST CLIENT CLOSES]
           <button
             type="button"
             className={styles.secondaryButton}
             onClick={handleOpenAddTimeline}
           >
-            <CalendarClock size={16} /> Career Roadmap
+            <CalendarClock size={16} /> Milestones
           </button>
+          */}
           <button
             type="button"
             className={styles.secondaryButton}
@@ -1568,8 +1366,6 @@ export default function AdminDashboard({ isDemo = false }) {
     const rawPages = [
       { path: "/", label: "Home / Hero Section", count: analyticsData.pageCounts?.["/"] || 1 },
       { path: "/#projects", label: "Projects Showcase", count: analyticsData.pageCounts?.["/#projects"] || 0 },
-      { path: "/#career", label: "Career Roadmap", count: analyticsData.pageCounts?.["/#career"] || 0 },
-      { path: "/#certifications", label: "Certifications", count: analyticsData.pageCounts?.["/#certifications"] || 0 },
       { path: "/#about", label: "About & Skills Matrix", count: analyticsData.pageCounts?.["/#about"] || 0 },
       { path: "/#contact", label: "Contact & Social Form", count: analyticsData.pageCounts?.["/#contact"] || 0 },
       { path: "/resume", label: "Resume PDF Downloads", count: analyticsData.pageCounts?.["/resume"] || 0 },
@@ -1989,14 +1785,14 @@ export default function AdminDashboard({ isDemo = false }) {
             />
           </label>
           <label>
-            Facebook Profile URL
+            LinkedIn Profile URL
             <input
               type="url"
-              value={heroForm.facebookUrl || ""}
+              value={heroForm.linkedinUrl || ""}
               onChange={(e) =>
-                setHeroForm({ ...heroForm, facebookUrl: e.target.value })
+                setHeroForm({ ...heroForm, linkedinUrl: e.target.value })
               }
-              placeholder="https://facebook.com/DncngBlde"
+              placeholder="https://linkedin.com/in/yourprofile"
             />
           </label>
         </div>
@@ -2798,160 +2594,6 @@ export default function AdminDashboard({ isDemo = false }) {
     </section>
   );
 
-  // 7. CERTIFICATIONS
-  const renderCertifications = () => (
-    <section className={styles.panel}>
-      <div className={styles.panelHeader}>
-        <div>
-          <h2>Certifications Manager ({certifications.length})</h2>
-          <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
-            Add, edit, or delete verified technical credentials, professional licenses, and course completions.
-          </span>
-        </div>
-        <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={handleSeedCertifications}
-            disabled={crudLoading["seed-certs"]}
-            title="Seed Ground Gurus Laravel & React certifications to Firebase"
-          >
-            {crudLoading["seed-certs"] ? (
-              <>
-                <Loader2 size={16} className={styles.spinner} />
-                <span>Seeding...</span>
-              </>
-            ) : (
-              <>
-                <Sparkles size={16} />
-                <span>Seed Certifications</span>
-              </>
-            )}
-          </button>
-          <button
-            type="button"
-            className={styles.primaryButton}
-            onClick={handleOpenAddCertification}
-          >
-            <Plus size={18} /> New Certification
-          </button>
-        </div>
-      </div>
-
-      {loadingCertifications ? (
-        <p style={{ padding: "1.5rem" }}>Loading certifications...</p>
-      ) : (
-        <div className={styles.projectTable}>
-          <div className={styles.certTableHeader}>
-            <span>Certification</span>
-            <span>Issuer</span>
-            <span>Duration</span>
-            <span>Skills</span>
-            <span>Verify Link</span>
-            <span style={{ textAlign: "right" }}>Actions</span>
-          </div>
-          {certifications.map((c) => {
-            const skillsList = Array.isArray(c.skills)
-              ? c.skills.join(", ")
-              : c.skills || "";
-            return (
-              <div key={c.id} className={styles.certTableRow}>
-                <div className={styles.mobileFieldRow}>
-                  <strong style={{ fontSize: "0.95rem", color: "var(--primary-color, #004643)" }}>
-                    {c.title}
-                  </strong>
-                  {c.featured && (
-                    <small
-                      style={{
-                        display: "block",
-                        color: "var(--accent-color, #4f46e5)",
-                        fontWeight: 600,
-                        marginTop: "0.15rem",
-                      }}
-                    >
-                      ★ Featured Credential
-                    </small>
-                  )}
-                </div>
-
-                <div className={styles.mobileFieldRow}>
-                  <span className={styles.mobileFieldLabel}>Issuer</span>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#334155" }}>
-                    {c.issuer}
-                  </span>
-                </div>
-
-                <div className={styles.mobileFieldRow}>
-                  <span className={styles.mobileFieldLabel}>Duration</span>
-                  <span style={{ fontSize: "0.85rem", color: "#475569" }}>
-                    {c.duration}
-                  </span>
-                </div>
-
-                <div className={styles.mobileFieldRow}>
-                  <span className={styles.mobileFieldLabel}>Skills Covered</span>
-                  <span style={{ fontSize: "0.85rem", color: "#334155" }}>
-                    {skillsList || "—"}
-                  </span>
-                </div>
-
-                <div className={styles.mobileFieldRow}>
-                  <span className={styles.mobileFieldLabel}>Verification</span>
-                  <span>
-                    {c.verificationUrl ? (
-                      <a
-                        href={c.verificationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: "var(--primary-color, #004643)",
-                          textDecoration: "none",
-                          fontWeight: 600,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "0.25rem",
-                          fontSize: "0.85rem",
-                        }}
-                      >
-                        <ExternalLink size={14} /> Link
-                      </a>
-                    ) : (
-                      "—"
-                    )}
-                  </span>
-                </div>
-
-                <div className={styles.rowActions}>
-                  <button
-                    type="button"
-                    className={styles.iconButton}
-                    title="Edit certification"
-                    onClick={() => handleOpenEditCertification(c)}
-                  >
-                    <Pencil size={16} />
-                  </button>
-                  <button
-                    type="button"
-                    className={`${styles.iconButton} ${styles.deleteBtn}`}
-                    title="Delete certification"
-                    disabled={crudLoading[`del-cert-${c.id}`]}
-                    onClick={() => handleDeleteCertification(c.id)}
-                  >
-                    {crudLoading[`del-cert-${c.id}`] ? (
-                      <Loader2 size={16} className={styles.spinner} />
-                    ) : (
-                      <Trash2 size={16} />
-                    )}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </section>
-  );
-
   const renderActivePage = () => {
     switch (activePage) {
       case "analytics":
@@ -2966,8 +2608,6 @@ export default function AdminDashboard({ isDemo = false }) {
         return renderBanner();
       case "projects":
         return renderProjects();
-      case "certifications":
-        return renderCertifications();
       case "profile":
         return renderProfile();
       default:
@@ -3911,226 +3551,6 @@ export default function AdminDashboard({ isDemo = false }) {
                     </>
                   ) : (
                     "Add Tech Stack"
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ======================================================== */}
-      {/* MODAL 5: ADD / EDIT CERTIFICATION */}
-      {/* ======================================================== */}
-      {showCertificationModal && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setShowCertificationModal(false)}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={styles.modalHeader}>
-              <h3>{editingCertification ? "Edit Certification" : "Add New Certification"}</h3>
-              <button
-                type="button"
-                className={styles.modalCloseBtn}
-                onClick={() => setShowCertificationModal(false)}
-                aria-label="Close modal"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <form
-              onSubmit={handleSaveCertificationModal}
-              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-            >
-              <div>
-                <label>Certification Title</label>
-                <input
-                  type="text"
-                  required
-                  value={certForm.title}
-                  onChange={(e) =>
-                    setCertForm({ ...certForm, title: e.target.value })
-                  }
-                  placeholder="e.g. Laravel PHP Certification"
-                />
-              </div>
-
-              <div className={styles.formGrid}>
-                <div>
-                  <label>Issuer / Institution</label>
-                  <input
-                    type="text"
-                    required
-                    value={certForm.issuer}
-                    onChange={(e) =>
-                      setCertForm({ ...certForm, issuer: e.target.value })
-                    }
-                    placeholder="e.g. Ground Gurus, Coursera, Meta"
-                  />
-                </div>
-                <div>
-                  <label>Duration / Hours</label>
-                  <input
-                    type="text"
-                    required
-                    value={certForm.duration}
-                    onChange={(e) =>
-                      setCertForm({ ...certForm, duration: e.target.value })
-                    }
-                    placeholder="e.g. 12 hours, 40 hours"
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formGrid}>
-                <div>
-                  <label>Status</label>
-                  <select
-                    value={certForm.status}
-                    onChange={(e) =>
-                      setCertForm({ ...certForm, status: e.target.value })
-                    }
-                  >
-                    <option value="Completed">Completed</option>
-                    <option value="In progress">In progress</option>
-                    <option value="Verified">Verified</option>
-                  </select>
-                </div>
-                <div>
-                  <label>Verification URL</label>
-                  <input
-                    type="url"
-                    value={certForm.verificationUrl}
-                    onChange={(e) =>
-                      setCertForm({ ...certForm, verificationUrl: e.target.value })
-                    }
-                    placeholder="https://groundgurus.net/certificate/..."
-                  />
-                </div>
-              </div>
-
-              {/* Skills Tags */}
-              <div>
-                <label>Skills / Topics Covered</label>
-                <div className={styles.tagContainer}>
-                  {(Array.isArray(certForm.skills)
-                    ? certForm.skills
-                    : []
-                  ).map((s, idx) => {
-                    const badge = getTechBadgeData(s);
-                    const Icon = badge.icon;
-                    return (
-                      <span
-                        key={idx}
-                        className={styles.tagPill}
-                        style={{
-                          color: badge.color,
-                          backgroundColor: `${badge.color}15`,
-                          borderColor: `${badge.color}35`,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "0.35rem",
-                        }}
-                      >
-                        {Icon && <Icon size={12} style={{ color: badge.color }} />}
-                        <span>{s}</span>
-                        <button
-                          type="button"
-                          className={styles.tagRemoveBtn}
-                          onClick={() =>
-                            setCertForm({
-                              ...certForm,
-                              skills: certForm.skills.filter(
-                                (_, i) => i !== idx
-                              ),
-                            })
-                          }
-                          title={`Remove ${s}`}
-                        >
-                          <X size={13} />
-                        </button>
-                      </span>
-                    );
-                  })}
-                  <input
-                    type="text"
-                    placeholder="+ Add skill tag (Press Enter)"
-                    className={styles.tagInputField}
-                    value={certTagInput}
-                    onChange={(e) => setCertTagInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        const tag = certTagInput.trim();
-                        if (tag && !certForm.skills.includes(tag)) {
-                          setCertForm({
-                            ...certForm,
-                            skills: [...certForm.skills, tag],
-                          });
-                          setCertTagInput("");
-                        }
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label>Description / Learning Outcomes</label>
-                <textarea
-                  rows="3"
-                  value={certForm.description}
-                  onChange={(e) =>
-                    setCertForm({
-                      ...certForm,
-                      description: e.target.value,
-                    })
-                  }
-                  placeholder="e.g. Laravel fundamentals & beyond: Laravel Developer's Core Skills..."
-                />
-              </div>
-
-              <label className={styles.checkboxContainer}>
-                <input
-                  type="checkbox"
-                  checked={certForm.featured}
-                  onChange={(e) =>
-                    setCertForm({
-                      ...certForm,
-                      featured: e.target.checked,
-                    })
-                  }
-                />
-                Show on Featured Badges
-              </label>
-
-              <div className={styles.modalActions}>
-                <button
-                  type="button"
-                  className={styles.secondaryButton}
-                  onClick={() => setShowCertificationModal(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={styles.primaryButton}
-                  disabled={crudLoading["save-cert"]}
-                >
-                  {crudLoading["save-cert"] ? (
-                    <>
-                      <Loader2 size={16} className={styles.spinner} />
-                      <span>Saving...</span>
-                    </>
-                  ) : editingCertification ? (
-                    "Update Certification"
-                  ) : (
-                    "Save Certification"
                   )}
                 </button>
               </div>

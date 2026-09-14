@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, FileText, Sparkles, CheckCircle2, MessageSquare, ExternalLink, Briefcase } from "lucide-react";
-import { FaGithub, FaPaperPlane } from "react-icons/fa";
-import { Telegram } from "react-bootstrap-icons";
+import { Mail, Phone, MapPin, Send, Sparkles, CheckCircle2, MessageSquare, ExternalLink, Briefcase } from "lucide-react";
+import { FaGithub, FaLinkedin, FaPaperPlane } from "react-icons/fa";
+import { SiUpwork } from "react-icons/si";
 import styles from "@/styles/Contact.module.css";
 import { getHeroProfile, getCachedHeroProfile, DEFAULT_PROFILE } from "@/services/profileServices";
 
@@ -201,7 +201,7 @@ export default function ContactPage() {
                 Work directly with Sean Marion Velasco with full Upwork escrow protection and transparent milestone delivery.
               </p>
               <a
-                href={profile.upworkUrl || "https://www.upwork.com"}
+                href={profile.upworkUrl || "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.submitBtn}
@@ -227,7 +227,7 @@ export default function ContactPage() {
 
               <div className={styles.infoList}>
                 <a
-                  href={`mailto:${profile.email || "contact@seanvelasco.dev"}`}
+                  href={`mailto:${profile.email || "seanmarionvelasco.work@gmail.com"}`}
                   className={styles.infoItem}
                 >
                   <div className={styles.infoIconWrapper}>
@@ -236,22 +236,7 @@ export default function ContactPage() {
                   <div className={styles.infoDetails}>
                     <span className={styles.infoLabel}>Email</span>
                     <span className={styles.infoValue}>
-                      {profile.email || "contact@seanvelasco.dev"}
-                    </span>
-                  </div>
-                </a>
-
-                <a
-                  href={`tel:${profile.phone || "+15550192834"}`}
-                  className={styles.infoItem}
-                >
-                  <div className={styles.infoIconWrapper}>
-                    <Phone size={18} />
-                  </div>
-                  <div className={styles.infoDetails}>
-                    <span className={styles.infoLabel}>Direct Line / WhatsApp</span>
-                    <span className={styles.infoValue}>
-                      {profile.phone || "+1 (555) 019-2834"}
+                      {profile.email || "seanmarionvelasco.work@gmail.com"}
                     </span>
                   </div>
                 </a>
@@ -270,10 +255,10 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Social Media Channels */}
+            {/* Professional Client Channels */}
             <div className={styles.infoCard}>
-              <h3 className={styles.infoCardTitle}>Developer Networks</h3>
-              <p className={styles.socialText}>Explore my code repositories and milestone updates:</p>
+              <h3 className={styles.infoCardTitle}>Professional Client Channels</h3>
+              <p className={styles.socialText}>Direct links to my verified freelance profiles and public code repositories:</p>
 
               <div className={styles.socialIcons}>
                 {profile.githubUrl && (
@@ -288,39 +273,30 @@ export default function ContactPage() {
                     <FaGithub size={18} />
                   </a>
                 )}
-                <a
-                  href="https://t.me/yourusername"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Telegram"
-                  title="Telegram"
-                  className={styles.socialBtn}
-                >
-                  <Telegram size={18} />
-                </a>
-              </div>
-            </div>
-
-            {/* Professional CV / Deck Card */}
-            <div className={styles.resumeCard}>
-              <div className={styles.resumeCardContent}>
-                <div>
-                  <h3 className={styles.resumeTitle}>Professional CV & Technical Profile</h3>
-                  <p className={styles.resumeSubtitle}>
-                    Review my complete technical background, engineering skillset, and project track record.
-                  </p>
-                </div>
-                <a
-                  href="#contact"
-                  className={styles.resumeBtn}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                >
-                  <FileText size={18} />
-                  <span>Request Resume / CV</span>
-                </a>
+                {/* {profile.linkedinUrl && (
+                  <a
+                    href={profile.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn Profile"
+                    title="LinkedIn"
+                    className={styles.socialBtn}
+                  >
+                    <FaLinkedin size={18} />
+                  </a>
+                )} */}
+                {profile.upworkUrl && (
+                  <a
+                    href={profile.upworkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Upwork Profile"
+                    title="Upwork"
+                    className={styles.socialBtn}
+                  >
+                    <SiUpwork size={17} />
+                  </a>
+                )}
               </div>
             </div>
           </motion.div>

@@ -5,19 +5,19 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 export const DEFAULT_PROFILE = {
   greeting: "Hi, I'm",
   name: "Sean Marion Velasco",
-  role: "Full-Stack Developer & Software Engineer",
-  bio: "Full-stack software engineer specializing in high-performance React web applications, scalable Laravel PHP backends, REST APIs, and bespoke digital solutions for global clients.",
-  githubUrl: "https://github.com",
-  facebookUrl: "",
-  upworkUrl: "https://www.upwork.com",
-  email: "contact@seanvelasco.dev",
-  phone: "+1 (555) 019-2834",
-  yearsExperience: "4+",
-  programmingStartYear: 2021,
+  role: "Web Developer – Full Stack",
+  bio: "Dedicated freelance full-stack developer committed to crafting clean, reliable, and high-performance web applications that help businesses bring their digital vision to life.",
+  githubUrl: "https://github.com/Sapnu24",
+  linkedinUrl: "https://linkedin.com",
+  upworkUrl: "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share",
+  email: "seanmarionvelasco.work@gmail.com",
+  phone: "",
+  yearsExperience: "2-3 years",
+  programmingStartYear: 2023,
   resumeUrl: "",
 };
 
-export const LOCAL_STORAGE_KEY = "smv_personal_profile_settings_v2";
+export const LOCAL_STORAGE_KEY = "smv_personal_profile_settings_v5";
 
 /**
  * Read cached hero and profile settings synchronously from localStorage for instant, flicker-free rendering

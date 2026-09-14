@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaFacebook } from "react-icons/fa";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { SiUpwork } from "react-icons/si";
 import {
   ArrowRight,
@@ -11,48 +11,24 @@ import {
   Terminal,
   CheckCircle2,
   Zap,
-  FileText,
 } from "lucide-react";
 import { getHeroProfile, getCachedHeroProfile, DEFAULT_PROFILE } from "@/services/profileServices";
 import { getProjectCount, getCachedProjectCount } from "@/services/projectServices";
-import { getBannerSkills, DEFAULT_BANNER_SKILLS } from "@/services/bannerSkillsServices";
+import { getBannerSkills, getCachedBannerSkills, DEFAULT_BANNER_SKILLS } from "@/services/bannerSkillsServices";
 import { getTechIcon } from "@/utils/techIcons";
 import styles from "@/styles/Hero.module.css";
 
-const getInitialBannerSkills = () => {
-  try {
-    const cached = localStorage.getItem("srn_portfolio_banner_skills_v1");
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch {
-    // fallback
-  }
-  return DEFAULT_BANNER_SKILLS;
-};
-
 const getInitialHeroSkills = () => {
-  try {
-    const cached = localStorage.getItem("srn_portfolio_banner_skills_v1");
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        const inHero = parsed.filter((s) => s.showInHero && s.isVisible !== false);
-        if (inHero.length > 0) return inHero.slice(0, 12);
-        return parsed.filter((s) => s.isVisible !== false).slice(0, 12);
-      }
-    }
-  } catch {
-    // fallback
-  }
-  return DEFAULT_BANNER_SKILLS.filter((s) => s.showInHero !== false && s.isVisible !== false).slice(0, 12);
+  const list = getCachedBannerSkills();
+  const inHero = list.filter((s) => s.showInHero && s.isVisible !== false);
+  if (inHero.length > 0) return inHero.slice(0, 12);
+  return list.filter((s) => s.isVisible !== false).slice(0, 12);
 };
 
 export default function Hero() {
   const [profile, setProfile] = useState(getCachedHeroProfile);
   const [projectCount, setProjectCount] = useState(getCachedProjectCount);
-  const [allBannerSkills, setAllBannerSkills] = useState(getInitialBannerSkills);
+  const [allBannerSkills, setAllBannerSkills] = useState(getCachedBannerSkills);
   const [heroSkills, setHeroSkills] = useState(getInitialHeroSkills);
   const [activeCodeTab, setActiveCodeTab] = useState("overview");
 
@@ -151,16 +127,16 @@ export default function Hero() {
 
             <div className={styles.roleBadgeWrapper}>
               <h2 className={styles.roleTitle}>
-                {profile.role || "Full-Stack Developer & Software Engineer"}
+                {profile.role || "Web Developer – Full Stack"}
               </h2>
               <span className={styles.roleSubBadge}>SMV</span>
             </div>
           </div>
 
-          {/* Narrative Bio */}
+          {/* Narrative Bio / Tagline */}
           <p className={styles.bioText}>
             {profile.bio ||
-              "Full-stack software engineer specializing in high-performance React web applications, scalable Laravel PHP backends, REST APIs, and bespoke digital solutions for global clients."}
+              "Dedicated freelance full-stack developer committed to crafting clean, reliable, and high-performance web applications that help businesses bring their digital vision to life."}
           </p>
 
           {/* Featured Technology Stack Pills */}
@@ -193,7 +169,7 @@ export default function Hero() {
 
               <div className={styles.secondaryActionRow}>
                 <a
-                  href={profile.upworkUrl || "https://www.upwork.com"}
+                  href={profile.upworkUrl || "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.secondaryBtn}
@@ -222,6 +198,18 @@ export default function Hero() {
                   className={styles.socialIcon}
                 >
                   <FaGithub size={19} />
+                </a>
+              )}
+              {profile.linkedinUrl && (
+                <a
+                  href={profile.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn Profile"
+                  title="LinkedIn"
+                  className={styles.socialIcon}
+                >
+                  <FaLinkedin size={18} />
                 </a>
               )}
               {profile.upworkUrl && (
@@ -307,15 +295,15 @@ export default function Hero() {
                     </span>,
                     {"\n"}  <span className={styles.tokenProperty}>role</span>:{" "}
                     <span className={styles.tokenString}>
-                      "{profile.role || "Full-Stack Developer & Software Engineer"}"
+                      "{profile.role || "Web Developer – Full Stack"}"
                     </span>,
                     {"\n"}  <span className={styles.tokenProperty}>specialization</span>: [
-                    {"\n"}    <span className={styles.tokenString}>"React Web Applications"</span>,
-                    {"\n"}    <span className={styles.tokenString}>"Laravel REST Backends"</span>,
-                    {"\n"}    <span className={styles.tokenString}>"Full-Stack Architecture"</span>
+                    {"\n"}    <span className={styles.tokenString}>"Full-Stack Web Development"</span>,
+                    {"\n"}    <span className={styles.tokenString}>"Client-Focused Solutions"</span>,
+                    {"\n"}    <span className={styles.tokenString}>"Responsive Applications"</span>
                     {"\n"}  ],
                     {"\n"}  <span className={styles.tokenProperty}>experience</span>:{" "}
-                    <span className={styles.tokenString}>"{displayExperience} in production"</span>,
+                    <span className={styles.tokenString}>"{displayExperience} in freelance & production"</span>,
                     {"\n"}  <span className={styles.tokenProperty}>completedProjects</span>:{" "}
                     <span className={styles.tokenNumber}>{projectCount}</span>,
                     {"\n"}  <span className={styles.tokenProperty}>upworkStatus</span>:{" "}
@@ -327,8 +315,8 @@ export default function Hero() {
                 <pre className={styles.codeSnippet}>
                   <code>
                     {"{\n"}  <span className={styles.tokenProperty}>"leadDeveloper"</span>: <span className={styles.tokenString}>"Sean Marion Velasco"</span>,
-                    {"\n"}  <span className={styles.tokenProperty}>"frontendStack"</span>: <span className={styles.tokenString}>"React, Next.js, Vite, TypeScript"</span>,
-                    {"\n"}  <span className={styles.tokenProperty}>"backendStack"</span>: <span className={styles.tokenString}>"Laravel PHP, Node.js, REST APIs"</span>,
+                    {"\n"}  <span className={styles.tokenProperty}>"primaryFocus"</span>: <span className={styles.tokenString}>"Modern Full-Stack Web Development"</span>,
+                    {"\n"}  <span className={styles.tokenProperty}>"clientApproach"</span>: <span className={styles.tokenString}>"High-Quality, Reliable Delivery"</span>,
                     {"\n"}  <span className={styles.tokenProperty}>"featuredTech"</span>: [
                     {displayedSkillNames.slice(0, 4).map((skillName, i) => (
                       <span key={i}>

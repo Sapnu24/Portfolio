@@ -12,29 +12,51 @@ import {
 import { detectTechKey } from "@/utils/techIcons";
 
 export const DEFAULT_BANNER_SKILLS = [
-  { id: "bs-react", name: "React", iconKey: "react", isVisible: true, order: 1 },
-  { id: "bs-laravel", name: "Laravel", iconKey: "laravel", isVisible: true, order: 2 },
-  { id: "bs-firebase", name: "Firebase", iconKey: "firebase", isVisible: true, order: 3 },
-  { id: "bs-javascript", name: "JavaScript", iconKey: "javascript", isVisible: true, order: 4 },
-  { id: "bs-php", name: "PHP", iconKey: "php", isVisible: true, order: 5 },
-  { id: "bs-mysql", name: "MySQL", iconKey: "mysql", isVisible: true, order: 6 },
-  { id: "bs-tailwind", name: "Tailwind CSS", iconKey: "tailwind", isVisible: true, order: 7 },
-  { id: "bs-css", name: "CSS3", iconKey: "css3", isVisible: true, order: 8 },
-  { id: "bs-html", name: "HTML5", iconKey: "html5", isVisible: true, order: 9 },
-  { id: "bs-git", name: "Git", iconKey: "git", isVisible: true, order: 10 },
-  { id: "bs-github", name: "GitHub", iconKey: "github", isVisible: true, order: 11 },
-  { id: "bs-bootstrap", name: "Bootstrap", iconKey: "bootstrap", isVisible: true, order: 12 },
-  { id: "bs-wordpress", name: "WordPress", iconKey: "wordpress", isVisible: true, order: 13 },
-  { id: "bs-flutter", name: "Flutter", iconKey: "flutter", isVisible: true, order: 14 },
-  { id: "bs-dart", name: "Dart", iconKey: "dart", isVisible: true, order: 15 },
-  { id: "bs-python", name: "Python", iconKey: "python", isVisible: true, order: 16 },
-  { id: "bs-xampp", name: "XAMPP", iconKey: "xampp", isVisible: true, order: 17 },
-  { id: "bs-cloudflare-pages", name: "Cloudflare Pages", iconKey: "cloudflarepages", isVisible: true, order: 18 },
-  { id: "bs-cloudflare-workers", name: "Cloudflare Workers", iconKey: "cloudflareworkers", isVisible: true, order: 19 },
-  { id: "bs-render", name: "Render", iconKey: "render", isVisible: true, order: 20 },
+  // Row 1 - Frontend & Modern Web
+  { id: "bs-react", name: "React", iconKey: "react", isVisible: true, showInHero: true, order: 1 },
+  { id: "bs-nextjs", name: "Next.js", iconKey: "nextjs", isVisible: true, showInHero: true, order: 2 },
+  { id: "bs-typescript", name: "TypeScript", iconKey: "typescript", isVisible: true, showInHero: true, order: 3 },
+  { id: "bs-javascript", name: "JavaScript", iconKey: "javascript", isVisible: true, showInHero: true, order: 4 },
+  { id: "bs-html-css", name: "HTML5 & CSS3", iconKey: "html5", isVisible: true, showInHero: true, order: 5 },
+  { id: "bs-tailwind", name: "Tailwind CSS", iconKey: "tailwind", isVisible: true, showInHero: true, order: 6 },
+  { id: "bs-bootstrap", name: "Bootstrap", iconKey: "bootstrap", isVisible: true, showInHero: false, order: 7 },
+  { id: "bs-vite", name: "Vite", iconKey: "vite", isVisible: true, showInHero: true, order: 8 },
+
+  // Row 2 - Backend, Servers & APIs
+  { id: "bs-laravel", name: "Laravel PHP", iconKey: "laravel", isVisible: true, showInHero: true, order: 9 },
+  { id: "bs-php", name: "PHP", iconKey: "php", isVisible: true, showInHero: false, order: 10 },
+  { id: "bs-node-express", name: "Node.js & Express", iconKey: "nodejs", isVisible: true, showInHero: true, order: 11 },
+  { id: "bs-rest-api", name: "REST APIs", iconKey: "graphql", isVisible: true, showInHero: true, order: 12 },
+  { id: "bs-python", name: "Python", iconKey: "python", isVisible: true, showInHero: true, order: 13 },
+  { id: "bs-cplusplus", name: "C/C++", iconKey: "cplusplus", isVisible: true, showInHero: true, order: 14 },
+  { id: "bs-java", name: "Java (basic)", iconKey: "java", isVisible: true, showInHero: false, order: 15 },
+  { id: "bs-mysql", name: "MySQL", iconKey: "mysql", isVisible: true, showInHero: true, order: 16 },
+
+  // Row 3 - Cloud, Databases & DevOps
+  { id: "bs-postgresql", name: "PostgreSQL", iconKey: "postgresql", isVisible: true, showInHero: false, order: 17 },
+  { id: "bs-firebase", name: "Firebase & Firestore", iconKey: "firebase", isVisible: true, showInHero: true, order: 18 },
+  { id: "bs-supabase", name: "Supabase", iconKey: "supabase", isVisible: true, showInHero: true, order: 19 },
+  { id: "bs-redis", name: "Redis", iconKey: "redis", isVisible: true, showInHero: false, order: 20 },
+  { id: "bs-cloudflare-pages", name: "Cloudflare Pages", iconKey: "cloudflarepages", isVisible: true, showInHero: true, order: 21 },
+  { id: "bs-cloudflare-workers", name: "Cloudflare Workers", iconKey: "cloudflareworkers", isVisible: true, showInHero: false, order: 22 },
+  { id: "bs-render", name: "Render", iconKey: "render", isVisible: true, showInHero: false, order: 23 },
+  { id: "bs-railway", name: "Railway", iconKey: "railway", isVisible: true, showInHero: false, order: 24 },
+  { id: "bs-vercel", name: "Vercel", iconKey: "vercel", isVisible: true, showInHero: false, order: 25 },
+  { id: "bs-docker", name: "Docker", iconKey: "docker", isVisible: true, showInHero: false, order: 26 },
+
+  // Row 4 - Observability, Mobile, BaaS & Tooling
+  { id: "bs-grafana", name: "Grafana", iconKey: "grafana", isVisible: true, showInHero: true, order: 27 },
+  { id: "bs-git-github", name: "Git & GitHub", iconKey: "github", isVisible: true, showInHero: true, order: 28 },
+  { id: "bs-firebase-baas", name: "Firebase & Firestore (BaaS / Cloud Data)", iconKey: "firebase", isVisible: true, showInHero: false, order: 29 },
+  { id: "bs-flutter", name: "Flutter", iconKey: "flutter", isVisible: true, showInHero: false, order: 30 },
+  { id: "bs-dart", name: "Dart", iconKey: "dart", isVisible: true, showInHero: false, order: 31 },
+  { id: "bs-wordpress", name: "WordPress", iconKey: "wordpress", isVisible: true, showInHero: false, order: 32 },
+  { id: "bs-figma", name: "Figma", iconKey: "figma", isVisible: true, showInHero: false, order: 33 },
+  { id: "bs-postman", name: "Postman", iconKey: "postman", isVisible: true, showInHero: false, order: 34 },
+  { id: "bs-xampp", name: "XAMPP", iconKey: "xampp", isVisible: true, showInHero: false, order: 35 },
 ];
 
-const LOCAL_STORAGE_KEY = "srn_portfolio_banner_skills_v1";
+const LOCAL_STORAGE_KEY = "smv_portfolio_banner_skills_v4";
 
 /**
  * Read cached banner skills synchronously from localStorage

@@ -67,13 +67,13 @@ export default function CareerRoadmap() {
         >
           <div className={styles.eyebrowBadge}>
             <Sparkles size={14} />
-            <span>Experience & Milestones</span>
+            <span>Freelance Delivery & Milestones</span>
           </div>
           <h2 className={styles.title}>
-            Career Journey & <span className={styles.titleGradient}>Experience</span>
+            Freelance Engineering & <span className={styles.titleGradient}>Client Milestones</span>
           </h2>
           <p className={styles.subtitle}>
-            A chronological roadmap of Sean Marion Velasco's software engineering background, technical expertise, and milestone projects.
+            A track record of bespoke web architectures, international client deliverables, and high-impact freelance milestones.
           </p>
         </motion.div>
 

@@ -13,52 +13,30 @@ import {
 
 export const DEFAULT_TIMELINE = [
   {
-    id: "agency-founder-scaling",
-    role: "Full-Stack Developer & Technical Lead",
+    id: "freelance-upwork-engineering",
+    role: "Lead Full-Stack Freelance Engineer",
     company: "Freelance & Upwork Engineering",
     period: "2024 - Present",
     description:
-      "Delivering full-stack web engineering and technical architecture for international clients on Upwork. Leading development of high-throughput React, Laravel, and Node.js solutions (assisted by my team for larger project scopes).",
-    tags: ["React JS", "Laravel PHP", "Cloud Architecture", "REST APIs"],
+      "Delivering bespoke full-stack web engineering, custom cloud architectures, and reactive web applications for global clients with 100% Job Success. Specializing in high-throughput React, Next.js, and Laravel PHP systems.",
+    tags: ["React JS", "Laravel PHP", "Cloud Architecture", "REST APIs", "Upwork Top Rated"],
     iconType: "briefcase",
     order: 1,
   },
   {
-    id: "lead-web-engineering",
-    role: "Senior Full-Stack Developer",
-    company: "Digital Solutions & Client Engineering",
-    period: "2023 - 2024",
+    id: "contract-client-systems",
+    role: "Contract Software Engineer",
+    company: "Client MVPs & Custom Systems",
+    period: "2022 - 2024",
     description:
-      "Architected responsive web portals, secure RESTful APIs, database structures, and dynamic dashboards with a focus on performance and clean code standards.",
-    tags: ["Full-Stack Engineering", "MySQL", "PHP", "React JS"],
-    iconType: "award",
-    order: 2,
-  },
-  {
-    id: "frontend-uiux-specialization",
-    role: "Frontend & UI/UX Engineer",
-    company: "Web Platforms & Custom Systems",
-    period: "2022 - 2023",
-    description:
-      "Crafted intuitive user interfaces, modular design systems, and responsive layouts across cross-functional client web applications.",
-    tags: ["React", "UI/UX", "Tailwind CSS", "JavaScript"],
+      "Engineered bespoke client web portals, database structures, secure REST APIs, and responsive web dashboards with a focus on fast load times, reliability, and clean architecture.",
+    tags: ["Full-Stack Engineering", "MySQL", "PHP", "React JS", "Tailwind CSS"],
     iconType: "laptop",
-    order: 3,
-  },
-  {
-    id: "academic-engineering",
-    role: "B.S. in Information Technology & Software Engineering",
-    company: "Academic & Technical Engineering Foundation",
-    period: "2020 - 2024",
-    description:
-      "Comprehensive engineering background covering algorithms, distributed database systems, network protocols, and software development methodologies.",
-    tags: ["Software Engineering", "Databases", "Web Architecture"],
-    iconType: "graduation",
-    order: 4,
+    order: 2,
   },
 ];
 
-export const LOCAL_STORAGE_KEY = "smv_personal_timeline_data_v2";
+export const LOCAL_STORAGE_KEY = "smv_personal_timeline_data_v3";
 
 /**
  * Read cached Career Roadmap items synchronously from localStorage

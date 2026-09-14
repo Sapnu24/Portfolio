@@ -7,7 +7,6 @@ import {
   FaUserAlt,
   FaBriefcase,
   FaProjectDiagram,
-  FaCertificate,
   FaEnvelope,
 } from "react-icons/fa";
 import { Send } from "lucide-react";
@@ -26,37 +25,65 @@ export default function Navbar() {
   const navLinks = [
     { href: "#home", id: "home", label: "Home", icon: <FaHome /> },
     { href: "#nextSection", id: "nextSection", label: "About", icon: <FaUserAlt /> },
-    { href: "#career", id: "career", label: "Career", icon: <FaBriefcase /> },
+    /* Uncomment when first client is closed:
+    { href: "#career", id: "career", label: "Milestones", icon: <FaBriefcase /> },
+    */
     { href: "#projects", id: "projects", label: "Projects", icon: <FaProjectDiagram /> },
-    { href: "#certifications", id: "certifications", label: "Certs", fullLabel: "Certifications", icon: <FaCertificate /> },
     { href: "#contact", id: "contact", label: "Contact", icon: <FaEnvelope /> },
   ];
 
   useEffect(() => {
+    let ticking = false;
+    let isScrolledState = false;
+
     const handleScroll = () => {
-      // Toggle compact scrolled style
-      setScrolled(window.scrollY > 40);
-
-      // Active section scroll spy
-      const sectionIds = ["home", "nextSection", "career", "projects", "certifications", "contact"];
-      const scrollPosition = window.scrollY + 200;
-
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const id = sectionIds[i];
-        const el = document.getElementById(id);
-        if (el) {
-          const top = el.offsetTop;
-          if (scrollPosition >= top) {
-            setActiveSection(id);
-            break;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrolled = window.scrollY > 40;
+          if (currentScrolled !== isScrolledState) {
+            isScrolledState = currentScrolled;
+            setScrolled(currentScrolled);
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    // High-performance IntersectionObserver for active section tracking without layout thrashing
+    const sectionIds = [
+      "home",
+      "nextSection",
+      // "career", /* Uncomment when first client is closed */
+      "projects",
+      "contact",
+    ];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          visible.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          setActiveSection(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-20% 0px -40% 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   return (

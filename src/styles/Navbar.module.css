@@ -34,14 +34,16 @@
   padding: 0 1.5rem;
   border-radius: 9999px;
   background: var(--navbar-bg, rgba(255, 255, 255, 0.85));
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
   border: 1px solid var(--navbar-border, rgba(255, 255, 255, 0.85));
+  transform: translateZ(0);
+  will-change: height, background-color, box-shadow;
   box-shadow:
     0 12px 36px var(--shadow-glow, rgba(79, 70, 229, 0.12)),
     0 2px 8px rgba(0, 0, 0, 0.04),
     inset 0 1px 1px rgba(255, 255, 255, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
 }
 
