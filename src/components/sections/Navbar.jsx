@@ -9,7 +9,7 @@ import {
   FaProjectDiagram,
   FaEnvelope,
 } from "react-icons/fa";
-import { Send } from "lucide-react";
+import { Send, Bot } from "lucide-react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -146,6 +146,16 @@ export default function Navbar() {
         })}
         <div className={styles.mobileDockDivider} />
         <ThemeToggle compact dropUp />
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent("toggle-chatbot"))}
+          className={styles.mobileChatToggleBtn}
+          aria-label="Open SMV AI Assistant"
+          title="Open SMV AI Assistant"
+        >
+          <Bot size={18} className={styles.mobileChatIcon} />
+          <span className={styles.mobileChatPulse} />
+        </button>
       </nav>
     </header>
   );

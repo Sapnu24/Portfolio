@@ -54,6 +54,18 @@ const ChatBot = () => {
     }
   }, [isOpen]);
 
+  // Global event listener for mobile dock / external triggers
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    const handleToggle = () => setIsOpen((prev) => !prev);
+    window.addEventListener("open-chatbot", handleOpen);
+    window.addEventListener("toggle-chatbot", handleToggle);
+    return () => {
+      window.removeEventListener("open-chatbot", handleOpen);
+      window.removeEventListener("toggle-chatbot", handleToggle);
+    };
+  }, []);
+
   // Fetch real-time portfolio knowledge from Firestore / Local Cache
   useEffect(() => {
     async function loadPortfolioContext() {

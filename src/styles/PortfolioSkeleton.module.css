@@ -102,6 +102,8 @@
   background: var(--toggle-bg, rgba(79, 70, 229, 0.05));
   padding: 0.35rem 0.6rem;
   border-radius: 9999px;
+  margin-left: auto;
+  margin-right: 0.75rem;
 }
 
 .navLinkPill {
