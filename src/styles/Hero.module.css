@@ -996,7 +996,7 @@
     padding: 0.85rem 1.25rem;
     font-size: 0.92rem;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(0, 70, 67, 0.22);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.22);
     box-sizing: border-box;
     margin-bottom: 0;
   }
@@ -1018,7 +1018,7 @@
     justify-content: center;
     gap: 0.4rem;
     white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0, 70, 67, 0.06);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.06);
     box-sizing: border-box;
   }
 
@@ -1122,8 +1122,8 @@
     padding: 0.75rem 0.35rem;
     border-radius: 0.95rem;
     background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 70, 67, 0.12);
-    box-shadow: 0 4px 14px rgba(0, 70, 67, 0.06);
+    border: 1px solid rgba(79, 70, 229, 0.12);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.06);
     box-sizing: border-box;
     min-width: 0;
   }

@@ -3,8 +3,8 @@
   overflow: hidden;
   display: grid;
   grid-template-columns: 270px 1fr;
-  background: #f0f4f5;
-  color: var(--text-color, #1a202c);
+  background: var(--bg-secondary, #f8fafc);
+  color: var(--text-color, #0f172a);
   font-family: inherit;
   position: relative;
 }
@@ -16,13 +16,14 @@
   height: 100vh;
   overflow-y: auto;
   padding: 1.5rem;
-  background: var(--primary-color, #004643);
+  background: linear-gradient(180deg, #111827 0%, #0f172a 60%, #0b0f19 100%);
+  border-right: 1px solid rgba(99, 102, 241, 0.15);
   color: var(--secondary-color, #fffffe);
   display: flex;
   flex-direction: column;
   z-index: 100;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
 }
 
 .sidebarHeader {
@@ -43,8 +44,8 @@
 
 .mobileCloseBtn {
   display: none;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #fff;
   border-radius: 0.6rem;
   width: 38px;
@@ -60,7 +61,7 @@
 }
 
 .mobileCloseBtn:hover {
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.25);
   transform: scale(1.05);
 }
 
@@ -101,19 +102,27 @@
   border: 0;
   border-radius: 0.75rem;
   background: transparent;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
   font-size: var(--font-sm, 0.875rem);
   font-weight: 600;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
 }
 
-.sideNav button:hover,
+.sideNav button:hover {
+  color: #fff;
+  background: rgba(99, 102, 241, 0.16);
+  transform: translateX(3px);
+}
+
 .sideNav .active {
   color: #fff;
-  background: rgba(255, 255, 255, 0.16);
+  background: linear-gradient(90deg, rgba(79, 70, 229, 0.35) 0%, rgba(6, 182, 212, 0.15) 100%);
+  border-left: 3px solid #06b6d4;
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.2);
   transform: translateX(3px);
 }
 
@@ -149,7 +158,7 @@
   flex-direction: column;
   gap: 1.25rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 70, 67, 0.4) transparent;
+  scrollbar-color: rgba(79, 70, 229, 0.35) transparent;
 }
 
 .topbar {
@@ -159,9 +168,9 @@
   gap: 1rem;
   padding: 1.25rem 1.5rem;
   border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 10px 30px rgba(0, 70, 67, 0.06);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.05);
 }
 
 .topbarLeft {
@@ -174,8 +183,8 @@
 .menuToggle {
   display: none;
   background: #ffffff;
-  border: 1.5px solid #d7e1e2;
-  color: var(--primary-color, #004643);
+  border: 1.5px solid #cbd5e1;
+  color: var(--primary-color, #4f46e5);
   border-radius: 0.75rem;
   width: 44px;
   height: 44px;
@@ -187,17 +196,17 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0, 70, 67, 0.08);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.08);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-sizing: border-box;
 }
 
 .menuToggle:hover {
-  background: #f0fdf4;
-  border-color: var(--primary-color, #004643);
-  color: var(--primary-color, #004643);
+  background: #f5f3ff;
+  border-color: var(--primary-color, #4f46e5);
+  color: var(--primary-color, #4f46e5);
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 70, 67, 0.12);
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.14);
 }
 
 .menuToggle:active {
@@ -207,9 +216,9 @@
 .menuToggle svg {
   width: 22px !important;
   height: 22px !important;
-  stroke: var(--primary-color, #004643) !important;
+  stroke: var(--primary-color, #4f46e5) !important;
   stroke-width: 2.3 !important;
-  color: var(--primary-color, #004643) !important;
+  color: var(--primary-color, #4f46e5) !important;
   flex-shrink: 0;
   display: block;
   margin: auto;
@@ -218,7 +227,7 @@
 .topbar h1,
 .panel h2 {
   margin: 0;
-  color: var(--primary-color, #004643);
+  color: var(--headline-color, #0f172a);
   font-weight: 800;
 }
 
@@ -230,7 +239,7 @@
 .eyebrow {
   display: block;
   margin-bottom: 0.25rem;
-  color: var(--mix-color, #e11d48);
+  color: var(--accent-color, #06b6d4);
   font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -248,7 +257,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid #d7e1e2;
+  border: 1px solid #cbd5e1;
   border-radius: 0.75rem;
   background: #fff;
   color: var(--subtitle-color, #64748b);
@@ -290,7 +299,7 @@
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 10px 30px rgba(0, 70, 67, 0.05);
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.05);
 }
 
 .metricCard {
@@ -298,21 +307,22 @@
   align-items: center;
   gap: 1rem;
   padding: 1.25rem;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .metricCard:hover {
   transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.1);
 }
 
 .metricCard svg {
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
   flex-shrink: 0;
 }
 
 .metricCard strong {
   display: block;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
   font-size: 1.6rem;
   font-weight: 800;
   line-height: 1.1;
@@ -365,7 +375,7 @@ label,
 .textAreaLabel {
   display: grid;
   gap: 0.4rem;
-  color: var(--primary-color, #004643);
+  color: var(--text-primary, #0f172a);
   font-size: 0.85rem;
   font-weight: 700;
   min-width: 0;
@@ -392,7 +402,7 @@ input[type="checkbox"] {
   padding: 0 !important;
   margin: 0 !important;
   cursor: pointer !important;
-  accent-color: var(--primary-color, #004643) !important;
+  accent-color: var(--primary-color, #4f46e5) !important;
   flex-shrink: 0 !important;
 }
 
@@ -411,15 +421,15 @@ input[type="checkbox"] {
 }
 
 .checkboxContainer:hover {
-  color: var(--primary-color, #004643) !important;
+  color: var(--primary-color, #4f46e5) !important;
 }
 
 input:not([type="checkbox"]):not([type="radio"]):focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--primary-color, #004643);
-  box-shadow: 0 0 0 3px rgba(0, 70, 67, 0.12);
+  border-color: var(--primary-color, #4f46e5);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
 }
 
 textarea {
@@ -448,13 +458,15 @@ textarea {
 
 .primaryButton {
   padding: 0.75rem 1.25rem;
-  background: var(--primary-color, #004643);
+  background: var(--primary-color, #4f46e5);
   color: #fff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.28);
 }
 
 .primaryButton:hover {
-  background: #003330;
+  background: var(--primary-hover, #4338ca);
   transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
 }
 
 .primaryButton:disabled,
@@ -470,12 +482,12 @@ textarea {
 
 .secondaryButton {
   padding: 0.7rem 1.1rem;
-  background: rgba(0, 70, 67, 0.08);
-  color: var(--primary-color, #004643);
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary-color, #4f46e5);
 }
 
 .secondaryButton:hover {
-  background: rgba(0, 70, 67, 0.15);
+  background: rgba(79, 70, 229, 0.15);
   transform: translateY(-1px);
 }
 
@@ -494,14 +506,14 @@ textarea {
   width: 38px;
   height: 38px;
   padding: 0;
-  background: rgba(0, 70, 67, 0.06);
-  color: var(--primary-color, #004643);
+  background: rgba(79, 70, 229, 0.06);
+  color: var(--primary-color, #4f46e5);
   flex-shrink: 0;
 }
 
 .iconButton:hover,
 .rowActions button:hover {
-  background: rgba(0, 70, 67, 0.14);
+  background: rgba(79, 70, 229, 0.14);
 }
 
 .deleteBtn {
@@ -532,12 +544,12 @@ textarea {
   align-items: center;
   gap: 0.4rem;
   padding: 0.35rem 0.75rem;
-  background: #e6f4f1;
-  color: var(--primary-color, #004643);
+  background: #eef2ff;
+  color: var(--primary-color, #4f46e5);
   font-weight: 600;
   font-size: 0.8rem;
   border-radius: 9999px;
-  border: 1px solid rgba(0, 70, 67, 0.2);
+  border: 1px solid rgba(79, 70, 229, 0.2);
   word-break: break-word;
   max-width: 100%;
 }
@@ -607,7 +619,7 @@ textarea {
 
 .tagAutocompleteItem:hover {
   background: #f1f5f9;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
 }
 
 .tagAutocompleteCategory {
@@ -660,9 +672,9 @@ textarea {
 }
 
 .tagQuickAddChipActive {
-  background-color: #e6f4f1;
-  border-color: var(--primary-color, #004643);
-  color: var(--primary-color, #004643);
+  background-color: #eef2ff;
+  border-color: var(--primary-color, #4f46e5);
+  color: var(--primary-color, #4f46e5);
   font-weight: 700;
 }
 
@@ -684,12 +696,12 @@ textarea {
 
 .dropZone:hover,
 .dropZoneActive {
-  border-color: var(--primary-color, #004643);
-  background: rgba(0, 70, 67, 0.04);
+  border-color: var(--primary-color, #4f46e5);
+  background: rgba(79, 70, 229, 0.04);
 }
 
 .dropZoneIcon {
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
 }
 
 .dropZoneText {
@@ -850,7 +862,7 @@ textarea {
 
 .progressBarFill {
   height: 100%;
-  background: var(--primary-color, #004643);
+  background: linear-gradient(90deg, #4f46e5 0%, #06b6d4 100%);
   border-radius: 9999px;
   transition: width 0.2s ease;
 }
@@ -883,7 +895,7 @@ textarea {
 .categoryHeader h3 {
   margin: 0;
   font-size: 1.05rem;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -935,7 +947,7 @@ textarea {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   flex-shrink: 0;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
 }
 
 .bannerSkillNameGroup {
@@ -1001,7 +1013,7 @@ textarea {
 
 .liveStatusCard h4 {
   margin: 0 0 0.25rem 0;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
   font-size: 1rem;
   font-weight: 750;
 }
@@ -1078,7 +1090,7 @@ textarea {
 .certTableRow:hover {
   background: #fff;
   border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(0, 70, 67, 0.04);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.06);
 }
 
 .rowActions {
@@ -1158,7 +1170,7 @@ textarea {
 .timelineCardHeader h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
 }
 
 .timelineCardHeader p {
@@ -1173,8 +1185,8 @@ textarea {
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.25rem 0.6rem;
-  background: rgba(0, 70, 67, 0.08);
-  color: var(--primary-color, #004643);
+  background: rgba(79, 70, 229, 0.08);
+  color: var(--primary-color, #4f46e5);
   border-radius: 0.5rem;
 }
 
@@ -1213,7 +1225,7 @@ textarea {
   padding: 1.75rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 70, 67, 0.4) transparent;
+  scrollbar-color: rgba(79, 70, 229, 0.35) transparent;
   box-sizing: border-box;
 }
 
@@ -1231,7 +1243,7 @@ textarea {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
 }
 
 .modalCloseBtn {
@@ -1323,14 +1335,14 @@ textarea {
 .modalContent::-webkit-scrollbar-track,
 .workspace::-webkit-scrollbar-track,
 .sidebar::-webkit-scrollbar-track {
-  background: rgba(0, 70, 67, 0.04);
+  background: rgba(79, 70, 229, 0.04);
   border-radius: 9999px;
 }
 
 .modalContent::-webkit-scrollbar-thumb,
 .workspace::-webkit-scrollbar-thumb,
 .sidebar::-webkit-scrollbar-thumb {
-  background: rgba(0, 70, 67, 0.35);
+  background: rgba(79, 70, 229, 0.35);
   border-radius: 9999px;
   border: 1px solid transparent;
   background-clip: content-box;
@@ -1339,7 +1351,7 @@ textarea {
 .modalContent::-webkit-scrollbar-thumb:hover,
 .workspace::-webkit-scrollbar-thumb:hover,
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 70, 67, 0.65);
+  background: rgba(79, 70, 229, 0.65);
   background-clip: content-box;
 }
 
@@ -1348,11 +1360,12 @@ textarea {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: var(--primary-color, #004643);
+  background: #1e1b4b;
   color: #fff;
   padding: 0.85rem 1.4rem;
   border-radius: 0.75rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 15px rgba(79, 70, 229, 0.25);
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -1428,7 +1441,7 @@ textarea {
 
 .timeframeBtnActive {
   background: #ffffff;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   font-weight: 700;
 }
@@ -1462,7 +1475,7 @@ textarea {
   margin: 0;
   font-size: 1rem;
   font-weight: 750;
-  color: var(--primary-color, #004643);
+  color: var(--primary-color, #4f46e5);
 }
 
 .progressList {
@@ -1632,7 +1645,7 @@ textarea {
     border-radius: 0.85rem;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    box-shadow: 0 2px 8px rgba(0, 70, 67, 0.04);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.04);
   }
 
   .mobileFieldLabel {
@@ -1666,7 +1679,7 @@ textarea {
     padding: 1rem 1.15rem;
     border-radius: 1rem;
     background: rgba(255, 255, 255, 0.96);
-    box-shadow: 0 4px 16px rgba(0, 70, 67, 0.06);
+    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.06);
   }
 
   .topbarLeft {
@@ -1708,8 +1721,8 @@ textarea {
 
   .searchBox:focus-within {
     background: #ffffff;
-    border-color: var(--primary-color, #004643);
-    box-shadow: 0 0 0 3px rgba(0, 70, 67, 0.12);
+    border-color: var(--primary-color, #4f46e5);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
   }
 
   .searchBox svg {
@@ -1730,22 +1743,22 @@ textarea {
     border-radius: 0.75rem;
     background: #ffffff;
     border: 1.5px solid #e2e8f0;
-    color: var(--primary-color, #004643);
+    color: var(--primary-color, #4f46e5);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     transition: all 0.2s ease;
   }
 
   .topbarActions a:hover {
-    background: #f0fdf4;
-    border-color: var(--primary-color, #004643);
+    background: #f5f3ff;
+    border-color: var(--primary-color, #4f46e5);
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 70, 67, 0.1);
+    box-shadow: 0 3px 8px rgba(79, 70, 229, 0.12);
   }
 
   .topbarActions a svg {
     width: 18px !important;
     height: 18px !important;
-    stroke: var(--primary-color, #004643) !important;
+    stroke: var(--primary-color, #4f46e5) !important;
     stroke-width: 2.2 !important;
     display: block;
     margin: auto;

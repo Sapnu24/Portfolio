@@ -353,7 +353,7 @@ export default function AdminDashboard({ isDemo = false }) {
   const [categoryForm, setCategoryForm] = useState({
     title: "",
     icon: "code",
-    color: "#9a0002",
+    color: "#4f46e5",
     skills: [],
   });
 
@@ -682,7 +682,7 @@ export default function AdminDashboard({ isDemo = false }) {
     setCategoryForm({
       title: "",
       icon: "code",
-      color: "#9a0002",
+      color: "#4f46e5",
       skills: [],
     });
     setShowCategoryModal(true);
@@ -693,7 +693,7 @@ export default function AdminDashboard({ isDemo = false }) {
     setCategoryForm({
       title: cat.title || "",
       icon: cat.icon || "code",
-      color: cat.color || "#9a0002",
+      color: cat.color || "#4f46e5",
       skills: Array.isArray(cat.skills) ? [...cat.skills] : [],
     });
     setShowCategoryModal(true);
@@ -1991,7 +1991,7 @@ export default function AdminDashboard({ isDemo = false }) {
                   style={{
                     background: "transparent",
                     border: 0,
-                    color: "var(--primary-color, #004643)",
+                    color: "var(--primary-color, #4f46e5)",
                     fontSize: "0.8rem",
                     fontWeight: 700,
                     cursor: crudLoading[`add-tag-${cat.id}`] ? "not-allowed" : "pointer",
@@ -2349,7 +2349,7 @@ export default function AdminDashboard({ isDemo = false }) {
             return (
               <div key={p.id} className={styles.projectTableRow}>
                 <div className={styles.mobileFieldRow}>
-                  <strong style={{ fontSize: "0.95rem", color: "var(--primary-color, #004643)" }}>
+                  <strong style={{ fontSize: "0.95rem", color: "var(--primary-color, #4f46e5)" }}>
                     {p.title}
                   </strong>
                   {p.isMasterFeatured && (
@@ -2358,7 +2358,7 @@ export default function AdminDashboard({ isDemo = false }) {
                         display: "inline-flex",
                         alignItems: "center",
                         gap: "0.25rem",
-                        background: "linear-gradient(135deg, #004643, #028090)",
+                        background: "linear-gradient(135deg, #4f46e5, #06b6d4)",
                         color: "#ffffff",
                         fontSize: "0.68rem",
                         fontWeight: 700,
@@ -2366,7 +2366,7 @@ export default function AdminDashboard({ isDemo = false }) {
                         borderRadius: "9999px",
                         marginTop: "0.25rem",
                         width: "fit-content",
-                        boxShadow: "0 2px 6px rgba(0, 70, 67, 0.25)",
+                        boxShadow: "0 2px 8px rgba(79, 70, 229, 0.3)",
                       }}
                     >
                       Master Featured (#1 in Dev)
@@ -2376,7 +2376,7 @@ export default function AdminDashboard({ isDemo = false }) {
                     <small
                       style={{
                         display: "block",
-                        color: "var(--accent-color, #4f46e5)",
+                        color: "var(--accent-color, #06b6d4)",
                         fontWeight: 600,
                         marginTop: "0.15rem",
                       }}
@@ -2562,9 +2562,9 @@ export default function AdminDashboard({ isDemo = false }) {
       <div className={styles.resumeSectionBox}>
         <div className={styles.resumeCardHeader}>
           <div className={styles.resumeCardLeft}>
-            <FileText size={28} color="var(--primary-color, #004643)" style={{ flexShrink: 0 }} />
+            <FileText size={28} color="var(--primary-color, #4f46e5)" style={{ flexShrink: 0 }} />
             <div>
-              <strong style={{ display: "block", color: "var(--primary-color, #004643)" }}>
+              <strong style={{ display: "block", color: "var(--primary-color, #4f46e5)" }}>
                 Curriculum Vitae / Resume PDF
               </strong>
               <span style={{ fontSize: "0.8rem", color: "#64748b", wordBreak: "break-all" }}>
@@ -3045,7 +3045,7 @@ export default function AdminDashboard({ isDemo = false }) {
                 {/* Quick-Add / Popular Stacks Pill Bar */}
                 <div className={styles.tagQuickAddSection}>
                   <div className={styles.tagQuickAddHeading}>
-                    <Sparkles size={12} style={{ color: "var(--admin-primary, #004643)" }} />
+                    <Sparkles size={12} style={{ color: "var(--primary-color, #4f46e5)" }} />
                     <span>Quick-Add Deployment, Cloud & Stacks:</span>
                   </div>
                   <div className={styles.tagQuickAddGrid}>
@@ -3516,7 +3516,7 @@ export default function AdminDashboard({ isDemo = false }) {
                     }
                     suggestedKey={detectTechKey(bannerForm.name)}
                   />
-                  <div style={{ marginTop: "0.4rem", display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.82rem", color: "var(--admin-primary, #004643)" }}>
+                  <div style={{ marginTop: "0.4rem", display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.82rem", color: "var(--primary-color, #4f46e5)" }}>
                     {getTechIcon(bannerForm.iconKey || bannerForm.name, 18)}
                     <span>Selected: <strong>{bannerForm.iconKey}</strong></span>
                   </div>
@@ -3614,8 +3614,8 @@ export default function AdminDashboard({ isDemo = false }) {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
-                <FileText size={22} color="var(--primary-color, #004643)" style={{ flexShrink: 0 }} />
-                <h3 style={{ margin: 0, fontSize: "1.15rem", color: "var(--primary-color, #004643)" }}>
+                <FileText size={22} color="var(--primary-color, #4f46e5)" style={{ flexShrink: 0 }} />
+                <h3 style={{ margin: 0, fontSize: "1.15rem", color: "var(--primary-color, #4f46e5)" }}>
                   Resume Preview: {heroForm.name}
                 </h3>
               </div>

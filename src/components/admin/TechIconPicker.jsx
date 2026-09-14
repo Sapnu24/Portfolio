@@ -64,7 +64,7 @@ export default function TechIconPicker({
       key: value,
       name: value,
       category: "custom",
-      color: "#004643",
+      color: "#4f46e5",
     };
   }, [value, allOptions]);
 
@@ -131,7 +131,7 @@ export default function TechIconPicker({
         <div className={styles.triggerContent}>
           <div
             className={styles.triggerIcon}
-            style={{ color: currentSelection?.color || "var(--primary-color, #004643)" }}
+            style={{ color: currentSelection?.color || "var(--primary-color, #4f46e5)" }}
           >
             {getTechIcon(currentSelection?.key || value, 18)}
           </div>
