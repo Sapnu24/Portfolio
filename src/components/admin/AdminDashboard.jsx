@@ -1401,14 +1401,14 @@ export default function AdminDashboard({ isDemo = false }) {
     const recentVisits = Array.isArray(analyticsData.recentVisits) && analyticsData.recentVisits.length > 0
       ? analyticsData.recentVisits
       : [
-          {
-            id: "v-default",
-            path: "/",
-            device: "desktop",
-            referrer: "direct",
-            timestamp: new Date().toISOString(),
-          },
-        ];
+        {
+          id: "v-default",
+          path: "/",
+          device: "desktop",
+          referrer: "direct",
+          timestamp: new Date().toISOString(),
+        },
+      ];
 
     const handleTriggerTest = async () => {
       await withLoading("trigger-test", async () => {
@@ -2164,9 +2164,8 @@ export default function AdminDashboard({ isDemo = false }) {
             return (
               <div
                 key={s.id}
-                className={`${styles.bannerSkillCard} ${
-                  inHero ? styles.bannerSkillCardInHero : ""
-                }`}
+                className={`${styles.bannerSkillCard} ${inHero ? styles.bannerSkillCardInHero : ""
+                  }`}
               >
                 <div className={styles.bannerSkillInfo}>
                   <div className={styles.bannerSkillIconWrap}>
@@ -2310,8 +2309,8 @@ export default function AdminDashboard({ isDemo = false }) {
               p.status === "Completed"
                 ? styles.statusCompleted
                 : p.status === "Deployment"
-                ? styles.statusDeployment
-                : styles.statusProgress;
+                  ? styles.statusDeployment
+                  : styles.statusProgress;
 
             return (
               <div key={p.id} className={styles.projectTableRow}>
@@ -3024,16 +3023,15 @@ export default function AdminDashboard({ isDemo = false }) {
                         <button
                           key={item.name}
                           type="button"
-                          className={`${styles.tagQuickAddChip} ${
-                            isAdded ? styles.tagQuickAddChipActive : ""
-                          }`}
+                          className={`${styles.tagQuickAddChip} ${isAdded ? styles.tagQuickAddChipActive : ""
+                            }`}
                           style={
                             isAdded
                               ? {
-                                  borderColor: badge.color,
-                                  color: badge.color,
-                                  backgroundColor: `${badge.color}18`,
-                                }
+                                borderColor: badge.color,
+                                color: badge.color,
+                                backgroundColor: `${badge.color}18`,
+                              }
                               : undefined
                           }
                           onClick={() => handleToggleProjectTag(item.name)}
