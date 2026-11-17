@@ -18,7 +18,7 @@ const PILLS = [
   "Short-form & YouTube",
 ];
 
-const featured = WORK.find((w) => w.id === "avner-presenter") || WORK[0];
+const featured = WORK.find((w) => w.id === "avatar-npg-fancy-long") || WORK[0];
 
 export default function Hero() {
   return (
@@ -138,7 +138,7 @@ export default function Hero() {
             </div>
             <div className={styles.deckFooter}>
               <div className={styles.deckStatusLeft}>
-                <span>AI presenter video made with my pipeline for Specialty Vision</span>
+                <span>AI avatar video: generated, voiced and edited with my pipeline</span>
               </div>
             </div>
           </div>
