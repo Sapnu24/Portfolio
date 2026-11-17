@@ -9,10 +9,13 @@
 .tabActive{background:#1e3a8a;color:#fff}
 :global([data-theme="dark"]) .tab{color:#bcd0ff;border-color:#4766c9}
 :global([data-theme="dark"]) .tabActive{background:#2f4fb5;color:#fff}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.4rem;align-items:start}
+.gridTall{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:1.4rem;align-items:start}
+.gridWide{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(460px,100%),1fr));gap:1.4rem;align-items:start;margin-top:1.4rem}
 .card{background:#0b1f4d;color:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(11,31,77,.25)}
-.media{background:#000;display:flex;justify-content:center}
-.video{width:100%;display:block;max-height:560px;background:#000}
+.media{background:#000;width:100%}
+.mediaTall{aspect-ratio:9/16}
+.mediaWide{aspect-ratio:16/9}
+.video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
 .body{padding:1rem 1.1rem 1.2rem}
 .cat{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#9bb7ff;font-weight:700}
 .cardTitle{margin:.25rem 0 .4rem;font-size:1.05rem;font-weight:700}
