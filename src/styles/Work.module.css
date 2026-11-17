@@ -32,3 +32,6 @@
 .res span{font-size:.8rem;color:#475569}
 .owned{border-left:4px solid #9bb7ff;padding-left:1rem;margin:0 0 1rem;line-height:1.6}
 .lessons{margin:0;color:#d6e0ff;line-height:1.6;font-size:.95rem}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:1.4rem}
+.toolsLabel{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:#9bb7ff;font-weight:700;margin-right:.3rem}
+.tool{background:#fff;color:#0b1f4d;border-radius:999px;padding:.45rem 1rem;font-weight:700;font-size:.95rem}

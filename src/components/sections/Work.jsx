@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "@/styles/Work.module.css";
-import { WORK, CASE_STUDY } from "@/data/work";
+import { WORK, CASE_STUDY, TOOLS } from "@/data/work";
 
 const CATEGORIES = ["All", ...Array.from(new Set(WORK.map((w) => w.category)))];
 
@@ -61,12 +61,10 @@ export default function Work() {
               </li>
             ))}
           </ol>
-          <div className={styles.results}>
-            {CASE_STUDY.results.map(([n, l]) => (
-              <div key={l} className={styles.res}>
-                <strong>{n}</strong>
-                <span>{l}</span>
-              </div>
+          <div className={styles.tools}>
+            <span className={styles.toolsLabel}>Tools I use</span>
+            {TOOLS.map((t) => (
+              <span key={t} className={styles.tool}>{t}</span>
             ))}
           </div>
           <p className={styles.owned}>{CASE_STUDY.owned}</p>

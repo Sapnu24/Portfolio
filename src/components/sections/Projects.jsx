@@ -217,10 +217,10 @@ const Projects = () => {
             <span>Featured Work & Projects</span>
           </div>
           <h2 className={styles.title}>
-            Web <span className={styles.titleGradient}>Projects</span>
+            Part-time <span className={styles.titleGradient}>Web Development</span>
           </h2>
           <p className={styles.subtitle}>
-            Websites and web apps I built earlier, from my IT background. My main focus is AI video production.
+            Tools, websites and side projects I build part-time, using my BS in IT. My main focus is AI video production.
           </p>
 
           {/* Category Filter Tabs */}

@@ -12,6 +12,7 @@ const PILLS = [
   "Google Flow",
   "ElevenLabs",
   "Claude Code",
+  "HyperFrames",
   "Premiere Pro",
   "CapCut",
   "Short-form & YouTube",
@@ -59,6 +60,9 @@ export default function Hero() {
               <h2 className={styles.roleTitle}>{SITE.role}</h2>
               <span className={styles.roleSubBadge}>SMV</span>
             </div>
+            <p style={{ margin: "0.35rem 0 0", fontWeight: 600, opacity: 0.75 }}>
+              + Part-time Web Developer (my own tools and side projects)
+            </p>
           </div>
 
           <p className={styles.bioText}>{SITE.bio}</p>
