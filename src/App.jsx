@@ -9,9 +9,9 @@ import Timeline from "./components/sections/Timeline";
 import Contact from "./components/sections/Contact";
 import Footer from "./components/sections/Footer";
 import Projects from "./components/sections/Projects";
+import Work from "./components/sections/Work";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminLogin from "./components/admin/AdminLogin.jsx";
-import SkillsBanner from "./components/SkillsBanner";
 import SmoothCursor from "./components/SmoothCursor";
 import ChatBot from "./components/ChatBot";
 import PortfolioSkeleton from "./components/PortfolioSkeleton";
@@ -40,7 +40,7 @@ function Portfolio() {
       <main className="portfolioMainContent">
         <About />
         {/* <Timeline /> -- Milestones section (Uncomment once first client is closed) */}
-        <SkillsBanner />
+        <Work />
         <Projects />
         <Contact />
       </main>

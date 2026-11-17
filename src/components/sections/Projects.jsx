@@ -217,10 +217,10 @@ const Projects = () => {
             <span>Featured Work & Projects</span>
           </div>
           <h2 className={styles.title}>
-            Featured <span className={styles.titleGradient}>Projects & Work</span>
+            Web <span className={styles.titleGradient}>Projects</span>
           </h2>
           <p className={styles.subtitle}>
-            A curated portfolio of production-grade web applications and systems engineered, developed, and delivered by Sean Marion Velasco.
+            Websites and web apps I built earlier, from my IT background. My main focus is AI video production.
           </p>
 
           {/* Category Filter Tabs */}

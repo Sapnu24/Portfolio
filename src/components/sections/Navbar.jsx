@@ -28,7 +28,8 @@ export default function Navbar() {
     /* Uncomment when first client is closed:
     { href: "#career", id: "career", label: "Milestones", icon: <FaBriefcase /> },
     */
-    { href: "#projects", id: "projects", label: "Projects", icon: <FaProjectDiagram /> },
+    { href: "#work", id: "work", label: "Work", icon: <FaBriefcase /> },
+    { href: "#projects", id: "projects", label: "Web Projects", icon: <FaProjectDiagram /> },
     { href: "#contact", id: "contact", label: "Contact", icon: <FaEnvelope /> },
   ];
 
@@ -57,6 +58,7 @@ export default function Navbar() {
     const sectionIds = [
       "home",
       "nextSection",
+      "work",
       // "career", /* Uncomment when first client is closed */
       "projects",
       "contact",

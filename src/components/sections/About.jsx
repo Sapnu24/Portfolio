@@ -52,13 +52,13 @@ const About = () => {
         >
           <div className={styles.eyebrowBadge}>
             <Sparkles size={14} />
-            <span>Web Developer – Full Stack</span>
+            <span>AI Video Production Lead</span>
           </div>
           <h2 className={styles.title}>
-            Engineered for Performance, <span className={styles.titleGradient}>Scalability & Precision</span>
+            Built for Output, <span className={styles.titleGradient}>Quality & Cost Control</span>
           </h2>
           <p className={styles.subtitle}>
-            I am Sean Marion Velasco, a freelance Full-Stack Web Developer. I build clean, high-performance web applications and reliable digital systems for clients on Upwork and worldwide.
+            I am Sean Marion Velasco. I lead the video editing team at Specialty Vision and build AI-assisted production workflows for DTC ads, UGC and presenter videos. I hold a BS in Information Technology, which is why I build the tools behind the videos myself.
           </p>
         </motion.div>
 
@@ -75,8 +75,8 @@ const About = () => {
               <Zap size={22} />
             </div>
             <div className={styles.philosophyContent}>
-              <h4>High-Performance Webapps</h4>
-              <p>Building lightning-fast, reactive web interfaces with React JS, TypeScript, modern CSS architecture, and optimized bundle sizes.</p>
+              <h4>Ads that convert</h4>
+              <p>Hooks, word-synced captions, product callouts, offer cards and multiple versions per ad for testing.</p>
             </div>
           </motion.div>
 
@@ -85,8 +85,8 @@ const About = () => {
               <Compass size={22} />
             </div>
             <div className={styles.philosophyContent}>
-              <h4>Scalable Backend Architecture</h4>
-              <p>Designing secure REST APIs, microservices, and database systems with Laravel PHP, Node.js, and MySQL for reliable enterprise data flow.</p>
+              <h4>Automated, gated pipelines</h4>
+              <p>Script, generation, checks, edit, voice and delivery as one repeatable process, with approvals before credits are spent.</p>
             </div>
           </motion.div>
 
@@ -95,8 +95,8 @@ const About = () => {
               <ShieldCheck size={22} />
             </div>
             <div className={styles.philosophyContent}>
-              <h4>Clean Code & Client Delivery</h4>
-              <p>Applying best practices in version control (Git), modular component systems, continuous testing, and proactive milestone delivery.</p>
+              <h4>Quality and cost control</h4>
+              <p>Per-clip checks, a credit ledger for every video, and a rule added for every failure.</p>
             </div>
           </motion.div>
         </motion.div>

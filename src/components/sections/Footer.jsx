@@ -36,7 +36,7 @@ export default function Footer() {
             SMV<span className={styles.logoDot}>.</span>
           </h2>
           <p className={styles.tagline}>
-            Bespoke full-stack web engineering, scalable cloud systems, and modern digital experiences delivered for global clients.
+            AI video production, DTC and UGC ads, and automated editing workflows for global clients.
           </p>
         </div>
 

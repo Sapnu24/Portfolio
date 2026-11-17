@@ -5,12 +5,12 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 export const DEFAULT_PROFILE = {
   greeting: "Hi, I'm",
   name: "Sean Marion Velasco",
-  role: "Web Developer – Full Stack",
-  bio: "Dedicated freelance full-stack developer committed to crafting clean, reliable, and high-performance web applications that help businesses bring their digital vision to life.",
+  role: "AI Video Production Lead",
+  bio: "I produce DTC ads and short-form video with AI-assisted workflows, and lead the video editing team at Specialty Vision.",
   githubUrl: "https://github.com/Sapnu24",
-  linkedinUrl: "",
+  linkedinUrl: "https://www.linkedin.com/in/sean-marion-velasco-890544318/",
   upworkUrl: "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share",
-  email: "seanmarionvelasco.work@gmail.com",
+  email: "seanmarionvelasco@gmail.com",
   yearsExperience: "1+",
   programmingStartYear: 2023,
 };

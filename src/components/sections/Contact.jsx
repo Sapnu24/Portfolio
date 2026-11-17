@@ -25,7 +25,7 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    serviceType: "Full-Stack Web Application",
+    serviceType: "DTC / UGC Ad Production",
     message: "",
   });
 
@@ -149,11 +149,11 @@ export default function ContactPage() {
                     className={styles.input}
                     style={{ cursor: "pointer" }}
                   >
-                    <option value="Full-Stack Web Application">Full-Stack Web Application (React + Laravel / Node)</option>
-                    <option value="Frontend Architecture & UI/UX">Frontend Architecture & Responsive UI/UX</option>
-                    <option value="Backend REST APIs & Database Design">Backend REST APIs & Database Optimization</option>
-                    <option value="Dedicated Upwork Agile Sprints">Dedicated Upwork Agile Sprints (Hourly / Milestone)</option>
-                    <option value="Other Technical Inquiry">Other Technical Inquiry</option>
+                    <option value="DTC / UGC Ad Production">DTC / UGC Ad Production</option>
+                    <option value="AI Video Production Workflow">AI Video Production Workflow</option>
+                    <option value="Long-form / YouTube Editing">Long-form / YouTube Editing</option>
+                    <option value="Short-form Editing">Short-form Editing</option>
+                    <option value="Other Inquiry">Other Inquiry</option>
                   </select>
                 </div>
 
@@ -162,7 +162,7 @@ export default function ContactPage() {
                   <textarea
                     id="message"
                     name="message"
-                    placeholder="Describe your goals, tech preferences, timeline, or Upwork contract scope..."
+                    placeholder="Describe your goals, brand, formats and timeline..."
                     rows="5"
                     required
                     value={formData.message}

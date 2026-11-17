@@ -101,19 +101,19 @@ const ChatBot = () => {
       ?.map((s) => `- ${s.name}: ${s.skills?.map((item) => (typeof item === "string" ? item : item.name)).join(", ")}`)
       ?.join("\n");
 
-    return `You are the AI Assistant for Sean Marion Velasco, Web Developer – Full Stack. Speak on behalf of Sean ("Sean", "I", "my work").
+    return `You are the AI Assistant for Sean Marion Velasco, AI Video Production Lead. Speak on behalf of Sean ("Sean", "I", "my work").
 
 CRITICAL SCOPE RESTRICTION:
-- You must ONLY answer questions directly related to Sean Marion Velasco, full-stack web development, programming languages & frameworks (React, Laravel, Next.js, Node.js, PHP, MySQL, TypeScript, Tailwind CSS, REST APIs, Cloud), case studies, work experience, Upwork contracts, and hiring Sean.
+- You must ONLY answer questions directly related to Sean Marion Velasco, video production, DTC and UGC ads, AI video workflows (Google Flow, ElevenLabs, Claude Code, Whisper), editing tools (Premiere Pro, CapCut), his work at Specialty Vision, Upwork, and hiring Sean.
 - You must REFUSE to answer off-topic questions (e.g., general world trivia, math homework, politics, personal non-career questions, jokes, cooking recipes, weather, general AI assistance).
-- When an off-topic question is asked, respond ONLY with: "I'm only trained to answer questions about Sean Marion Velasco's web development background, projects, skills, and how to start an Upwork contract with him! 🚀"
+- When an off-topic question is asked, respond ONLY with: "I'm only trained to answer questions about Sean Marion Velasco's video production background, work, skills, and how to hire him! 🚀"
 - Keep all valid answers concise, friendly, professional, and straight to the point (2-3 sentences max).
 
 === SEAN MARION VELASCO PROFILE DATA ===
 - Name: ${profile?.name || "Sean Marion Velasco"}
-- Role: ${profile?.role || "Web Developer – Full Stack"}
+- Role: ${profile?.role || "AI Video Production Lead"}
 - Bio: ${profile?.bio || "Dedicated freelance full-stack developer committed to crafting clean, reliable, and high-performance web applications."}
-- Email: ${profile?.email || "seanmarionvelasco.work@gmail.com"}
+- Email: ${profile?.email || "seanmarionvelasco@gmail.com"}
 - Availability: Available for Upwork Contracts, Fixed Projects, and Dedicated Sprints
 - Upwork: ${profile?.upworkUrl || "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share"}
 - GitHub: ${profile?.githubUrl || "https://github.com/Sapnu24"}
@@ -144,15 +144,15 @@ ${skillsSummary || "React.js, Next.js, Laravel PHP, Node.js, TypeScript, MySQL, 
     }
 
     if (q.includes("skill") || q.includes("stack") || q.includes("tech") || q.includes("framework")) {
-      return `Sean specializes in React.js, Next.js, Laravel PHP, TypeScript, MySQL, Tailwind CSS, Cloud architecture, and modern full-stack web engineering. 💻`;
+      return `Sean works with Google Flow, ElevenLabs, Whisper, Claude Code, Premiere Pro and CapCut to produce DTC ads, UGC and presenter videos. 🎬`;
     }
 
     if (q.includes("experience") || q.includes("team") || q.includes("track record") || q.includes("sean")) {
-      return `Sean Marion Velasco brings 4+ years of hands-on software engineering experience delivering high-converting web applications for global clients. 🌟`;
+      return `Sean has 6,259 hours on Upwork with a 100% Job Success score and leads the video editing team at Specialty Vision. 🌟`;
     }
 
     if (q.includes("contact") || q.includes("hire") || q.includes("upwork") || q.includes("quote") || q.includes("reach")) {
-      return `You can hire Sean directly on Upwork with full escrow protection or reach out at ${profile?.email || "seanmarionvelasco.work@gmail.com"}. He is available for fixed-price contracts and dedicated hourly sprints! 📬`;
+      return `You can hire Sean directly on Upwork with full escrow protection or reach out at ${profile?.email || "seanmarionvelasco@gmail.com"}. He is available for fixed-price contracts and dedicated hourly sprints! 📬`;
     }
 
     if (q.includes("hi") || q.includes("hello") || q.includes("hey") || q.includes("who are you")) {
