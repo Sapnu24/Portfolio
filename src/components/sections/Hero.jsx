@@ -154,9 +154,9 @@ export default function Hero() {
             <div className={styles.hudStatCard}>
               <div className={styles.hudTopRow}>
                 <div className={styles.hudIconWrapper}><Zap size={16} /></div>
-                <strong className={styles.hudNumber}>100%</strong>
+                <strong className={styles.hudNumber}>300+</strong>
               </div>
-              <span className={styles.hudLabel}>Job Success</span>
+              <span className={styles.hudLabel}>Videos Edited</span>
             </div>
             <div className={styles.hudStatCard}>
               <div className={styles.hudTopRow}>

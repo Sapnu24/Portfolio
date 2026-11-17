@@ -148,7 +148,7 @@ ${skillsSummary || "React.js, Next.js, Laravel PHP, Node.js, TypeScript, MySQL, 
     }
 
     if (q.includes("experience") || q.includes("team") || q.includes("track record") || q.includes("sean")) {
-      return `Sean has 6,259 hours on Upwork with a 100% Job Success score and leads the video editing team at Specialty Vision. 🌟`;
+      return `Sean has edited 300+ videos, has 6,259 hours on Upwork, and leads the video editing team at Specialty Vision. 🌟`;
     }
 
     if (q.includes("contact") || q.includes("hire") || q.includes("upwork") || q.includes("quote") || q.includes("reach")) {
