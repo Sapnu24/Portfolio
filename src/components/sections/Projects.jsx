@@ -331,10 +331,10 @@ const Projects = () => {
                         <h3 className={styles.projectTitle}>{project.title}</h3>
                         <span
                           className={`${styles.statusBadge} ${project.status === "Completed"
-                              ? styles.statusCompleted
-                              : project.status === "Deployment"
-                                ? styles.statusDeployment
-                                : styles.statusProgress
+                            ? styles.statusCompleted
+                            : project.status === "Deployment"
+                              ? styles.statusDeployment
+                              : styles.statusProgress
                             }`}
                         >
                           {project.status === "Completed" && <FaCheckCircle size={10} />}
@@ -409,6 +409,7 @@ const Projects = () => {
                                   rel="noopener noreferrer"
                                   className={`${styles.cardBtn} ${styles.primaryDemoBtn}`}
                                 >
+
                                   <span>Live Demo</span>
                                   <FiExternalLink size={15} className={styles.btnArrow} />
                                 </a>
