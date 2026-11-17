@@ -1,64 +1,32 @@
-# Neil Patrick Acierto - Developer Portfolio
+# Sean Marion Velasco: AI Video Production Portfolio
 
-Official responsive developer portfolio website built with React, Vite, Tailwind CSS, and Firebase.
+Portfolio site for Sean Marion Velasco, AI Video Production Lead: DTC and UGC ads, AI video workflows, and short-form and YouTube editing.
 
-## 🚀 Features
+- LinkedIn: https://www.linkedin.com/in/sean-marion-velasco-890544318/
+- Upwork: https://www.upwork.com/freelancers/~01c5be6cda3726622f
 
-- **Interactive Showcase**: Dynamic projects gallery, skills matrix, career timeline, and credential verification.
-- **Real-Time Data**: Backed by Firebase Firestore with offline fallback support.
-- **Smart Portfolio Assistant**: Integrated Gemini AI chatbot for interactive inquiries.
-- **Optimized & Responsive**: Glassmorphism UI, Framer Motion animations, and mobile-first responsive design.
+## What is on the site
 
----
+- **Hero:** intro, featured AI presenter video, key Upwork stats.
+- **Work:** sample videos by category, plus a case study of the FLOW 11 presenter video pipeline.
+- **Web Projects:** earlier websites and web apps.
+- **Contact:** inquiry form.
 
-## 🛠️ Tech Stack
+## Add or change videos
 
-- **Framework**: [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/), CSS Modules, Lucide Icons, Bootstrap Icons
-- **Animations**: [Framer Motion](https://www.framer.com/motion/), Vanta.js / Three.js
-- **Database / Backend-as-a-Service**: [Firebase](https://firebase.google.com/) (Firestore, Auth, Storage)
-- **Deployment**: [Vercel](https://vercel.com/)
+Edit `src/data/work.js`. Put video files and poster images in `public/work/`, or use full URLs.
 
----
-
-## 💻 Getting Started
-
-### 1. Installation
+## Run locally
 
 ```bash
 npm install
-```
-
-### 2. Environment Setup
-
-Copy `.env.example` to `.env` and fill in your Firebase and Gemini credentials:
-
-```bash
-cp .env.example .env
-```
-
-### 3. Local Development
-
-Start the Vite development server:
-
-```bash
 npm run dev
 ```
 
-### 4. Build for Production
+Build for production with `npm run build`.
 
-```bash
-npm run build
-```
+## Tech
 
-Preview production build:
+React 19, Vite, Framer Motion, Firebase (admin dashboard and analytics), deployed on Vercel.
 
-```bash
-npm run preview
-```
-
-### 5. Linting
-
-```bash
-npm run lint
-```
+Firebase and chatbot keys go in a local `.env` file (see `.env.example`). Never commit real keys.
