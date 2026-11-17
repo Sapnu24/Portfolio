@@ -18,7 +18,7 @@ const PILLS = [
   "Short-form & YouTube",
 ];
 
-const featured = WORK.find((w) => w.id === "lf-ai-avatar-practice-guide") || WORK[0];
+const featured = WORK.find((w) => w.id === "lf-avner-practice-guide") || WORK[0];
 
 export default function Hero() {
   return (
