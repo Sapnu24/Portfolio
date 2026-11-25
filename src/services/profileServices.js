@@ -6,7 +6,7 @@ export const DEFAULT_PROFILE = {
   greeting: "Hi, I'm",
   name: "Sean Marion Velasco",
   role: "AI Video Production Lead",
-  bio: "I produce DTC ads and short-form video with AI-assisted workflows, and lead the video editing team at Specialty Vision.",
+  bio: "I produce DTC ads and short-form video with AI-assisted workflows.",
   githubUrl: "https://github.com/Sapnu24",
   linkedinUrl: "https://www.linkedin.com/in/sean-marion-velasco-890544318/",
   upworkUrl: "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share",

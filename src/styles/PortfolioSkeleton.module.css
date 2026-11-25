@@ -1,7 +1,7 @@
 /* ==========================================================
    PORTFOLIO SKELETON LOADER - High-End UI Shimmer System
    Responsive for Desktop, Tablet, and Mobile
-   Theme 1: #4f46e5 (Electric Indigo) & #06b6d4 (Neon Cyan)
+   Theme 1: #0a0a0a (Electric Indigo) & #0a0a0a (Neon Cyan)
 ========================================================== */
 
 .skeletonOverlay {
@@ -85,7 +85,7 @@
   border-radius: 9999px;
   background: var(--skeleton-nav-bg, rgba(255, 255, 255, 0.88));
   backdrop-filter: blur(20px);
-  border: 1px solid var(--skeleton-border, rgba(79, 70, 229, 0.15));
+  border: 1px solid var(--skeleton-border, rgba(0, 0, 0, 0.15));
   box-shadow: var(--shadow-card, 0 10px 30px rgba(0, 0, 0, 0.06));
 }
 
@@ -99,7 +99,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: var(--toggle-bg, rgba(79, 70, 229, 0.05));
+  background: var(--toggle-bg, rgba(0, 0, 0, 0.05));
   padding: 0.35rem 0.6rem;
   border-radius: 9999px;
   margin-left: auto;
@@ -255,7 +255,7 @@
 
 .codeDeck {
   background: var(--skeleton-card-bg, #ffffff);
-  border: 1px solid var(--skeleton-border, rgba(79, 70, 229, 0.12));
+  border: 1px solid var(--skeleton-border, rgba(0, 0, 0, 0.12));
   border-radius: 1.5rem;
   box-shadow: var(--shadow-card, 0 20px 45px rgba(0, 0, 0, 0.08));
   padding: 1.5rem;
@@ -269,7 +269,7 @@
   align-items: center;
   justify-content: space-between;
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--skeleton-border, rgba(79, 70, 229, 0.1));
+  border-bottom: 1px solid var(--skeleton-border, rgba(0, 0, 0, 0.1));
 }
 
 .windowDots {
@@ -395,7 +395,7 @@
 
 .projectCard {
   background: var(--skeleton-card-bg, #ffffff);
-  border: 1px solid var(--skeleton-border, rgba(79, 70, 229, 0.12));
+  border: 1px solid var(--skeleton-border, rgba(0, 0, 0, 0.12));
   border-radius: 1.5rem;
   padding: 1.25rem;
   display: flex;

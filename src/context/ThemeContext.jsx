@@ -17,24 +17,10 @@ function getSystemTheme() {
 }
 
 export function ThemeProvider({ children }) {
-  const [theme, setThemeState] = useState(() => {
-    if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("smv_portfolio_theme_mode");
-      if (savedTheme === "dark" || savedTheme === "light") {
-        return savedTheme;
-      }
-      return getSystemTheme();
-    }
-    return "light";
-  });
+  // The site is black-and-white light only: ignore saved or OS dark preferences.
+  const [theme, setThemeState] = useState("light");
 
-  const [hasManualPreference, setHasManualPreference] = useState(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved === "dark" || saved === "light";
-    }
-    return false;
-  });
+  const [hasManualPreference, setHasManualPreference] = useState(true);
 
   const setTheme = useCallback((newTheme) => {
     setThemeState(newTheme);
