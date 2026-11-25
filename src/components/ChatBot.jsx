@@ -11,10 +11,10 @@ import { SITE } from "@/data/work";
 import "@/styles/Chatbot.css";
 
 const QUICK_PROMPTS = [
-  "What kinds of videos do you edit?",
-  "Which tools do you use?",
-  "Tell me about your experience",
-  "How can I contact you?",
+  "How much do you charge?",
+  "Can you edit my YouTube videos?",
+  "How long does an edit take?",
+  "How do I send my footage?",
 ];
 
 const ChatBot = () => {
@@ -62,8 +62,10 @@ const ChatBot = () => {
 CRITICAL SCOPE RESTRICTION:
 - You must ONLY answer questions directly related to Sean Marion Velasco, video editing (long-form, short-form, ads, VSLs, travel vlogs, eye care education), AI video workflows, editing tools, his work at Specialty Vision, Upwork, and hiring Sean.
 - You must REFUSE to answer off-topic questions (e.g., general world trivia, math homework, politics, personal non-career questions, jokes, cooking recipes, weather, general AI assistance).
-- When an off-topic question is asked, respond ONLY with: "I'm only trained to answer questions about Sean Marion Velasco's video editing background, work, tools, and how to hire him!"
+- When an off-topic question is asked, respond ONLY with: "I can only help with video editing questions: rates, turnaround, samples, tools and hiring Sean."
 - Keep all valid answers concise, friendly, professional, and straight to the point (2-3 sentences max).
+- Treat visitors as potential clients with a video editing inquiry: answer, then invite them to share video type, length and deadline, and to hire Sean on Upwork or by email.
+- Never invent prices, turnaround times or results. Rate: $12 per hour, adjustable for bigger or ongoing work. Turnaround and revisions are agreed per project.
 
 === PROFILE ===
 - Name: Sean Marion Velasco
@@ -86,29 +88,49 @@ CRITICAL SCOPE RESTRICTION:
 - Editing: Premiere Pro, CapCut, HyperFrames, ffmpeg. AI: Google Flow, ElevenLabs, Claude Code, Whisper. Scripts: Python.
 `;
 
-  // Local fallback if the API key fails or the network is unavailable
-  const getSmartLocalResponse = (query) => {
-    const q = query.toLowerCase();
+  // Local answers for video editing inquiries (used when no AI key is set or the network fails).
+  // Each rule: keywords to look for, and the reply. The first rule that matches wins.
+  const LOCAL_RULES = [
+    [["rate", "price", "pricing", "charge", "cost", "budget", "how much", "fee", "per hour", "hourly"],
+      `Sean charges $12 per hour. For bigger or ongoing work, the rate can be adjusted depending on the workload. Message him on Upwork or email ${SITE.email} with your project details.`],
+    [["turnaround", "how long", "deadline", "fast", "rush", "timeline", "when can", "delivery time"],
+      `It depends on the video length and how many revisions you need. Sean agrees on a timeline with you before he starts, so send the length and deadline and he will confirm.`],
+    [["revision", "changes", "feedback", "edit again", "notes"],
+      `You get a first cut, send your notes, and Sean revises. The number of revision rounds is agreed before work starts.`],
+    [["send", "footage", "raw", "files", "upload", "google drive", "dropbox", "brief"],
+      `Send your raw footage through Google Drive, Dropbox or any link, plus a short brief: the platform, length, style and any reference videos you like.`],
+    [["youtube", "long-form", "long form", "podcast", "vlog", "travel"],
+      `Yes. Sean edits long-form YouTube videos, podcasts and travel vlogs: pacing, cuts, b-roll, captions, sound and color, exported for YouTube.`],
+    [["short", "reel", "tiktok", "shorts", "vertical", "9:16", "clip", "repurpose"],
+      `Yes. Sean edits Reels, TikToks and YouTube Shorts, including cutting shorts from your long videos, with captions, hooks and motion graphics.`],
+    [["ad", "ugc", "vsl", "sales", "dtc", "ecommerce", "e-commerce", "product"],
+      `Yes. Sean edits ads, UGC and VSLs: strong hooks, word-synced captions, product callouts, offer cards and several versions for testing.`],
+    [["caption", "subtitle", "motion graphic", "animation", "kinetic", "text", "thumbnail"],
+      `Sean adds word-synced captions, kinetic text and motion graphics. Ask about thumbnails with your project details.`],
+    [["eye", "optometr", "ophthalm", "clinic", "healthcare", "medical", "doctor", "patient"],
+      `Sean has edited patient-education videos, practice ads and testimonials for eye care, optometry and ophthalmology practices.`],
+    [["ai", "avatar", "talking head", "voice", "elevenlabs", "flow", "generated"],
+      `Sean produces AI talking-head and AI UGC videos with Google Flow and ElevenLabs, and checks every clip before it goes out.`],
+    [["tool", "software", "premiere", "capcut", "program", "app"],
+      `Sean edits in Premiere Pro and CapCut, and uses Claude Code and HyperFrames for motion graphics and fast variations. The Tools section explains each one.`],
+    [["sample", "portfolio", "example", "work", "previous"],
+      `Watch his samples in the Work section and the short-form highlights at the top of the page.`],
+    [["experience", "how many", "years", "background", "upwork rating", "review"],
+      `Sean is an Upwork Top Rated Plus freelancer (top 3% of freelancers), has edited 300+ videos and has 6,259 hours on Upwork with a 5.0 client rating.`],
+    [["timezone", "time zone", "where", "location", "based", "available", "hours"],
+      `Sean is in the Philippines (GMT+8) and works remotely. You can agree on overlap hours with your team.`],
+    [["contact", "hire", "upwork", "email", "reach", "start", "book", "quote"],
+      `You can hire Sean on Upwork or email ${SITE.email}. Share the video type, length and deadline to get started.`],
+    [["hi", "hello", "hey", "who are you", "good morning", "good evening"],
+      `Hi! I'm Sean Marion Velasco's assistant. Tell me about the video you need edited, or ask about rates, turnaround or samples.`],
+  ];
 
-    if (q.includes("video") || q.includes("edit") || q.includes("work") || q.includes("sample") || q.includes("portfolio")) {
-      return `Sean edits long-form and short-form videos, ads and VSLs, travel vlogs and eye care education videos, plus AI talking heads and motion graphics. Watch samples in the Work section.`;
+  const getSmartLocalResponse = (query) => {
+    const q = ` ${query.toLowerCase()} `;
+    for (const [words, reply] of LOCAL_RULES) {
+      if (words.some((w) => (w.length <= 3 ? new RegExp(`\\b${w}\\b`).test(q) : q.includes(w)))) return reply;
     }
-    if (q.includes("tool") || q.includes("software") || q.includes("premiere") || q.includes("capcut") || q.includes("ai")) {
-      return `Sean edits in Premiere Pro and CapCut, and builds AI workflows with Google Flow, ElevenLabs, Claude Code and HyperFrames. Open the Tools section for what each one is used for.`;
-    }
-    if (q.includes("experience") || q.includes("team") || q.includes("track record") || q.includes("sean")) {
-      return `Sean is an Upwork Top Rated Plus freelancer (top 3% of freelancers), has edited 300+ videos and has 6,259 hours on Upwork.`;
-    }
-    if (q.includes("rate") || q.includes("price") || q.includes("charge") || q.includes("cost")) {
-      return `Sean charges $12 per hour. For bigger or ongoing work, the rate can be adjusted depending on the workload.`;
-    }
-    if (q.includes("contact") || q.includes("hire") || q.includes("upwork") || q.includes("quote") || q.includes("reach")) {
-      return `You can hire Sean on Upwork or email ${SITE.email}. He is open to video editing projects and roles.`;
-    }
-    if (q.includes("hi") || q.includes("hello") || q.includes("hey") || q.includes("who are you")) {
-      return `Hi! I'm Sean Marion Velasco's assistant. Ask me about his video work, tools or experience.`;
-    }
-    return `I'm only trained to answer questions about Sean Marion Velasco's video editing background, work, tools, and how to hire him.`;
+    return `I can help with video editing questions: rates, turnaround, revisions, the kinds of videos Sean edits, and how to hire him. What are you working on?`;
   };
 
   const handleSend = async (customText = null) => {
@@ -299,9 +321,9 @@ CRITICAL SCOPE RESTRICTION:
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Powered by Gemini Tag */}
+          {/* Footer hint */}
           <div className="powered-by-container">
-            <span>Powered by Google Gemini AI</span>
+            <span>Ask about rates, turnaround and samples</span>
           </div>
 
           {/* Input Box */}

@@ -507,3 +507,26 @@
 
 /* Revamp: flat accent instead of indigo gradient */
 .chatbot-toggle { background: var(--rv-accent) !important; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28) !important; color: #ffffff !important; }
+
+/* ===== Black-and-white chat window (matches the site) ===== */
+.chatbot-container { background: #ffffff !important; border: 1px solid #e5e5e5 !important; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12) !important; color: #0a0a0a !important; }
+.chatbot-header { background: #0a0a0a !important; border-bottom: 1px solid #e5e5e5 !important; }
+.chatbot-title, .chatbot-header .chatbot-status { color: #ffffff !important; }
+.chatbot-avatar { background: #ffffff !important; color: #0a0a0a !important; }
+.chatbot-action-btn, .chatbot-close-btn { background: rgba(255, 255, 255, 0.12) !important; color: #ffffff !important; }
+.chatbot-messages { background: #fafafa !important; }
+.chat-message.bot > div, .chat-message.bot p, .bot-greeting { background: #ffffff !important; color: #0a0a0a !important; border: 1px solid #e5e5e5 !important; }
+.chat-message.user > div, .chat-message.user p { background: #0a0a0a !important; color: #ffffff !important; border: none !important; }
+.chatbot-input { background: #ffffff !important; border-top: 1px solid #e5e5e5 !important; }
+.chatbot-input input { background: #ffffff !important; color: #0a0a0a !important; border: 1px solid #d4d4d4 !important; }
+.chatbot-input input::placeholder { color: #737373 !important; }
+.chatbot-send-btn { background: #0a0a0a !important; color: #ffffff !important; }
+/* Higher specificity so these beat the older themed rules */
+html body .chatbot-container .chat-message.bot { background: #ffffff !important; color: #0a0a0a !important; border: 1px solid #e5e5e5 !important; box-shadow: none !important; }
+html body .chatbot-container .chat-message.bot * { color: #0a0a0a !important; }
+html body .chatbot-container .chat-message.user { background: #0a0a0a !important; color: #ffffff !important; border: none !important; }
+html body .chatbot-container .chat-message.user * { color: #ffffff !important; }
+html body .chatbot-container .chat-message.bot > div,
+html body .chatbot-container .chat-message.bot p,
+html body .chatbot-container .bot-greeting { background: transparent !important; border: none !important; }
+html body .chatbot-container .chatbot-input input { background: #ffffff !important; color: #0a0a0a !important; border: 1px solid #d4d4d4 !important; }

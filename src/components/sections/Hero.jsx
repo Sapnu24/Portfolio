@@ -4,6 +4,7 @@ import BlurFade from "@/components/fx/BlurFade";
 import Marquee from "@/components/fx/Marquee";
 import NumberTicker from "@/components/fx/NumberTicker";
 import { ShareSheet } from "@/components/vengeance/ShareSheet";
+import { Award } from "lucide-react";
 
 const SKILLS = [
   "Long-form & YouTube",
@@ -56,10 +57,10 @@ export default function Hero() {
               className={styles.badge}
               title="Verify on my Upwork profile"
             >
-              <span className={styles.badgeDot} />
-              Upwork Top Rated Plus
-              <span className={styles.badgeSep}>/</span>
-              Top 3% of freelancers
+              <Award size={16} aria-hidden="true" />
+              <span>Upwork Top Rated Plus</span>
+              <span className={styles.badgeSep}>•</span>
+              <span>Top 3% of freelancers</span>
             </a>
           </BlurFade>
 
