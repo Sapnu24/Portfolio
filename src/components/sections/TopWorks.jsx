@@ -15,7 +15,8 @@ const TOP_IDS = [
   "ugc-cleanliving",
   "avatar-dam03",
   "ai-ugc-tryon-maroon",
-  "avatar-npg-kienobi-short_02_kienobi2",
+  "avatar-money_short_01_one-marketing-dollar",
+  "avatar-overview_short_02_speak-your-language",
   "avatar-dam10",
 ];
 
