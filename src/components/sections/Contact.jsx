@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, Sparkles, CheckCircle2, MessageSquare, ExternalLink, Briefcase } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle2, MessageSquare, ExternalLink, Briefcase } from "lucide-react";
 import { FaGithub, FaPaperPlane } from "react-icons/fa";
 import { SiUpwork } from "react-icons/si";
 import styles from "@/styles/Contact.module.css";
@@ -69,7 +69,6 @@ export default function ContactPage() {
           viewport={{ once: true, amount: 0.25 }}
         >
           <div className={styles.eyebrowBadge}>
-            <Sparkles size={14} />
             <span>Initiate Project / Contract</span>
           </div>
           <h2 className={styles.title}>

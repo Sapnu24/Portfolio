@@ -4,7 +4,6 @@ import styles from "@/styles/Projects.module.css";
 import { FaUsers, FaUser, FaGithub, FaCheckCircle } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
 import {
-  Sparkles,
   Maximize2,
   X,
   Layers,
@@ -213,7 +212,6 @@ const Projects = () => {
           viewport={{ once: true, amount: 0.25 }}
         >
           <div className={styles.eyebrowBadge}>
-            <Sparkles size={14} />
             <span>Featured Work & Projects</span>
           </div>
           <h2 className={styles.title}>

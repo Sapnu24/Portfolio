@@ -36,7 +36,7 @@ export default function Footer() {
             SMV<span className={styles.logoDot}>.</span>
           </h2>
           <p className={styles.tagline}>
-            AI video production, DTC and UGC ads, and automated editing workflows for global clients.
+            Video editing for YouTube, ads and healthcare practices, plus AI video production workflows.
           </p>
         </div>
 

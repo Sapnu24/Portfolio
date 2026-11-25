@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import styles from "@/styles/About.module.css";
-import { Sparkles, Compass, Zap, ShieldCheck } from "lucide-react";
+import { Compass, Zap, ShieldCheck } from "lucide-react";
 
 const headerVariants = {
   hidden: { opacity: 0, y: 28 },
@@ -51,14 +51,13 @@ const About = () => {
           viewport={{ once: true, amount: 0.25 }}
         >
           <div className={styles.eyebrowBadge}>
-            <Sparkles size={14} />
-            <span>AI Video Production Lead</span>
+            <span>Video Editor & AI Video Production Lead</span>
           </div>
           <h2 className={styles.title}>
             Built for Output, <span className={styles.titleGradient}>Quality & Cost Control</span>
           </h2>
           <p className={styles.subtitle}>
-            I am Sean Marion Velasco. I lead the video editing team at Specialty Vision and build AI-assisted production workflows for DTC ads, UGC and presenter videos. I hold a BS in Information Technology, which is why I build the tools behind the videos myself.
+            I am Sean Marion Velasco, a video editor from the Philippines. I edit long-form and short-form videos, ads and VSLs in Premiere Pro and CapCut, and I have worked on travel vlogs and patient-education content for eye care, optometry and ophthalmology practices. I also build AI video workflows and lead the editing team at Specialty Vision.
           </p>
         </motion.div>
 

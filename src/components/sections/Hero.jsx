@@ -1,21 +1,25 @@
 import { motion } from "framer-motion";
 import { FaLinkedin } from "react-icons/fa";
 import { SiUpwork } from "react-icons/si";
-import { Mail, Sparkles, Briefcase, Zap, Star, Award } from "lucide-react";
+import { Mail, Briefcase, Zap, Star, Award } from "lucide-react";
 import Button from "@/components/ui/Button";
 import styles from "@/styles/Hero.module.css";
 import { SITE, WORK } from "@/data/work";
 
 const PILLS = [
+  "Long-form & YouTube",
+  "Short-form & Reels",
   "DTC & UGC Ads",
-  "AI Video Workflows",
+  "VSLs",
+  "Travel vlogs",
+  "Eye care education",
+  "Premiere Pro",
+  "CapCut",
+  "AI video workflows",
   "Google Flow",
   "ElevenLabs",
   "Claude Code",
   "HyperFrames",
-  "Premiere Pro",
-  "CapCut",
-  "Short-form & YouTube",
 ];
 
 const featured = WORK.find((w) => w.id === "lf-avner-practice-guide") || WORK[0];
@@ -39,7 +43,7 @@ export default function Hero() {
               <span className={styles.pulseDot} />
             </span>
             <span className={styles.statusText}>
-              <span className={styles.statusTextLong}>Open to AI video production roles • Remote</span>
+              <span className={styles.statusTextLong}>Open to video editing and AI production roles • Remote</span>
               <span className={styles.statusTextShort}>Open to work</span>
             </span>
             <span className={styles.statusDivider}>•</span>
@@ -49,7 +53,6 @@ export default function Hero() {
           <div className={styles.headingGroup}>
             <div className={styles.greetingRow}>
               <span className={styles.greetingPrefix}>
-                <Sparkles size={15} className={styles.sparkleIcon} />
                 Hi, I'm
               </span>
             </div>
@@ -100,7 +103,7 @@ export default function Hero() {
                   className={styles.secondaryBtn}
                   title="Sean Marion Velasco on Upwork"
                 >
-                  <Sparkles size={16} />
+                  <SiUpwork size={16} />
                   <span>Upwork Profile</span>
                 </a>
                 <a href="#contact" className={styles.secondaryBtn}>

@@ -6,7 +6,6 @@ import {
   Bot,
   X,
   Trash2,
-  Sparkles,
 } from "lucide-react";
 import { getHeroProfile, DEFAULT_PROFILE } from "@/services/profileServices";
 import { getProjects, DEFAULT_PROJECTS } from "@/services/projectServices";
@@ -101,10 +100,10 @@ const ChatBot = () => {
       ?.map((s) => `- ${s.name}: ${s.skills?.map((item) => (typeof item === "string" ? item : item.name)).join(", ")}`)
       ?.join("\n");
 
-    return `You are the AI Assistant for Sean Marion Velasco, AI Video Production Lead. Speak on behalf of Sean ("Sean", "I", "my work").
+    return `You are the AI Assistant for Sean Marion Velasco, Video Editor and AI Video Production Lead. Speak on behalf of Sean ("Sean", "I", "my work").
 
 CRITICAL SCOPE RESTRICTION:
-- You must ONLY answer questions directly related to Sean Marion Velasco, video production, DTC and UGC ads, AI video workflows (Google Flow, ElevenLabs, Claude Code, Whisper), editing tools (Premiere Pro, CapCut), his work at Specialty Vision, Upwork, and hiring Sean.
+- You must ONLY answer questions directly related to Sean Marion Velasco, video editing (long-form, short-form, ads, VSLs, travel vlogs, eye care education), AI video workflows (Google Flow, ElevenLabs, Claude Code, Whisper), editing tools (Premiere Pro, CapCut), his work at Specialty Vision, Upwork, and hiring Sean.
 - You must REFUSE to answer off-topic questions (e.g., general world trivia, math homework, politics, personal non-career questions, jokes, cooking recipes, weather, general AI assistance).
 - When an off-topic question is asked, respond ONLY with: "I'm only trained to answer questions about Sean Marion Velasco's video production background, work, skills, and how to hire him! 🚀"
 - Keep all valid answers concise, friendly, professional, and straight to the point (2-3 sentences max).
@@ -315,7 +314,7 @@ ${skillsSummary || "React.js, Next.js, Laravel PHP, Node.js, TypeScript, MySQL, 
             {messages.length === 0 && (
               <div className="quick-prompts-container">
                 <span className="quick-prompts-label">
-                  <Sparkles size={12} /> Suggested questions:
+                  Suggested questions:
                 </span>
                 <div className="quick-prompts-list">
                   {QUICK_PROMPTS.map((prompt, idx) => (

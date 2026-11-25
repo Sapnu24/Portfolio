@@ -13,9 +13,9 @@ export default function Work() {
     <section id="work" className={styles.section}>
       <div className={styles.container}>
         <span className={styles.eyebrow}>Video work</span>
-        <h2 className={styles.title}>DTC ads, UGC and AI video</h2>
+        <h2 className={styles.title}>Videos I have edited and produced</h2>
         <p className={styles.sub}>
-          Samples of ads and videos I edited or produced. Each card says what I did.
+          Long-form, short-form, ads, AI talking heads and motion graphics. Each card says what I did.
         </p>
         <div className={styles.tabs}>
           {CATEGORIES.map((c) => (

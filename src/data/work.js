@@ -1,8 +1,8 @@
 // Edit this file to add or change videos. Files live in /public/work (or use a full URL).
 export const SITE = {
   name: "Sean Marion Velasco",
-  role: "AI Video Production Lead",
-  bio: "I produce DTC ads, UGC and short-form video with AI workflows built on Google Flow, ElevenLabs, Claude Code and HyperFrames: brief to generated assets to edit to review to delivery. I also lead the video editing team at Specialty Vision.",
+  role: "Video Editor & AI Video Production Lead",
+  bio: "I edit videos for a living: long-form YouTube, short-form, ads and VSLs in Premiere Pro and CapCut, from travel vlogs to patient-education videos for eye care, optometry and ophthalmology practices. I also build AI video workflows with Google Flow, ElevenLabs, Claude Code and HyperFrames, and I lead the editing team at Specialty Vision.",
   email: "seanmarionvelasco@gmail.com",
   linkedin: "https://www.linkedin.com/in/sean-marion-velasco-890544318/",
   upwork: "https://www.upwork.com/freelancers/~01c5be6cda3726622f",
