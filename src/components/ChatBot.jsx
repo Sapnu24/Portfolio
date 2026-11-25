@@ -78,7 +78,7 @@ CRITICAL SCOPE RESTRICTION:
 - Long-form YouTube videos, short-form (Reels, TikTok, Shorts), DTC and UGC ads, VSLs, travel vlogs, eye care, optometry and ophthalmology patient education, AI talking heads, text-only motion graphics ads.
 
 === EXPERIENCE ===
-- Specialty Vision (healthcare marketing agency): Assistant Video Editor (Feb 2025), Junior (Aug 2025), Senior (Feb 2026), Team Lead Video Editor (Nov 2026): leads the editing team, writes briefs, checks every video before release.
+- Specialty Vision (healthcare marketing agency): Assistant Video Editor (Feb 2025), Junior (Aug 2025), Senior Video Editor (Feb 2026): patient education, practice ads, testimonials and short-form for eye care clinics.
 - Upwork: 300+ videos edited, 6,259 hours, 5.0 client rating.
 - Education: BS Information Technology, Pampanga State Agricultural University (2020 to 2024).
 
@@ -97,7 +97,7 @@ CRITICAL SCOPE RESTRICTION:
       return `Sean edits in Premiere Pro and CapCut, and builds AI workflows with Google Flow, ElevenLabs, Claude Code and HyperFrames. Open the Tools section for what each one is used for.`;
     }
     if (q.includes("experience") || q.includes("team") || q.includes("track record") || q.includes("sean")) {
-      return `Sean is an Upwork Top Rated Plus freelancer (top 3% of freelancers), has edited 300+ videos with 6,259 hours on Upwork, and leads the video editing team at Specialty Vision.`;
+      return `Sean is an Upwork Top Rated Plus freelancer (top 3% of freelancers), has edited 300+ videos and has 6,259 hours on Upwork.`;
     }
     if (q.includes("rate") || q.includes("price") || q.includes("charge") || q.includes("cost")) {
       return `Sean charges $12 per hour. For bigger or ongoing work, the rate can be adjusted depending on the workload.`;

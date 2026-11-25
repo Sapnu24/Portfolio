@@ -2,7 +2,7 @@
 export const SITE = {
   name: "Sean Marion Velasco",
   role: "Video Editor & AI Video Production Lead",
-  bio: "I edit videos for a living: long-form YouTube, short-form, ads and VSLs in Premiere Pro and CapCut, from travel vlogs to patient-education videos for eye care, optometry and ophthalmology practices. I also build AI video workflows with Google Flow, ElevenLabs, Claude Code and HyperFrames, and I lead the editing team at Specialty Vision.",
+  bio: "I edit videos for a living: long-form YouTube, short-form, ads and VSLs in Premiere Pro and CapCut, from travel vlogs to patient-education videos for eye care, optometry and ophthalmology practices. I also build AI video workflows with Google Flow, ElevenLabs, Claude Code and HyperFrames.",
   email: "seanmarionvelasco@gmail.com",
   linkedin: "https://www.linkedin.com/in/sean-marion-velasco-890544318/",
   upwork: "https://www.upwork.com/freelancers/~01c5be6cda3726622f",

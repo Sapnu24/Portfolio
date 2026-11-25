@@ -16,7 +16,6 @@ const PATH = [
   ["Feb 2025", "Assistant Video Editor"],
   ["Aug 2025", "Junior Video Editor"],
   ["Feb 2026", "Senior Video Editor"],
-  ["Nov 2026", "Team Lead Video Editor"],
 ];
 
 export default function About() {
@@ -53,7 +52,7 @@ export default function About() {
             <CursorCard image="/work/lf-avner-practice-guide.jpg" description="AI talking-head video made with my pipeline: generated clips, voice, checks and edit.">
               AI video workflows
             </CursorCard>{" "}
-            and lead the editing team at Specialty Vision.
+            for my edits.
           </p>
         </BlurFade>
 
@@ -84,7 +83,7 @@ export default function About() {
                 ))}
               </ol>
               <p className={styles.note}>
-                I write briefs, check every video before release and keep a shared style guide.
+                Healthcare marketing agency: patient education, practice ads, testimonials and short-form for eye care clinics.
               </p>
             </SpotlightCard>
           </BlurFade>
