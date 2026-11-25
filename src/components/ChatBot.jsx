@@ -115,6 +115,7 @@ CRITICAL SCOPE RESTRICTION:
 - Bio: ${profile?.bio || "Dedicated freelance full-stack developer committed to crafting clean, reliable, and high-performance web applications."}
 - Email: ${profile?.email || "seanmarionvelasco@gmail.com"}
 - Availability: Available for Upwork Contracts, Fixed Projects, and Dedicated Sprints
+- Upwork status: Top Rated Plus (top 3% of freelancers), 6,259 hours, 5.0 client rating
 - Upwork: ${profile?.upworkUrl || "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share"}
 - GitHub: ${profile?.githubUrl || "https://github.com/Sapnu24"}
 
@@ -148,7 +149,7 @@ ${skillsSummary || "React.js, Next.js, Laravel PHP, Node.js, TypeScript, MySQL, 
     }
 
     if (q.includes("experience") || q.includes("team") || q.includes("track record") || q.includes("sean")) {
-      return `Sean has edited 300+ videos, has 6,259 hours on Upwork, and leads the video editing team at Specialty Vision. 🌟`;
+      return `Sean is an Upwork Top Rated Plus freelancer (top 3% of freelancers), has edited 300+ videos, has 6,259 hours on Upwork, and leads the video editing team at Specialty Vision. 🌟`;
     }
 
     if (q.includes("contact") || q.includes("hire") || q.includes("upwork") || q.includes("quote") || q.includes("reach")) {

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { FaLinkedin } from "react-icons/fa";
 import { SiUpwork } from "react-icons/si";
-import { Mail, Sparkles, Briefcase, Zap, Star } from "lucide-react";
+import { Mail, Sparkles, Briefcase, Zap, Star, Award } from "lucide-react";
 import Button from "@/components/ui/Button";
 import styles from "@/styles/Hero.module.css";
 import { SITE, WORK } from "@/data/work";
@@ -63,6 +63,18 @@ export default function Hero() {
             <p style={{ margin: "0.35rem 0 0", fontWeight: 600, opacity: 0.75 }}>
               + Part-time Web Developer (my own tools and side projects)
             </p>
+            <a
+              href={SITE.upwork}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.upworkBadge}
+              title="Verify on my Upwork profile"
+            >
+              <Award size={16} />
+              <span>Upwork Top Rated Plus</span>
+              <span className={styles.upworkBadgeDivider}>•</span>
+              <span>Top 3% of freelancers</span>
+            </a>
           </div>
 
           <p className={styles.bioText}>{SITE.bio}</p>
