@@ -1,0 +1,39 @@
+/* Shared section shell for Top work and FAQ. */
+.section {
+  padding: 6rem 2rem 5rem;
+  background: var(--rv-bg);
+  color: var(--rv-text);
+  border-top: 1px solid var(--rv-line);
+}
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+.label {
+  margin: 0 0 1rem;
+  font-family: var(--rv-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rv-muted);
+}
+.title {
+  max-width: 22ch;
+  margin: 0 0 2.4rem;
+  font-family: var(--rv-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+.soft {
+  color: var(--rv-muted);
+}
+.narrow {
+  max-width: 820px;
+}
+@media (max-width: 760px) {
+  .section {
+    padding: 4.5rem 1.25rem 3.5rem;
+  }
+}

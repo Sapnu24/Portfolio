@@ -120,3 +120,24 @@ a {
     transform: translateY(0);
   }
 }
+
+/* Revamp: this file loads after index.css, so repeat the key tokens here to win the cascade */
+:root,
+[data-theme="dark"],
+[data-theme="light"],
+html.dark-theme,
+body.dark-theme {
+  --primary-color: #0a0a0a;
+  --primary-hover: #262626;
+  --secondary-color: #ffffff;
+  --secondary-bg-color: #fafafa;
+  --text-color: #0a0a0a;
+  --subtitle-color: #737373;
+  --navbar-color: rgba(0, 0, 0, 0.9);
+  --btn-bg-hover-color: #262626;
+  --badge-color: #0a0a0a;
+  --card-color: #ffffff;
+  --glass-color: rgba(255, 255, 255, 0.9);
+  --mix-color: #0a0a0a;
+  --deployment-color: #0a0a0a;
+}

@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeProvider } from "./context/ThemeContext";
-import Navbar from "./components/sections/Navbar";
+import SiteNav from "./components/sections/SiteNav";
+import TopWorks from "./components/sections/TopWorks";
+import Faq from "./components/sections/Faq";
 import Hero from "./components/sections/Hero";
 import About from "./components/sections/About";
 import Timeline from "./components/sections/Timeline";
 import Contact from "./components/sections/Contact";
 import Footer from "./components/sections/Footer";
-import Projects from "./components/sections/Projects";
+import Tools from "./components/sections/Tools";
 import Work from "./components/sections/Work";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminLogin from "./components/admin/AdminLogin.jsx";
@@ -35,13 +37,15 @@ function Portfolio() {
     <div style={{ position: "relative", minHeight: "100vh" }}>
       <PortfolioSkeleton isVisible={loading} />
       <SmoothCursor size={60} ease={0.16} />
-      <Navbar />
+      <SiteNav />
       <Hero />
       <main className="portfolioMainContent">
+        <TopWorks />
         <About />
         {/* <Timeline /> -- Milestones section (Uncomment once first client is closed) */}
         <Work />
-        <Projects />
+        <Tools />
+        <Faq />
         <Contact />
       </main>
       <Footer />

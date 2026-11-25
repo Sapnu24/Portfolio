@@ -282,3 +282,74 @@ a {
 a:hover {
   color: var(--accent-color);
 }
+
+
+/* ==========================================================
+   REVAMP TOKENS (ink navy + warm white + one accent). The site is dark-only.
+   These come last so they win over the older indigo/cyan tokens above.
+========================================================== */
+:root,
+[data-theme="dark"],
+[data-theme="light"],
+html.dark-theme,
+html.light-theme,
+body.dark-theme {
+  --rv-bg: #ffffff;
+  --rv-surface: #fafafa;
+  --rv-surface-2: #f4f4f5;
+  --rv-line: #e5e5e5;
+  --rv-text: #0a0a0a;
+  --rv-muted: #737373;
+  --rv-accent: #0a0a0a;
+  --rv-display: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --rv-sans: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --rv-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #fafafa;
+  --secondary-bg-color: #fafafa;
+  --text-primary: #0a0a0a;
+  --text-secondary: #404040;
+  --text-color: #0a0a0a;
+  --subtitle-color: #737373;
+  --headline-color: #0a0a0a;
+  --text-muted: #737373;
+  --primary-color: #0a0a0a;
+  --primary-hover: #262626;
+  --secondary-color: #ffffff;
+  --mix-color: #0a0a0a;
+  --accent-color: #0a0a0a;
+  --accent-hover: #262626;
+  --accent-glow: rgba(0, 0, 0, 0.08);
+  --primary-glow: rgba(0, 0, 0, 0.06);
+  --gradient-primary: #0a0a0a;
+  --gradient-accent: #0a0a0a;
+  --title-gradient: linear-gradient(#0a0a0a, #0a0a0a);
+  --card-color: #ffffff;
+  --card-bg: #ffffff;
+  --card-bg-elevated: #ffffff;
+  --glass-color: rgba(255, 255, 255, 0.9);
+  --glass-border: #e5e5e5;
+  --navbar-bg: rgba(255, 255, 255, 0.85);
+  --navbar-scrolled-bg: rgba(255, 255, 255, 0.95);
+  --navbar-border: #e5e5e5;
+  --nav-pill-bg: #fafafa;
+  --nav-pill-border: #e5e5e5;
+  --nav-link-color: #525252;
+  --nav-link-active-bg: #f4f4f5;
+  --mobile-dock-bg: rgba(255, 255, 255, 0.95);
+  --mobile-dock-border: #e5e5e5;
+  --border-subtle: #e5e5e5;
+  --border-card: #e5e5e5;
+  --border-card-hover: #a3a3a3;
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-glow: rgba(0, 0, 0, 0.04);
+  color-scheme: light;
+}
+
+html,
+body {
+  background: var(--rv-bg);
+  color: var(--rv-text);
+}

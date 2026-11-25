@@ -7,15 +7,12 @@ import {
   X,
   Trash2,
 } from "lucide-react";
-import { getHeroProfile, DEFAULT_PROFILE } from "@/services/profileServices";
-import { getProjects, DEFAULT_PROJECTS } from "@/services/projectServices";
-import { getTimelineItems, DEFAULT_TIMELINE } from "@/services/timelineServices";
-import { getSkillCategories, DEFAULT_SKILL_CATEGORIES } from "@/services/skillServices";
+import { SITE } from "@/data/work";
 import "@/styles/Chatbot.css";
 
 const QUICK_PROMPTS = [
-  "What are your top projects?",
-  "What is your tech stack?",
+  "What kinds of videos do you edit?",
+  "Which tools do you use?",
   "Tell me about your experience",
   "How can I contact you?",
 ];
@@ -25,12 +22,6 @@ const ChatBot = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [liveData, setLiveData] = useState({
-    profile: DEFAULT_PROFILE,
-    projects: DEFAULT_PROJECTS,
-    timeline: DEFAULT_TIMELINE,
-    skills: DEFAULT_SKILL_CATEGORIES,
-  });
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -65,101 +56,59 @@ const ChatBot = () => {
     };
   }, []);
 
-  // Fetch real-time portfolio knowledge from Firestore / Local Cache
-  useEffect(() => {
-    async function loadPortfolioContext() {
-      try {
-        const [profile, projects, timeline, skills] = await Promise.all([
-          getHeroProfile().catch(() => DEFAULT_PROFILE),
-          getProjects().catch(() => DEFAULT_PROJECTS),
-          getTimelineItems().catch(() => DEFAULT_TIMELINE),
-          getSkillCategories().catch(() => DEFAULT_SKILL_CATEGORIES),
-        ]);
-        setLiveData({ profile, projects, timeline, skills });
-      } catch (err) {
-        console.error("Error loading chatbot knowledge context:", err);
-      }
-    }
-    loadPortfolioContext();
-  }, []);
-
-  // System instruction and dynamic context prompt
-  const buildSystemContext = () => {
-    const { profile, projects, timeline, skills } = liveData;
-
-    const projectSummary = projects
-      ?.slice(0, 8)
-      ?.map((p) => `- ${p.title}: ${p.description || ""} (Tech: ${p.tags?.join(", ") || ""})`)
-      ?.join("\n");
-
-    const timelineSummary = timeline
-      ?.map((t) => `- ${t.role} at ${t.company} (${t.period}): ${t.description || ""}`)
-      ?.join("\n");
-
-    const skillsSummary = skills
-      ?.map((s) => `- ${s.name}: ${s.skills?.map((item) => (typeof item === "string" ? item : item.name)).join(", ")}`)
-      ?.join("\n");
-
-    return `You are the AI Assistant for Sean Marion Velasco, Video Editor and AI Video Production Lead. Speak on behalf of Sean ("Sean", "I", "my work").
+  // Static knowledge: video editing only (nothing is read from the old developer data)
+  const buildSystemContext = () => `You are the AI Assistant for Sean Marion Velasco, Video Editor and AI Video Production Lead. Speak on behalf of Sean ("Sean", "I", "my work").
 
 CRITICAL SCOPE RESTRICTION:
-- You must ONLY answer questions directly related to Sean Marion Velasco, video editing (long-form, short-form, ads, VSLs, travel vlogs, eye care education), AI video workflows (Google Flow, ElevenLabs, Claude Code, Whisper), editing tools (Premiere Pro, CapCut), his work at Specialty Vision, Upwork, and hiring Sean.
+- You must ONLY answer questions directly related to Sean Marion Velasco, video editing (long-form, short-form, ads, VSLs, travel vlogs, eye care education), AI video workflows, editing tools, his work at Specialty Vision, Upwork, and hiring Sean.
 - You must REFUSE to answer off-topic questions (e.g., general world trivia, math homework, politics, personal non-career questions, jokes, cooking recipes, weather, general AI assistance).
-- When an off-topic question is asked, respond ONLY with: "I'm only trained to answer questions about Sean Marion Velasco's video production background, work, skills, and how to hire him! 🚀"
+- When an off-topic question is asked, respond ONLY with: "I'm only trained to answer questions about Sean Marion Velasco's video editing background, work, tools, and how to hire him!"
 - Keep all valid answers concise, friendly, professional, and straight to the point (2-3 sentences max).
 
-=== SEAN MARION VELASCO PROFILE DATA ===
-- Name: ${profile?.name || "Sean Marion Velasco"}
-- Role: ${profile?.role || "AI Video Production Lead"}
-- Bio: ${profile?.bio || "Dedicated freelance full-stack developer committed to crafting clean, reliable, and high-performance web applications."}
-- Email: ${profile?.email || "seanmarionvelasco@gmail.com"}
-- Availability: Available for Upwork Contracts, Fixed Projects, and Dedicated Sprints
+=== PROFILE ===
+- Name: Sean Marion Velasco
+- Role: Video Editor and AI Video Production Lead, based in the Philippines
+- Email: ${SITE.email}
+- Upwork: ${SITE.upwork}
 - Upwork status: Top Rated Plus (top 3% of freelancers), 6,259 hours, 5.0 client rating
-- Upwork: ${profile?.upworkUrl || "https://www.upwork.com/freelancers/~01c5be6cda3726622f?mp_source=share"}
-- GitHub: ${profile?.githubUrl || "https://github.com/Sapnu24"}
+- Rate: $12 per hour; for bigger or ongoing work the rate can be adjusted depending on the workload
+- Services: Video editing for YouTube, ads and healthcare practices, plus AI video production workflows
 
-=== KEY CASE STUDIES & DELIVERABLES ===
-${projectSummary || "Kam Maalam Enterprise Web Portal, ACV Veterinary & Adoption System, Non-Profit Web Apps"}
+=== WHAT SEAN EDITS ===
+- Long-form YouTube videos, short-form (Reels, TikTok, Shorts), DTC and UGC ads, VSLs, travel vlogs, eye care, optometry and ophthalmology patient education, AI talking heads, text-only motion graphics ads.
 
-=== FREELANCE & CLIENT MILESTONES ===
-${timelineSummary || "Full-Stack Architecture, Enterprise Web Systems, and Web Engineering"}
+=== EXPERIENCE ===
+- Specialty Vision (healthcare marketing agency): Assistant Video Editor (Feb 2025), Junior (Aug 2025), Senior (Feb 2026), Team Lead Video Editor (Nov 2026): leads the editing team, writes briefs, checks every video before release.
+- Upwork: 300+ videos edited, 6,259 hours, 5.0 client rating.
+- Education: BS Information Technology, Pampanga State Agricultural University (2020 to 2024).
 
-=== TECHNICAL CAPABILITIES ===
-${skillsSummary || "React.js, Next.js, Laravel PHP, Node.js, TypeScript, MySQL, Tailwind CSS, RESTful APIs, Cloud"}
+=== TOOLS ===
+- Editing: Premiere Pro, CapCut, HyperFrames, ffmpeg. AI: Google Flow, ElevenLabs, Claude Code, Whisper. Scripts: Python.
 `;
-  };
 
-  // Intelligent local fallback if API key fails or network is unavailable
+  // Local fallback if the API key fails or the network is unavailable
   const getSmartLocalResponse = (query) => {
     const q = query.toLowerCase();
-    const { profile, projects, timeline, skills } = liveData;
 
-    if (q.includes("project") || q.includes("work") || q.includes("built") || q.includes("case") || q.includes("app")) {
-      const topProjects = projects?.slice(0, 3)?.map((p) => p.title)?.join(", ");
-      return `Featured projects delivered by Sean (assisted by his team) include ${topProjects || "Enterprise Web Systems, SaaS Platforms, and Custom Portals"}. You can explore live previews in the Projects section! 🚀`;
+    if (q.includes("video") || q.includes("edit") || q.includes("work") || q.includes("sample") || q.includes("portfolio")) {
+      return `Sean edits long-form and short-form videos, ads and VSLs, travel vlogs and eye care education videos, plus AI talking heads and motion graphics. Watch samples in the Work section.`;
     }
-
-    if (q.includes("database") || q.includes("backend") || q.includes("api") || q.includes("cloud")) {
-      return `Sean architects secure, high-performance backends using Laravel PHP, Node.js, MySQL, PostgreSQL, and RESTful APIs backed by cloud infrastructure. ⚡`;
+    if (q.includes("tool") || q.includes("software") || q.includes("premiere") || q.includes("capcut") || q.includes("ai")) {
+      return `Sean edits in Premiere Pro and CapCut, and builds AI workflows with Google Flow, ElevenLabs, Claude Code and HyperFrames. Open the Tools section for what each one is used for.`;
     }
-
-    if (q.includes("skill") || q.includes("stack") || q.includes("tech") || q.includes("framework")) {
-      return `Sean works with Google Flow, ElevenLabs, Whisper, Claude Code, Premiere Pro and CapCut to produce DTC ads, UGC and presenter videos. 🎬`;
-    }
-
     if (q.includes("experience") || q.includes("team") || q.includes("track record") || q.includes("sean")) {
-      return `Sean is an Upwork Top Rated Plus freelancer (top 3% of freelancers), has edited 300+ videos, has 6,259 hours on Upwork, and leads the video editing team at Specialty Vision. 🌟`;
+      return `Sean is an Upwork Top Rated Plus freelancer (top 3% of freelancers), has edited 300+ videos with 6,259 hours on Upwork, and leads the video editing team at Specialty Vision.`;
     }
-
+    if (q.includes("rate") || q.includes("price") || q.includes("charge") || q.includes("cost")) {
+      return `Sean charges $12 per hour. For bigger or ongoing work, the rate can be adjusted depending on the workload.`;
+    }
     if (q.includes("contact") || q.includes("hire") || q.includes("upwork") || q.includes("quote") || q.includes("reach")) {
-      return `You can hire Sean directly on Upwork with full escrow protection or reach out at ${profile?.email || "seanmarionvelasco@gmail.com"}. He is available for fixed-price contracts and dedicated hourly sprints! 📬`;
+      return `You can hire Sean on Upwork or email ${SITE.email}. He is open to video editing projects and roles.`;
     }
-
     if (q.includes("hi") || q.includes("hello") || q.includes("hey") || q.includes("who are you")) {
-      return `Hi! I'm Sean Marion Velasco's AI assistant. How can Sean help bring your project to life today? 😊`;
+      return `Hi! I'm Sean Marion Velasco's assistant. Ask me about his video work, tools or experience.`;
     }
-
-    return `I'm only trained to answer questions about Sean Marion Velasco's web development capabilities, projects, and how to hire him. Feel free to ask about his projects or how to start a contract! 🚀`;
+    return `I'm only trained to answer questions about Sean Marion Velasco's video editing background, work, tools, and how to hire him.`;
   };
 
   const handleSend = async (customText = null) => {
@@ -305,7 +254,7 @@ ${skillsSummary || "React.js, Next.js, Laravel PHP, Node.js, TypeScript, MySQL, 
             <div className="chat-message bot">
               <div className="bot-greeting">
                 <p>
-                  👋 Hi! I'm <strong>Sean Marion Velasco</strong>'s AI assistant. Ask me about Sean's engineering background, featured projects, tech stack, or hiring on Upwork!
+                  👋 Hi! I'm <strong>Sean Marion Velasco</strong>'s AI assistant. Ask me about Sean's video work, editing tools, experience, or hiring him on Upwork!
                 </p>
               </div>
             </div>
@@ -362,7 +311,7 @@ ${skillsSummary || "React.js, Next.js, Laravel PHP, Node.js, TypeScript, MySQL, 
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about projects, stack, experience..."
+              placeholder="Ask about videos, tools, experience..."
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import styles from "@/styles/Navbar.module.css";
-import ThemeToggle from "@/components/ui/ThemeToggle";
 import {
   FaHome,
   FaUserAlt,
   FaBriefcase,
-  FaProjectDiagram,
+  FaTools,
   FaEnvelope,
 } from "react-icons/fa";
 import { Send, Bot } from "lucide-react";
@@ -29,7 +28,7 @@ export default function Navbar() {
     { href: "#career", id: "career", label: "Milestones", icon: <FaBriefcase /> },
     */
     { href: "#work", id: "work", label: "Work", icon: <FaBriefcase /> },
-    { href: "#projects", id: "projects", label: "Web Projects", icon: <FaProjectDiagram /> },
+    { href: "#tools", id: "tools", label: "Tools", icon: <FaTools /> },
     { href: "#contact", id: "contact", label: "Contact", icon: <FaEnvelope /> },
   ];
 
@@ -60,7 +59,7 @@ export default function Navbar() {
       "nextSection",
       "work",
       // "career", /* Uncomment when first client is closed */
-      "projects",
+      "tools",
       "contact",
     ];
     const observer = new IntersectionObserver(
@@ -121,7 +120,6 @@ export default function Navbar() {
 
         {/* Desktop Header Quick CTA & Theme Toggle */}
         <div className={styles.navAction}>
-          <ThemeToggle />
           <a href="#contact" className={styles.navCtaBtn}>
             <span>Let's Talk</span>
             <Send size={14} className={styles.navCtaIcon} />
@@ -147,7 +145,6 @@ export default function Navbar() {
           );
         })}
         <div className={styles.mobileDockDivider} />
-        <ThemeToggle compact dropUp />
         <button
           type="button"
           onClick={() => window.dispatchEvent(new CustomEvent("toggle-chatbot"))}

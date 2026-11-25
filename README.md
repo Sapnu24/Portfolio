@@ -8,8 +8,8 @@ Portfolio site for Sean Marion Velasco, AI Video Production Lead: DTC and UGC ad
 ## What is on the site
 
 - **Hero:** intro, featured AI presenter video, key Upwork stats.
-- **Work:** sample videos by category, plus a case study of the FLOW 11 presenter video pipeline.
-- **Web Projects:** earlier websites and web apps.
+- **Work:** sample videos by category. Click one to watch it.
+- **Tools:** the editing software, AI tools and workflow tools I use, with a popup explaining each.
 - **Contact:** inquiry form.
 
 ## Add or change videos

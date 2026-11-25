@@ -9,8 +9,6 @@ export const SITE = {
   github: "https://github.com/Sapnu24",
 };
 
-export const TOOLS = ["Google Flow", "ElevenLabs", "Claude Code", "HyperFrames"];
-
 export const WORK = [
   {
     id: "ugc-telehealth-v3",
@@ -483,22 +481,3 @@ export const WORK = [
     note: "Trial video for a client.",
   },
 ];
-
-export const CASE_STUDY = {
-  title: "Case study: the FLOW 11 presenter video pipeline",
-  intro:
-    "A gated workflow that turns an approved script into a finished presenter video, with minimal manual editing and a cost record for every video.",
-  steps: [
-    ["Script", "Short lines, one idea per 8-second clip, claims only from approved sources. I approve it."],
-    ["Stills", "Presenter stills are generated at no cost and approved at full size before any video credits are used."],
-    ["Prompt lint and QC", "A script checks every prompt against locked wording, then a separate QC agent tries to break each prompt."],
-    ["Pilot, then batch", "Two clips are generated and joined first. The batch only runs after I approve the join."],
-    ["Clip checks", "Every clip goes through two Whisper passes (whole clip and 3-second windows) to catch repeats, ad-libs and bad starts or ends."],
-    ["Tight cut and voice", "Silence and restarts are cut frame-exactly, then the voice is swapped to the approved voice in ElevenLabs."],
-    ["Edit and shorts", "Word-timed zooms, logo and kinetic type in HyperFrames. Shorts are cut from the finished video with no new generation."],
-  ],
-  owned:
-    "I own the process, the rules, every approval, the cost tracking and clip review. I use Google Flow for video, ElevenLabs for voice, Claude Code to build and run the pipeline, and HyperFrames for editing.",
-  lessons:
-    "Every failure became a rule. A wrong batch setting once wasted credits, so every send now gets a settings check. Longer clips left spare time the model filled with repeats, so clips are 8 seconds.",
-};
