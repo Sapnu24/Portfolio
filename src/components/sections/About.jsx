@@ -4,12 +4,12 @@ import SpotlightCard from "@/components/fx/SpotlightCard";
 import { CursorCard } from "@/components/vengeance/CursorCard";
 
 const EDITS = [
-  "Long-form YouTube",
-  "Short-form: Reels, TikTok, Shorts",
+  "Long-Form YouTube",
+  "Short-Form: Reels, TikTok, Shorts",
   "Ads, UGC and VSLs",
-  "Travel vlogs",
-  "Eye care, optometry and ophthalmology education",
-  "AI talking heads and motion graphics",
+  "Travel Vlogs",
+  "Eye Care, Optometry and Ophthalmology Education",
+  "AI Talking Heads and Motion Graphics",
 ];
 
 const PATH = [

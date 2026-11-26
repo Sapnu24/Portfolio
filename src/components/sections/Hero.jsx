@@ -7,16 +7,17 @@ import { ShareSheet } from "@/components/vengeance/ShareSheet";
 import { Award } from "lucide-react";
 import BackgroundBeamsWithCollision from "@/components/aceternity/BackgroundBeamsWithCollision";
 import Spotlight from "@/components/aceternity/Spotlight";
+import DockRow from "@/components/aceternity/DockRow";
 
 const SKILLS = [
-  "Long-form & YouTube",
-  "Short-form & Reels",
+  "Long-Form & YouTube",
+  "Short-Form & Reels",
   "Ads & VSLs",
-  "Travel vlogs",
-  "Eye care education",
+  "Travel Vlogs",
+  "Eye Care Education",
   "Premiere Pro",
   "CapCut",
-  "AI video workflows",
+  "AI Video Workflows",
   "Google Flow",
   "ElevenLabs",
   "Claude Code",
@@ -68,11 +69,12 @@ export default function Hero() {
             </a>
           </BlurFade>
 
-          <BlurFade immediate delay={0.4} className={styles.actions}>
-            <a href="#work" className={styles.primary}>
+          <BlurFade immediate delay={0.4}>
+            <DockRow className={styles.actions}>
+            <a href="#work" className="sketch-btn sketch-btn--solid">
               Watch my work <span aria-hidden="true">→</span>
             </a>
-            <a href="#contact" className={styles.ghost}>
+            <a href="#contact" className="sketch-btn">
               Contact me
             </a>
             <ShareSheet url="https://smv-works.netlify.app/" title="Sean Marion Velasco: video editor portfolio" theme="auto" />
@@ -85,6 +87,7 @@ export default function Hero() {
               </a>
               <a href={`mailto:${SITE.email}`}>Email</a>
             </span>
+            </DockRow>
           </BlurFade>
         </div>
 

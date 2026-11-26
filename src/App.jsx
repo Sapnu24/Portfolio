@@ -17,6 +17,7 @@ import AdminLogin from "./components/admin/AdminLogin.jsx";
 import SmoothCursor from "./components/SmoothCursor";
 import ChatBot from "./components/ChatBot";
 import TracingBeam from "./components/aceternity/TracingBeam";
+import StickyBanner from "./components/aceternity/StickyBanner";
 import PortfolioSkeleton from "./components/PortfolioSkeleton";
 import { useAnalyticsTracker } from "./hooks/useAnalyticsTracker";
 import "./App.css";
@@ -38,6 +39,7 @@ function Portfolio() {
     <div style={{ position: "relative", minHeight: "100vh" }}>
       <PortfolioSkeleton isVisible={loading} />
       <SmoothCursor size={60} ease={0.16} />
+      <StickyBanner />
       <SiteNav />
       <Hero />
       <main className="portfolioMainContent">

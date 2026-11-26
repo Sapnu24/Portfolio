@@ -81,7 +81,7 @@ export function SpotlightNavbar({ items, activeIndex, onItemClick, className, en
   }, [activeIndex]);
 
   return (
-    <div className={cn("pointer-events-none fixed inset-x-0 top-4 z-[1000] flex justify-center px-3", className)}>
+    <div className={cn("pointer-events-none fixed inset-x-0 z-[1000] flex justify-center px-3", className)} style={{ top: "calc(1rem + var(--banner-h, 0px))", transition: "top 0.3s ease" }}>
       <nav
         ref={navRef}
         aria-label="Main"

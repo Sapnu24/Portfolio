@@ -2,14 +2,15 @@ import styles from "@/styles/Contact.module.css";
 import { SITE } from "@/data/work";
 import BlurFade from "@/components/fx/BlurFade";
 import { ShareSheet } from "@/components/vengeance/ShareSheet";
+import DockRow from "@/components/aceternity/DockRow";
 
 const SERVICES = [
-  "Long-form YouTube editing",
-  "Short-form: Reels, TikTok, Shorts",
+  "Long-Form YouTube Editing",
+  "Short-Form: Reels, TikTok, Shorts",
   "Ads, UGC and VSLs",
-  "Eye care and healthcare education videos",
-  "Travel vlogs",
-  "AI talking heads and AI video workflows",
+  "Eye Care and Healthcare Education Videos",
+  "Travel Vlogs",
+  "AI Talking Heads and AI Video Workflows",
 ];
 
 export default function Contact() {
@@ -32,17 +33,19 @@ export default function Contact() {
           </a>
         </BlurFade>
 
-        <BlurFade delay={0.14} className={styles.buttons}>
-          <a className={styles.primary} href={SITE.upwork} target="_blank" rel="noopener noreferrer">
+        <BlurFade delay={0.14}>
+          <DockRow className={styles.buttons}>
+          <a className="sketch-btn sketch-btn--solid" href={SITE.upwork} target="_blank" rel="noopener noreferrer">
             Hire me on Upwork <span aria-hidden="true">→</span>
           </a>
-          <a className={styles.ghost} href={SITE.linkedin} target="_blank" rel="noopener noreferrer">
+          <a className="sketch-btn" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">
             LinkedIn
           </a>
-          <a className={styles.ghost} href={`mailto:${SITE.email}`}>
+          <a className="sketch-btn" href={`mailto:${SITE.email}`}>
             Email me
           </a>
           <ShareSheet url="https://smv-works.netlify.app/" title="Sean Marion Velasco: video editor portfolio" theme="auto" />
+          </DockRow>
         </BlurFade>
 
         <BlurFade delay={0.2} className={styles.services}>

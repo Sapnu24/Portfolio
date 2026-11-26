@@ -1,5 +1,7 @@
 // Edit this file to add or change videos. Files live in /public/work (or use a full URL).
 export const SITE = {
+  // Google Calendar appointment-schedule booking link (30 min). Empty = the banner opens an email instead.
+  booking: "",
   name: "Sean Marion Velasco",
   role: "Video Editor & AI Video Production Lead",
   bio: "I edit videos for a living: long-form YouTube, short-form, ads and VSLs in Premiere Pro and CapCut, from travel vlogs to patient-education videos for eye care, optometry and ophthalmology practices. I also build AI video workflows with Google Flow, ElevenLabs, Claude Code and HyperFrames.",

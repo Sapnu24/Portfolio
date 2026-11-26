@@ -3,7 +3,7 @@
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 7.5rem 2rem 3rem;
+  padding: calc(7.5rem + var(--banner-h, 0px)) 2rem 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
