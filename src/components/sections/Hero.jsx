@@ -5,6 +5,8 @@ import Marquee from "@/components/fx/Marquee";
 import NumberTicker from "@/components/fx/NumberTicker";
 import { ShareSheet } from "@/components/vengeance/ShareSheet";
 import { Award } from "lucide-react";
+import BackgroundBeamsWithCollision from "@/components/aceternity/BackgroundBeamsWithCollision";
+import Spotlight from "@/components/aceternity/Spotlight";
 
 const SKILLS = [
   "Long-form & YouTube",
@@ -26,6 +28,8 @@ const featured = WORK.find((w) => w.id === "lf-avner-practice-guide") || WORK[0]
 export default function Hero() {
   return (
     <section id="home" className={styles.hero}>
+      <BackgroundBeamsWithCollision />
+      <Spotlight />
       <div className={styles.grid}>
         <div className={styles.copy}>
           <BlurFade immediate delay={0.05}>

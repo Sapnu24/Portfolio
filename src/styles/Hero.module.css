@@ -11,6 +11,8 @@
   background: var(--rv-bg);
   color: var(--rv-text);
   box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .grid {
@@ -272,4 +274,11 @@
   .stats div + div {
     padding-left: 0.8rem;
   }
+}
+
+/* Keep hero content above the beams and spotlight layer. */
+.grid,
+.marqueeWrap {
+  position: relative;
+  z-index: 1;
 }

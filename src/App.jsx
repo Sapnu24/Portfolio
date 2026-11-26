@@ -16,6 +16,7 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminLogin from "./components/admin/AdminLogin.jsx";
 import SmoothCursor from "./components/SmoothCursor";
 import ChatBot from "./components/ChatBot";
+import TracingBeam from "./components/aceternity/TracingBeam";
 import PortfolioSkeleton from "./components/PortfolioSkeleton";
 import { useAnalyticsTracker } from "./hooks/useAnalyticsTracker";
 import "./App.css";
@@ -40,6 +41,7 @@ function Portfolio() {
       <SiteNav />
       <Hero />
       <main className="portfolioMainContent">
+        <TracingBeam>
         <TopWorks />
         <About />
         {/* <Timeline /> -- Milestones section (Uncomment once first client is closed) */}
@@ -47,6 +49,7 @@ function Portfolio() {
         <Tools />
         <Faq />
         <Contact />
+        </TracingBeam>
       </main>
       <Footer />
       <ChatBot />
