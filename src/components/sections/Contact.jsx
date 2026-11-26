@@ -23,7 +23,7 @@ export default function Contact() {
             Let&apos;s work <em>together</em>.
           </h2>
           <p className={styles.sub}>
-            Open to video editing projects and roles. Email me with what you are making, or hire me on Upwork.
+            Open to video editing projects and roles. Book a free 30-minute discovery call, email me with what you are making, or hire me on Upwork.
           </p>
         </BlurFade>
 
@@ -35,7 +35,10 @@ export default function Contact() {
 
         <BlurFade delay={0.14}>
           <DockRow className={styles.buttons}>
-          <a className="sketch-btn sketch-btn--solid" href={SITE.upwork} target="_blank" rel="noopener noreferrer">
+          <a className="sketch-btn sketch-btn--solid" href={SITE.booking} target="_blank" rel="noopener noreferrer">
+            Book a discovery call <span aria-hidden="true">→</span>
+          </a>
+          <a className="sketch-btn" href={SITE.upwork} target="_blank" rel="noopener noreferrer">
             Hire me on Upwork <span aria-hidden="true">→</span>
           </a>
           <a className="sketch-btn" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">
