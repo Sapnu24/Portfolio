@@ -153,7 +153,7 @@ export const WORK = [
     title: "Where the money goes short 1: One marketing dollar",
     video: "/work/avatar-money_short_01_one-marketing-dollar.mp4",
     poster: "/work/avatar-money_short_01_one-marketing-dollar.jpg",
-    role: "Fancy short cut from a finished AI avatar long form: kinetic type, motion graphics and a look copied from a reference reel. No new generation.",
+    role: "Plain cut from the finished long form: no motion graphics, just the edit and captions.",
     note: "Google Flow avatar + ElevenLabs voice + Claude Code + HyperFrames.",
   },
   {
@@ -162,7 +162,7 @@ export const WORK = [
     title: "Specialty Vision overview short 2: Speak your language",
     video: "/work/avatar-overview_short_02_speak-your-language.mp4",
     poster: "/work/avatar-overview_short_02_speak-your-language.jpg",
-    role: "Fancy short cut from a finished AI avatar long form: kinetic type, motion graphics and a look copied from a reference reel. No new generation.",
+    role: "Plain cut from the finished long form: no motion graphics, just the edit and captions.",
     note: "Google Flow avatar + ElevenLabs voice + Claude Code + HyperFrames.",
   },
   {
@@ -171,7 +171,7 @@ export const WORK = [
     title: "New practice guide short 1: Where to start",
     video: "/work/avatar-practice_short_01_where-to-start.mp4",
     poster: "/work/avatar-practice_short_01_where-to-start.jpg",
-    role: "Fancy short cut from a finished AI avatar long form: kinetic type, motion graphics and a look copied from a reference reel. No new generation.",
+    role: "Plain cut from the finished long form: no motion graphics, just the edit and captions.",
     note: "Google Flow avatar + ElevenLabs voice + Claude Code + HyperFrames.",
   },
   {
@@ -180,7 +180,7 @@ export const WORK = [
     title: "Choosing an agency short 1: Five questions",
     video: "/work/avatar-agency-agency_short_01_five-questions.mp4",
     poster: "/work/avatar-agency-agency_short_01_five-questions.jpg",
-    role: "Fancy edit: kinetic type and motion graphics, cut from the finished long form with no new generation.",
+    role: "Plain cut from the finished long form: no motion graphics, just the edit and captions.",
     note: "Google Flow avatar + ElevenLabs voice + Claude Code + HyperFrames.",
   },
   {
