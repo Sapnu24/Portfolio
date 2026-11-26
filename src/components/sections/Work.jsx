@@ -6,7 +6,7 @@ import BlurFade from "@/components/fx/BlurFade";
 import VideoDialog from "@/components/fx/VideoDialog";
 
 // Tab order: Talking Heads first (also the tab that opens by default), then the rest as they appear in the data.
-const FIRST = ["Talking Heads"];
+const FIRST = ["Talking Heads", "Short Forms"];
 const CATEGORIES = [...FIRST, ...Array.from(new Set(WORK.map((w) => w.category))).filter((c) => !FIRST.includes(c))];
 
 function Card({ item, onOpen, index }) {
