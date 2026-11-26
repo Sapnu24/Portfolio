@@ -1,7 +1,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 
-// Light / dark switch that sits at the end of the top navbar. Inline styles so Bootstrap's button reset can't override it.
+// Light / dark switch that sits in the top-right corner. Inline styles so Bootstrap's button reset can't override it.
 export default function ThemeButton() {
   const { isDark, toggleTheme } = useTheme();
   const label = isDark ? "Switch to light mode" : "Switch to dark mode";
@@ -15,8 +15,8 @@ export default function ThemeButton() {
       style={{
         display: "grid",
         placeItems: "center",
-        width: 30,
-        height: 30,
+        width: 36,
+        height: 36,
         margin: 0,
         padding: 0,
         borderRadius: 999,
@@ -26,7 +26,7 @@ export default function ThemeButton() {
         cursor: "pointer",
       }}
     >
-      {isDark ? <Sun size={15} aria-hidden="true" /> : <Moon size={15} aria-hidden="true" />}
+      {isDark ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
     </button>
   );
 }

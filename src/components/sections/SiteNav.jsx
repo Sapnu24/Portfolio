@@ -4,11 +4,9 @@ import ThemeButton from "@/components/sections/ThemeButton";
 
 const ITEMS = [
   { label: "Home", href: "#home" },
-  { label: "About", href: "#nextSection" },
   { label: "Work", href: "#work" },
   { label: "Tools", href: "#tools" },
   { label: "FAQ", href: "#faq" },
-  { label: "Book", href: "#book" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -36,5 +34,12 @@ export default function SiteNav() {
     document.querySelector(item.href)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  return <SpotlightNavbar items={ITEMS} activeIndex={active} onItemClick={go} endSlot={<ThemeButton />} />;
+  return (
+    <>
+      <SpotlightNavbar items={ITEMS} activeIndex={active} onItemClick={go} />
+      <div className="theme-corner">
+        <ThemeButton />
+      </div>
+    </>
+  );
 }
