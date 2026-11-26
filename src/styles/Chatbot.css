@@ -530,3 +530,11 @@ html body .chatbot-container .chat-message.bot > div,
 html body .chatbot-container .chat-message.bot p,
 html body .chatbot-container .bot-greeting { background: transparent !important; border: none !important; }
 html body .chatbot-container .chatbot-input input { background: #ffffff !important; color: #0a0a0a !important; border: 1px solid #d4d4d4 !important; }
+
+/* Sit above the "Powered by Netlify" badge in the bottom-right corner, on every screen size. */
+html body .chatbot-toggle { bottom: 84px !important; }
+html body .chatbot-container { bottom: 154px !important; max-height: calc(100vh - 180px) !important; }
+@media (max-width: 860px) {
+  html body .chatbot-toggle { display: flex !important; bottom: 76px !important; right: 16px !important; width: 52px !important; height: 52px !important; }
+  html body .chatbot-container { bottom: 0 !important; max-height: 85dvh !important; }
+}

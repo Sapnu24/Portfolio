@@ -75,7 +75,7 @@ export const WORK = [
   },
   {
     id: "avatar-dam01",
-    category: "AI Talking Heads",
+    category: "Talking Heads",
     title: "A Doctor Asked Me ep. 1: Accounts in your name",
     video: "/work/avatar-dam01.mp4",
     poster: "/work/avatar-dam01.jpg",
@@ -84,7 +84,7 @@ export const WORK = [
   },
   {
     id: "avatar-dam02",
-    category: "AI Talking Heads",
+    category: "Talking Heads",
     title: "A Doctor Asked Me ep. 2: The first 30 days",
     video: "/work/avatar-dam02.mp4",
     poster: "/work/avatar-dam02.jpg",
@@ -93,7 +93,7 @@ export const WORK = [
   },
   {
     id: "avatar-dam03",
-    category: "AI Talking Heads",
+    category: "Talking Heads",
     title: "A Doctor Asked Me ep. 3: Marketing budget",
     video: "/work/avatar-dam03.mp4",
     poster: "/work/avatar-dam03.jpg",
@@ -102,7 +102,7 @@ export const WORK = [
   },
   {
     id: "avatar-dam04",
-    category: "AI Talking Heads",
+    category: "Talking Heads",
     title: "A Doctor Asked Me ep. 4: Leads vs schedule",
     video: "/work/avatar-dam04.mp4",
     poster: "/work/avatar-dam04.jpg",
@@ -111,7 +111,7 @@ export const WORK = [
   },
   {
     id: "avatar-dam05",
-    category: "AI Talking Heads",
+    category: "Talking Heads",
     title: "A Doctor Asked Me ep. 5: Rebuilding rankings",
     video: "/work/avatar-dam05.mp4",
     poster: "/work/avatar-dam05.jpg",
@@ -120,7 +120,7 @@ export const WORK = [
   },
   {
     id: "avatar-dam10",
-    category: "AI Talking Heads",
+    category: "Talking Heads",
     title: "A Doctor Asked Me ep. 10: Getting Google reviews",
     video: "/work/avatar-dam10.mp4",
     poster: "/work/avatar-dam10.jpg",
@@ -129,7 +129,7 @@ export const WORK = [
   },
   {
     id: "avatar-dam12",
-    category: "AI Talking Heads",
+    category: "Talking Heads",
     title: "A Doctor Asked Me ep. 12: Google Business Profile",
     video: "/work/avatar-dam12.mp4",
     poster: "/work/avatar-dam12.jpg",
@@ -138,7 +138,7 @@ export const WORK = [
   },
   {
     id: "avatar-dam13",
-    category: "AI Talking Heads",
+    category: "Talking Heads",
     title: "A Doctor Asked Me ep. 13: Website compliance",
     video: "/work/avatar-dam13.mp4",
     poster: "/work/avatar-dam13.jpg",
