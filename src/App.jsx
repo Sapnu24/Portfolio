@@ -5,6 +5,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import SiteNav from "./components/sections/SiteNav";
 import TopWorks from "./components/sections/TopWorks";
 import Faq from "./components/sections/Faq";
+import BookCall from "./components/sections/BookCall";
 import Hero from "./components/sections/Hero";
 import About from "./components/sections/About";
 import Timeline from "./components/sections/Timeline";
@@ -50,6 +51,7 @@ function Portfolio() {
         <Work />
         <Tools />
         <Faq />
+        <BookCall />
         <Contact />
         </TracingBeam>
       </main>

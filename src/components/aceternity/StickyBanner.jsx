@@ -23,7 +23,7 @@ export default function StickyBanner() {
 
   if (!open) return null;
 
-  const href = SITE.booking || `mailto:${SITE.email}?subject=${encodeURIComponent("30-minute discovery call")}`;
+  const href = SITE.booking ? "#book" : `mailto:${SITE.email}?subject=${encodeURIComponent("30-minute discovery call")}`;
 
   const close = () => {
     setOpen(false);
@@ -40,7 +40,7 @@ export default function StickyBanner() {
         <span className="sticky-banner-long">Free 30-minute discovery call: let&apos;s talk about your videos and plan the edits.</span>
         <span className="sticky-banner-short">Free 30-min discovery call</span>
       </p>
-      <a className="sticky-banner-cta" href={href} target={SITE.booking ? "_blank" : undefined} rel="noopener noreferrer">
+      <a className="sticky-banner-cta" href={href} >
         Book a call <span aria-hidden="true">→</span>
       </a>
       <button type="button" className="sticky-banner-close" onClick={close} aria-label="Close banner">

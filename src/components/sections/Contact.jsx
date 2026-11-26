@@ -35,7 +35,7 @@ export default function Contact() {
 
         <BlurFade delay={0.14}>
           <DockRow className={styles.buttons}>
-          <a className="sketch-btn sketch-btn--solid" href={SITE.booking} target="_blank" rel="noopener noreferrer">
+          <a className="sketch-btn sketch-btn--solid" href="#book">
             Book a discovery call <span aria-hidden="true">→</span>
           </a>
           <a className="sketch-btn" href={SITE.upwork} target="_blank" rel="noopener noreferrer">
