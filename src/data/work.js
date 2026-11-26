@@ -157,15 +157,6 @@ export const WORK = [
     note: "Google Flow avatar + ElevenLabs voice + Claude Code + HyperFrames.",
   },
   {
-    id: "avatar-overview_short_02_speak-your-language",
-    category: "AI Avatar Shorts",
-    title: "Specialty Vision overview short 2: Speak your language",
-    video: "/work/avatar-overview_short_02_speak-your-language.mp4",
-    poster: "/work/avatar-overview_short_02_speak-your-language.jpg",
-    role: "Plain cut from the finished long form: no motion graphics, just the edit and captions.",
-    note: "Google Flow avatar + ElevenLabs voice + Claude Code + HyperFrames.",
-  },
-  {
     id: "avatar-practice_short_01_where-to-start",
     category: "AI Avatar Shorts",
     title: "New practice guide short 1: Where to start",
