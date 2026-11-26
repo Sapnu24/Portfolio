@@ -1,6 +1,6 @@
 // Edit this file to add or change videos. Files live in /public/work (or use a full URL).
 export const SITE = {
-  // Google Calendar appointment-schedule booking link (30 min). Mon-Fri 8 PM-1 AM PHT.
+  // Google Calendar appointment-schedule booking link (30 min). Mon-Fri 8 PM-12 AM PHT.
   booking: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ38GhfXF912VpGqURxhu9nUkM2Q4_IP0EdJTX5WJaIY6-JPFiueSTOC4Iogf_wursPaYejO-MAY",
   name: "Sean Marion Velasco",
   role: "Video Editor & AI Video Production Lead",

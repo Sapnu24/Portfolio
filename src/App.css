@@ -187,3 +187,18 @@ html body .kss-host .kss-trigger:hover {
   .sticky-banner-short { display: inline; }
   .sticky-banner { font-size: 0.82rem; gap: 0.6rem; }
 }
+
+/* ===== Top navbar spacing (own classes, because Bootstrap's !important p-0 overrides Tailwind padding) ===== */
+.site-nav { height: 52px; }
+.site-nav-list { gap: 0.25rem; padding: 0 0.6rem 0 0.75rem !important; }
+.site-nav-link { padding: 0.55rem 1.05rem !important; font-size: 0.95rem; }
+.site-nav-end { padding-left: 0.5rem; }
+@media (max-width: 760px) {
+  .site-nav { height: 46px; }
+  .site-nav-list { gap: 0; padding: 0 0.4rem 0 0.5rem !important; }
+  .site-nav-link { padding: 0.5rem 0.6rem !important; font-size: 0.88rem; }
+  .site-nav-end { padding-left: 0.2rem; }
+}
+@media (max-width: 400px) {
+  .site-nav-link { padding: 0.45rem 0.42rem !important; font-size: 0.8rem; }
+}

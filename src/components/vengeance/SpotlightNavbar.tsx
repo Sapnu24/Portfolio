@@ -85,10 +85,10 @@ export function SpotlightNavbar({ items, activeIndex, onItemClick, className, en
       <nav
         ref={navRef}
         aria-label="Main"
-        className="pointer-events-auto relative h-11 overflow-hidden rounded-full border border-[var(--rv-line)] bg-[var(--rv-nav-bg)] shadow-[0_6px_24px_rgba(0,0,0,0.06)] backdrop-blur-md"
+        className="site-nav pointer-events-auto relative overflow-hidden rounded-full border border-[var(--rv-line)] bg-[var(--rv-nav-bg)] shadow-[0_6px_24px_rgba(0,0,0,0.06)] backdrop-blur-md"
         style={{ ["--spotlight-color" as string]: "rgba(var(--rv-beam),0.08)", ["--ambience-color" as string]: "rgba(var(--rv-beam),0.85)" }}
       >
-        <ul className="relative z-[10] m-0 flex h-full list-none items-center gap-0 p-0 px-1.5">
+        <ul className="site-nav-list relative z-[10] m-0 flex h-full list-none items-center">
           {items.map((item, idx) => (
             <li key={item.href} className={cn("relative flex h-full items-center justify-center", item.hideOnMobile && "max-[460px]:hidden")}>
               <a
@@ -99,7 +99,7 @@ export function SpotlightNavbar({ items, activeIndex, onItemClick, className, en
                   onItemClick?.(item, idx);
                 }}
                 className={cn(
-                  "rounded-full px-3.5 py-2 text-sm font-medium no-underline transition-colors duration-200 max-[400px]:px-2.5 max-[400px]:text-[13px]",
+                  "site-nav-link rounded-full font-medium no-underline transition-colors duration-200",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
                   activeIndex === idx ? "text-[var(--rv-text)]" : "text-[var(--rv-muted)] hover:text-[var(--rv-text)]"
                 )}
@@ -108,7 +108,7 @@ export function SpotlightNavbar({ items, activeIndex, onItemClick, className, en
               </a>
             </li>
           ))}
-          {endSlot && <li className="relative flex h-full items-center justify-center pl-1 pr-0.5">{endSlot}</li>}
+          {endSlot && <li className="site-nav-end relative flex h-full items-center justify-center">{endSlot}</li>}
         </ul>
 
         {/* Spotlight that follows the mouse */}
