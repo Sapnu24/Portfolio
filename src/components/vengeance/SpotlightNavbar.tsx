@@ -15,9 +15,10 @@ interface SpotlightNavbarProps {
   activeIndex: number;
   onItemClick?: (item: NavItem, index: number) => void;
   className?: string;
+  endSlot?: React.ReactNode;
 }
 
-export function SpotlightNavbar({ items, activeIndex, onItemClick, className }: SpotlightNavbarProps) {
+export function SpotlightNavbar({ items, activeIndex, onItemClick, className, endSlot }: SpotlightNavbarProps) {
   const navRef = useRef<HTMLElement>(null);
   const [hovering, setHovering] = useState(false);
   const spotlightX = useRef(0);
@@ -84,8 +85,8 @@ export function SpotlightNavbar({ items, activeIndex, onItemClick, className }: 
       <nav
         ref={navRef}
         aria-label="Main"
-        className="pointer-events-auto relative h-11 overflow-hidden rounded-full border border-neutral-200 bg-white/85 shadow-[0_6px_24px_rgba(0,0,0,0.06)] backdrop-blur-md"
-        style={{ ["--spotlight-color" as string]: "rgba(0,0,0,0.07)", ["--ambience-color" as string]: "rgba(0,0,0,0.85)" }}
+        className="pointer-events-auto relative h-11 overflow-hidden rounded-full border border-[var(--rv-line)] bg-[var(--rv-nav-bg)] shadow-[0_6px_24px_rgba(0,0,0,0.06)] backdrop-blur-md"
+        style={{ ["--spotlight-color" as string]: "rgba(var(--rv-beam),0.08)", ["--ambience-color" as string]: "rgba(var(--rv-beam),0.85)" }}
       >
         <ul className="relative z-[10] m-0 flex h-full list-none items-center gap-0 p-0 px-1.5">
           {items.map((item, idx) => (
@@ -100,13 +101,14 @@ export function SpotlightNavbar({ items, activeIndex, onItemClick, className }: 
                 className={cn(
                   "rounded-full px-3.5 py-2 text-sm font-medium no-underline transition-colors duration-200 max-[400px]:px-2.5 max-[400px]:text-[13px]",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
-                  activeIndex === idx ? "text-black" : "text-neutral-500 hover:text-black"
+                  activeIndex === idx ? "text-[var(--rv-text)]" : "text-[var(--rv-muted)] hover:text-[var(--rv-text)]"
                 )}
               >
                 {item.label}
               </a>
             </li>
           ))}
+          {endSlot && <li className="relative flex h-full items-center justify-center pl-1 pr-0.5">{endSlot}</li>}
         </ul>
 
         {/* Spotlight that follows the mouse */}

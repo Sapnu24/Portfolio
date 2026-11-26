@@ -141,3 +141,48 @@ body.dark-theme {
   --mix-color: #0a0a0a;
   --deployment-color: #0a0a0a;
 }
+
+/* ===== Theme tokens: light (default) and dark, both black and white ===== */
+:root {
+  --rv-body: #404040;
+  --rv-body-2: #525252;
+  --rv-on-accent: #ffffff;
+  --rv-accent-hover: #262626;
+  --rv-hover-line: rgba(0, 0, 0, 0.35);
+  --rv-nav-bg: rgba(255, 255, 255, 0.85);
+  --rv-soft: rgba(245, 245, 245, 0.6);
+  --rv-beam: 10, 10, 10;
+}
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  --rv-bg: #0a0a0a;
+  --rv-surface: #121212;
+  --rv-surface-2: #1a1a1a;
+  --rv-line: #262626;
+  --rv-text: #fafafa;
+  --rv-muted: #a3a3a3;
+  --rv-accent: #fafafa;
+  --rv-body: #d4d4d4;
+  --rv-body-2: #a3a3a3;
+  --rv-on-accent: #0a0a0a;
+  --rv-accent-hover: #e5e5e5;
+  --rv-hover-line: rgba(255, 255, 255, 0.35);
+  --rv-nav-bg: rgba(18, 18, 18, 0.85);
+  --rv-soft: rgba(255, 255, 255, 0.05);
+  --rv-beam: 250, 250, 250;
+  --primary-color: #fafafa;
+  --primary-hover: #e5e5e5;
+  --secondary-color: #0a0a0a;
+  --secondary-bg-color: #121212;
+  --text-color: #fafafa;
+  --subtitle-color: #a3a3a3;
+  --card-color: #121212;
+  --glass-color: rgba(18, 18, 18, 0.9);
+}
+html[data-theme="dark"] body {
+  background: var(--rv-bg);
+  color: var(--rv-text);
+}
+html, body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

@@ -29,8 +29,8 @@ export default function Spotlight({ style }) {
           rx="1924.71"
           ry="273.501"
           transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
-          fill="#0a0a0a"
-          fillOpacity="0.045"
+          style={{ fill: "var(--rv-text)" }}
+          fillOpacity="0.05"
         />
       </g>
       <defs>

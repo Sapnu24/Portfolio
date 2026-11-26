@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { SpotlightNavbar } from "@/components/vengeance/SpotlightNavbar";
+import ThemeButton from "@/components/sections/ThemeButton";
 
 const ITEMS = [
   { label: "Home", href: "#home", hideOnMobile: true },
@@ -34,5 +35,5 @@ export default function SiteNav() {
     document.querySelector(item.href)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  return <SpotlightNavbar items={ITEMS} activeIndex={active} onItemClick={go} />;
+  return <SpotlightNavbar items={ITEMS} activeIndex={active} onItemClick={go} endSlot={<ThemeButton />} />;
 }

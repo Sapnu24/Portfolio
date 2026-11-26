@@ -37,11 +37,11 @@ const ITEMS = [
     answer: (
       <>
         Message me on{" "}
-        <a href={SITE.upwork} target="_blank" rel="noopener noreferrer" className="font-semibold text-neutral-900 underline">
+        <a href={SITE.upwork} target="_blank" rel="noopener noreferrer" className="font-semibold text-[var(--rv-text)] underline">
           Upwork
         </a>{" "}
         or email{" "}
-        <a href={`mailto:${SITE.email}`} className="font-semibold text-neutral-900 underline">
+        <a href={`mailto:${SITE.email}`} className="font-semibold text-[var(--rv-text)] underline">
           {SITE.email}
         </a>
         .

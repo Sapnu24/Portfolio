@@ -19,7 +19,7 @@
       (function() {
         try {
           var savedTheme = localStorage.getItem('smv_portfolio_theme') || localStorage.getItem('smv_portfolio_theme_mode');
-          var resolved = 'light';
+          var resolved = savedTheme === 'dark' ? 'dark' : 'light';
           document.documentElement.setAttribute('data-theme', resolved);
           document.documentElement.style.colorScheme = resolved;
           if (resolved === 'dark') {

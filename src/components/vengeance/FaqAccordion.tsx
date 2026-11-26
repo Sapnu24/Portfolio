@@ -20,8 +20,8 @@ export function FaqAccordion({ items, className }: { items: FaqItem[]; className
             <li
               key={item.question}
               className={cn(
-                "relative w-full border-b-2 border-neutral-100 transition-all duration-300 ease-in last:border-b-0",
-                isActive && "border-b border-neutral-200"
+                "relative w-full border-b-2 border-[var(--rv-line)] transition-all duration-300 ease-in last:border-b-0",
+                isActive && "border-b border-[var(--rv-line)]"
               )}
             >
               <button
@@ -30,8 +30,8 @@ export function FaqAccordion({ items, className }: { items: FaqItem[]; className
                   "relative flex min-h-[60px] w-full cursor-pointer flex-row items-center justify-start text-left text-base outline-none md:text-lg",
                   "transition-colors duration-200",
                   isActive
-                    ? "border-l-neutral-900 bg-neutral-100/60 font-semibold text-neutral-900"
-                    : "border-l-neutral-300 bg-transparent text-neutral-600 hover:border-l-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
+                    ? "border-l-neutral-900 bg-[var(--rv-soft)] font-semibold text-[var(--rv-text)]"
+                    : "border-l-neutral-300 bg-transparent text-[var(--rv-body-2)] hover:border-l-neutral-500 hover:bg-[var(--rv-surface)] hover:text-[var(--rv-text)]"
                 )}
                 onClick={() => setActiveIndex(isActive ? null : index)}
                 aria-expanded={isActive}
@@ -40,15 +40,15 @@ export function FaqAccordion({ items, className }: { items: FaqItem[]; className
                   margin: 0,
                   padding: "1rem 3rem 1rem 3.5rem",
                   border: "none",
-                  borderLeft: `6px solid ${isActive ? "#171717" : "#d4d4d4"}`,
+                  borderLeft: `6px solid ${isActive ? "var(--rv-text)" : "var(--rv-line)"}`,
                   borderRadius: 0,
-                  background: isActive ? "rgba(245, 245, 245, 0.6)" : "transparent",
+                  background: isActive ? "var(--rv-soft)" : "transparent",
                 }}
               >
                 <span
                   className={cn(
                     "absolute left-4 top-1/2 -translate-y-1/2 leading-none transition-all duration-200 md:left-5",
-                    isActive ? "text-[32px] text-neutral-900 md:text-[40px]" : "text-[24px] text-neutral-400 md:text-[30px]"
+                    isActive ? "text-[32px] text-[var(--rv-text)] md:text-[40px]" : "text-[24px] text-[var(--rv-muted)] md:text-[30px]"
                   )}
                   aria-hidden="true"
                 >
@@ -59,7 +59,7 @@ export function FaqAccordion({ items, className }: { items: FaqItem[]; className
                   aria-hidden="true"
                   className={cn(
                     "absolute right-6 block h-2 w-2 border-r-[3px] border-t-[3px] transition-transform duration-200 ease-in-out",
-                    isActive ? "rotate-[-44deg] border-neutral-900" : "rotate-[133deg] border-neutral-400"
+                    isActive ? "rotate-[-44deg] border-[var(--rv-text)]" : "rotate-[133deg] border-[var(--rv-muted)]"
                   )}
                 />
               </button>
@@ -67,12 +67,12 @@ export function FaqAccordion({ items, className }: { items: FaqItem[]; className
               <div
                 className={cn(
                   "grid w-full transition-all duration-300 ease-in-out",
-                  isActive ? "grid-rows-[1fr] bg-neutral-100/60" : "grid-rows-[0fr] bg-transparent"
+                  isActive ? "grid-rows-[1fr] bg-[var(--rv-soft)]" : "grid-rows-[0fr] bg-transparent"
                 )}
-                style={{ borderLeft: `6px solid ${isActive ? "#171717" : "#d4d4d4"}` }}
+                style={{ borderLeft: `6px solid ${isActive ? "var(--rv-text)" : "var(--rv-line)"}` }}
               >
                 <div className="overflow-hidden">
-                  <div className="flex w-full flex-row items-start justify-start text-base font-normal leading-relaxed text-neutral-700 md:text-[17px]" style={{ padding: "0.5rem 1.5rem 1.5rem 3.5rem" }}>
+                  <div className="flex w-full flex-row items-start justify-start text-base font-normal leading-relaxed text-[var(--rv-body)] md:text-[17px]" style={{ padding: "0.5rem 1.5rem 1.5rem 3.5rem" }}>
                     <span>{item.answer}</span>
                   </div>
                 </div>

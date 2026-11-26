@@ -75,7 +75,7 @@ export default function Hero() {
             <a href="#contact" className={styles.ghost}>
               Contact me
             </a>
-            <ShareSheet url="https://smv-works.netlify.app/" title="Sean Marion Velasco: video editor portfolio" theme="light" />
+            <ShareSheet url="https://smv-works.netlify.app/" title="Sean Marion Velasco: video editor portfolio" theme="auto" />
             <span className={styles.links}>
               <a href={SITE.upwork} target="_blank" rel="noopener noreferrer">
                 Upwork

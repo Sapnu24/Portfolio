@@ -71,7 +71,7 @@
   transition: opacity 0.3s ease;
 }
 .spotlight:hover {
-  border-color: rgba(0, 0, 0, 0.35);
+  border-color: var(--rv-hover-line);
 }
 .spotlight:hover::before {
   opacity: 0;

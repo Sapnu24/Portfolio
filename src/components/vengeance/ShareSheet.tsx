@@ -100,7 +100,7 @@ export function ShareSheet({ url = sampleUrl, title = 'Share this page', variant
   const link = safeUrl(url)
   const canShare = Boolean(link)
   const [siteLight, setSiteLight] = useState(false)
-  useEffect(() => { const sync = () => setSiteLight(!document.documentElement.classList.contains('dark') && !document.body.classList.contains('dark')); sync(); const mo = new MutationObserver(sync); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] }); mo.observe(document.body, { attributes: true, attributeFilter: ['class'] }); return () => mo.disconnect() }, [])
+  useEffect(() => { const sync = () => setSiteLight(document.documentElement.getAttribute('data-theme') !== 'dark'); sync(); const mo = new MutationObserver(sync); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] }); mo.observe(document.body, { attributes: true, attributeFilter: ['class'] }); return () => mo.disconnect() }, [])
   const resolvedTheme = theme === 'auto' ? (siteLight ? 'light' : 'dark') : theme
   const isCompact = variant === 'compact'
   const isMessage = variant === 'message'

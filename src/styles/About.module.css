@@ -39,7 +39,7 @@
   margin: 1.6rem 0 3rem;
   font-size: 1.05rem;
   line-height: 1.75;
-  color: #404040;
+  color: var(--rv-body);
 }
 
 .bento {
@@ -130,7 +130,7 @@
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.65;
-  color: #525252;
+  color: var(--rv-body-2);
 }
 
 .tools {

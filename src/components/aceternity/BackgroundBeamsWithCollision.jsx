@@ -37,7 +37,7 @@ export default function BackgroundBeamsWithCollision() {
           right: 0,
           bottom: 0,
           height: 1,
-          background: "linear-gradient(to right, transparent, rgba(10,10,10,0.12), transparent)",
+          background: "linear-gradient(to right, transparent, rgba(var(--rv-beam),0.12), transparent)",
         }}
       />
     </div>
@@ -105,7 +105,7 @@ function Beam({ beam, parentRef, floorRef }) {
           width: 1,
           height: beam.h,
           borderRadius: 999,
-          background: "linear-gradient(to bottom, rgba(10,10,10,0), rgba(10,10,10,0.55))",
+          background: "linear-gradient(to bottom, rgba(var(--rv-beam),0), rgba(var(--rv-beam),0.55))",
         }}
       />
       <AnimatePresence>{hit && <Explosion key={`${cycle}-hit`} x={hit.x} y={hit.y} />}</AnimatePresence>
@@ -133,7 +133,7 @@ function Explosion({ x, y }) {
           width: 80,
           height: 2,
           borderRadius: 999,
-          background: "linear-gradient(to right, transparent, rgba(10,10,10,0.45), transparent)",
+          background: "linear-gradient(to right, transparent, rgba(var(--rv-beam),0.45), transparent)",
           filter: "blur(1px)",
         }}
       />
@@ -148,7 +148,7 @@ function Explosion({ x, y }) {
             width: 3,
             height: 3,
             borderRadius: 999,
-            background: "rgba(10,10,10,0.6)",
+            background: "rgba(var(--rv-beam),0.6)",
           }}
         />
       ))}

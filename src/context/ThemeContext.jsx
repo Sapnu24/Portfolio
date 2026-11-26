@@ -17,8 +17,14 @@ function getSystemTheme() {
 }
 
 export function ThemeProvider({ children }) {
-  // The site is black-and-white light only: ignore saved or OS dark preferences.
-  const [theme, setThemeState] = useState("light");
+  // Black-and-white site: light by default, dark when the visitor picks it (remembered).
+  const [theme, setThemeState] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
+    }
+  });
 
   const [hasManualPreference, setHasManualPreference] = useState(true);
 

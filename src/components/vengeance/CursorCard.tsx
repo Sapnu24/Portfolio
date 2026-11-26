@@ -31,7 +31,7 @@ export function CursorCard({ children, image, description, className }: CursorCa
     <>
       <span
         className={cn(
-          "relative -mx-1 inline cursor-default rounded px-1 font-semibold text-neutral-900 underline decoration-neutral-300 decoration-2 underline-offset-4 transition-colors hover:bg-neutral-200/70",
+          "relative -mx-1 inline cursor-default rounded px-1 font-semibold text-[var(--rv-text)] underline decoration-neutral-300 decoration-2 underline-offset-4 transition-colors hover:bg-[var(--rv-surface-2)]",
           className
         )}
         onMouseEnter={() => setIsHovered(true)}
@@ -51,10 +51,10 @@ export function CursorCard({ children, image, description, className }: CursorCa
                 exit={{ opacity: 0, scale: 0.85 }}
                 transition={{ duration: 0.15, ease: "easeOut" }}
                 style={{ x: springX, y: springY }}
-                className="pointer-events-none fixed left-0 top-0 z-[2000] w-[240px] rounded-xl border border-neutral-200 bg-white p-3 shadow-2xl"
+                className="pointer-events-none fixed left-0 top-0 z-[2000] w-[240px] rounded-xl border border-[var(--rv-line)] bg-[var(--rv-bg)] p-3 shadow-2xl"
               >
                 <img src={image} alt="" className="mb-3 block h-auto w-full rounded-md object-cover" />
-                <p className="m-0 text-sm leading-relaxed text-neutral-600">{description}</p>
+                <p className="m-0 text-sm leading-relaxed text-[var(--rv-body-2)]">{description}</p>
               </motion.div>
             )}
           </AnimatePresence>,

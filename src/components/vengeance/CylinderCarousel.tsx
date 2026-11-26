@@ -49,7 +49,7 @@ export function CylinderCarousel({ items, onSelect, animationDuration = 46, card
             onClick={() => onSelect?.(it)}
             aria-label={`Play ${it.title}`}
             title={it.title}
-            className="[grid-area:1/1] [backface-visibility:hidden] overflow-hidden rounded-2xl border border-neutral-200 bg-black p-0 cursor-pointer"
+            className="[grid-area:1/1] [backface-visibility:hidden] overflow-hidden rounded-2xl border border-[var(--rv-line)] bg-black p-0 cursor-pointer"
             style={
               {
                 width: "var(--w)",

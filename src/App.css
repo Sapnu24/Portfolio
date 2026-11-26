@@ -87,8 +87,8 @@
   display: grid;
   place-items: center;
   border-radius: 999px;
-  border: 1px solid rgba(10, 10, 10, 0.15);
-  background: #ffffff;
+  border: 1px solid var(--rv-line);
+  background: var(--rv-bg);
 }
 @media (max-width: 760px) {
   .tracing-beam-rail { left: 2px; }

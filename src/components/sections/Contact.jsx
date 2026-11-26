@@ -42,7 +42,7 @@ export default function Contact() {
           <a className={styles.ghost} href={`mailto:${SITE.email}`}>
             Email me
           </a>
-          <ShareSheet url="https://smv-works.netlify.app/" title="Sean Marion Velasco: video editor portfolio" theme="light" />
+          <ShareSheet url="https://smv-works.netlify.app/" title="Sean Marion Velasco: video editor portfolio" theme="auto" />
         </BlurFade>
 
         <BlurFade delay={0.2} className={styles.services}>

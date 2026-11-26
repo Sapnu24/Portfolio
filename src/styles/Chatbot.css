@@ -538,3 +538,18 @@ html body .chatbot-container { bottom: 154px !important; max-height: calc(100vh 
   html body .chatbot-toggle { display: flex !important; bottom: 76px !important; right: 16px !important; width: 52px !important; height: 52px !important; }
   html body .chatbot-container { bottom: 0 !important; max-height: 85dvh !important; }
 }
+
+/* ===== Dark mode chat window ===== */
+html[data-theme="dark"] body .chatbot-container { background: #121212 !important; border-color: #262626 !important; color: #fafafa !important; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important; }
+html[data-theme="dark"] body .chatbot-header { background: #fafafa !important; border-bottom-color: #262626 !important; }
+html[data-theme="dark"] body .chatbot-title, html[data-theme="dark"] body .chatbot-header .chatbot-status { color: #0a0a0a !important; }
+html[data-theme="dark"] body .chatbot-avatar { background: #0a0a0a !important; color: #fafafa !important; }
+html[data-theme="dark"] body .chatbot-action-btn, html[data-theme="dark"] body .chatbot-close-btn { background: rgba(0, 0, 0, 0.08) !important; color: #0a0a0a !important; }
+html[data-theme="dark"] body .chatbot-messages { background: #0a0a0a !important; }
+html[data-theme="dark"] body .chatbot-container .chat-message.bot { background: #1a1a1a !important; border: 1px solid #262626 !important; }
+html[data-theme="dark"] body .chatbot-container .chat-message.bot * { color: #fafafa !important; }
+html[data-theme="dark"] body .chatbot-container .chat-message.user { background: #fafafa !important; }
+html[data-theme="dark"] body .chatbot-container .chat-message.user * { color: #0a0a0a !important; }
+html[data-theme="dark"] body .chatbot-input { background: #121212 !important; border-top-color: #262626 !important; }
+html[data-theme="dark"] body .chatbot-container .chatbot-input input { background: #1a1a1a !important; color: #fafafa !important; border-color: #333333 !important; }
+html[data-theme="dark"] body .chatbot-send-btn, html[data-theme="dark"] body .chatbot-toggle { background: #fafafa !important; color: #0a0a0a !important; }
