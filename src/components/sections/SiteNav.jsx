@@ -3,7 +3,7 @@ import { SpotlightNavbar } from "@/components/vengeance/SpotlightNavbar";
 import ThemeButton from "@/components/sections/ThemeButton";
 
 const ITEMS = [
-  { label: "Home", href: "#home", hideOnMobile: true },
+  { label: "Home", href: "#home" },
   { label: "About", href: "#nextSection" },
   { label: "Work", href: "#work" },
   { label: "Tools", href: "#tools" },

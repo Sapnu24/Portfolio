@@ -200,5 +200,10 @@ html body .kss-host .kss-trigger:hover {
   .site-nav-end { padding-left: 0.2rem; }
 }
 @media (max-width: 400px) {
-  .site-nav-link { padding: 0.45rem 0.42rem !important; font-size: 0.8rem; }
+  .site-nav-list { padding: 0 0.25rem 0 0.3rem !important; }
+  .site-nav-link { padding: 0.4rem 0.26rem !important; font-size: 0.74rem; }
+  .site-nav-end { padding-left: 0.1rem; }
+}
+@media (max-width: 350px) {
+  .site-nav-link { padding: 0.4rem 0.14rem !important; font-size: 0.68rem; }
 }
